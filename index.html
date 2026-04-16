@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AppLibrary — アプリ一覧</title>
+  <meta name="description" content="Xcode で作ったアプリの紹介ライブラリ。">
+
+  <!-- OGP -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="AppLibrary">
+  <meta property="og:title" content="AppLibrary">
+  <meta property="og:description" content="Xcode で作ったアプリの紹介ライブラリ。">
+  <!-- TODO: OGP 画像を assets/img/ogp.png として配置したら有効化 -->
+  <!-- <meta property="og:image" content="./assets/img/ogp.png"> -->
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Design System -->
+  <link rel="stylesheet" href="./assets/css/tokens.css">
+  <link rel="stylesheet" href="./assets/css/standard.css">
+</head>
+<body>
+
+  <!-- Liquid Glass SVG filter -->
+  <script src="./assets/js/glass-filter.js"></script>
+
+  <div class="site-container">
+
+    <header class="site-header">
+      <h1 class="site-title">AppLibrary</h1>
+      <p class="site-tagline">Xcode で作ったアプリたち</p>
+    </header>
+
+    <section class="section" aria-labelledby="apps-heading">
+      <h2 id="apps-heading" class="section-title">Apps</h2>
+      <p class="section-sub">気になるアプリをタップして詳細を見てください。</p>
+
+      <div id="app-grid" class="app-grid"></div>
+
+      <div id="empty-state" class="empty-state" hidden>
+        <div class="empty-state-title">まだアプリがありません</div>
+        <p>apps/registry.js にアプリを追加してください。</p>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <p>&copy; 2026 uesugiyuuto · <a href="./apps/sublog/privacy.html">Privacy</a></p>
+    </footer>
+
+  </div>
+
+  <!-- Data + Renderer -->
+  <script src="./apps/registry.js"></script>
+  <script src="./assets/js/main.js"></script>
+
+  <!-- TODO: Analytics を入れるときはここに 1 行追加（例: plausible / GA4） -->
+</body>
+</html>

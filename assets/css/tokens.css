@@ -1,0 +1,66 @@
+/* ============================================================
+   AppLibrary Design Tokens
+   liquid-glass.css から移植・整理した標準トークン
+   すべてのページ（共通・個別）で読み込む
+   ============================================================ */
+
+:root {
+  /* --- Spacing --- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 56px;
+
+  /* --- Radius --- */
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --radius-full: 999px;
+
+  /* --- Font --- */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Yu Gothic UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* --- Liquid Glass --- */
+  --glass-blur: 22px;
+  --glass-blur-sm: 14px;
+  --glass-tint: rgba(255, 255, 255, 0.08);
+  --glass-tint-md: rgba(255, 255, 255, 0.12);
+  --glass-tint-hover: rgba(255, 255, 255, 0.15);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --glass-border-dim: rgba(255, 255, 255, 0.2);
+  --glass-border-bright: rgba(255, 255, 255, 0.6);
+  --glass-glow: 0 0 16px -6px rgba(255, 255, 255, 0.25);
+  --glass-glow-lg: 0 0 24px -6px rgba(255, 255, 255, 0.35);
+  --glass-inset: inset 0 0 10px -3px rgba(255, 255, 255, 0.6);
+  --glass-text: #ffffff;
+  --glass-text-dim: rgba(255, 255, 255, 0.7);
+  --glass-text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+
+  /* --- Shadow --- */
+  --shadow-out:    0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-out-sm: 0 2px 12px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-out-lg: 0 8px 40px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.06);
+  --shadow-in:     inset 0 2px 6px rgba(0, 0, 0, 0.08);
+  --shadow-in-sm:  inset 0 1px 3px rgba(0, 0, 0, 0.06);
+
+  /* --- Semantic Color --- */
+  --accent: #007AFF;
+  --accent-hover: #0a84ff;
+  --success: #30D158;
+  --danger:  #FF453A;
+  --warning: #FFD60A;
+  --info:    #5AC8FA;
+
+  /* --- Utility Palette --- */
+  --purple: #BF5AF2;
+  --pink:   #FF6482;
+  --orange: #FF9F0A;
+  --teal:   #64D2B1;
+  --indigo: #5856D6;
+}

@@ -1,0 +1,277 @@
+/* ============================================================
+   AppLibrary Standard Components
+   共通ページ（index.html / 404.html 等）で使う標準コンポーネント
+   個別アプリページでは任意。自由デザインの土台として流用可。
+   ============================================================ */
+
+/* --- Reset --- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--glass-text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; }
+
+/* --- Background ---
+   TODO: 実画像に差し替え可。差し替える場合は body の background を
+   url('../img/bg.jpg') center / cover no-repeat fixed に。
+*/
+body {
+  background:
+    radial-gradient(ellipse at top left,  rgba(90, 200, 250, 0.55), transparent 60%),
+    radial-gradient(ellipse at bottom right, rgba(191, 90, 242, 0.55), transparent 60%),
+    linear-gradient(135deg, #1a2a6c 0%, #2E3192 50%, #0f2027 100%);
+  background-attachment: fixed;
+}
+
+/* --- Contrast 保険レイヤー ---
+   liquid-glass は白テキスト前提。背景が明るい画像になった場合に備えて
+   画面全体に薄い黒を敷いてコントラストを確保する。
+*/
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.18);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Layout
+   ═══════════════════════════════════════════════════════════════ */
+.site-container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-5);
+}
+
+.site-header {
+  padding: var(--space-8) 0 var(--space-6);
+  text-align: center;
+}
+.site-title {
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--glass-text);
+  text-shadow: var(--glass-text-shadow);
+  margin: 0;
+}
+.site-tagline {
+  margin-top: var(--space-2);
+  color: var(--glass-text-dim);
+  font-size: 16px;
+}
+
+.site-footer {
+  padding: var(--space-8) 0 var(--space-6);
+  text-align: center;
+  color: var(--glass-text-dim);
+  font-size: 13px;
+}
+.site-footer a { color: var(--glass-text); text-decoration: none; opacity: 0.85; }
+.site-footer a:hover { opacity: 1; text-decoration: underline; }
+
+/* ═══════════════════════════════════════════════════════════════
+   Section: リキッドグラスパネル
+   ═══════════════════════════════════════════════════════════════ */
+.section {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-6);
+  overflow: visible;
+  box-shadow: 0 0 21px -8px rgba(255, 255, 255, 0.3);
+}
+.section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 14px -4px rgba(255, 255, 255, 0.7);
+  pointer-events: none;
+}
+.section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  filter: url(#glass-distortion);
+  -webkit-filter: url(#glass-distortion);
+  pointer-events: none;
+}
+.section > * { position: relative; z-index: 1; }
+
+.section-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--glass-text);
+  text-shadow: var(--glass-text-shadow);
+  margin: 0 0 var(--space-5);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--glass-border-dim);
+}
+.section-sub {
+  color: var(--glass-text-dim);
+  margin: 0 0 var(--space-5);
+  font-size: 14px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   App Grid / App Card
+   ═══════════════════════════════════════════════════════════════ */
+.app-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-5);
+}
+
+.app-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border-dim);
+  box-shadow: var(--shadow-out-sm);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.app-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: var(--shadow-out-lg), 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+.app-card-thumb {
+  aspect-ratio: 16 / 10;
+  background: var(--glass-tint);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+}
+.app-card-thumb img {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-out);
+}
+.app-card-body { padding: var(--space-4); }
+.app-card-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--glass-text);
+  text-shadow: var(--glass-text-shadow);
+}
+.app-card-desc {
+  margin-top: var(--space-2);
+  color: var(--glass-text-dim);
+  font-size: 14px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.app-card-meta {
+  margin-top: var(--space-3);
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Badge
+   ═══════════════════════════════════════════════════════════════ */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: var(--radius-full);
+  background: var(--glass-tint-hover);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: var(--glass-text);
+  text-shadow: var(--glass-text-shadow);
+}
+.badge-primary { background: rgba(0, 122, 255, 0.25); border-color: rgba(0, 122, 255, 0.4); }
+.badge-success { background: rgba(48, 209, 88, 0.22); border-color: rgba(48, 209, 88, 0.4); }
+.badge-warning { background: rgba(255, 214, 10, 0.22); border-color: rgba(255, 214, 10, 0.4); }
+
+/* ═══════════════════════════════════════════════════════════════
+   Button
+   ═══════════════════════════════════════════════════════════════ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-full);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  color: var(--glass-text);
+  background: var(--glass-tint-md);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur-sm));
+  -webkit-backdrop-filter: blur(var(--glass-blur-sm));
+  box-shadow: var(--glass-glow), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  text-shadow: var(--glass-text-shadow);
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  cursor: pointer;
+}
+.btn:hover {
+  border-color: var(--glass-border-bright);
+  background: var(--glass-tint-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--glass-glow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.btn:active { transform: translateY(0); }
+.btn-primary {
+  background: linear-gradient(135deg, rgba(0, 122, 255, 0.6), rgba(90, 200, 250, 0.5));
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 0 20px -4px rgba(0, 122, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, rgba(0, 122, 255, 0.7), rgba(90, 200, 250, 0.6));
+  box-shadow: 0 0 28px -4px rgba(0, 122, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Empty State
+   ═══════════════════════════════════════════════════════════════ */
+.empty-state {
+  text-align: center;
+  padding: var(--space-10) var(--space-5);
+  color: var(--glass-text-dim);
+}
+.empty-state-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--glass-text);
+  margin-bottom: var(--space-2);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 479px) {
+  .site-container { padding: var(--space-5) var(--space-4); }
+  .section { padding: var(--space-5); }
+  .app-grid { grid-template-columns: 1fr; gap: var(--space-4); }
+}

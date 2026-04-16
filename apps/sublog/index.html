@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SubLog — サブスクをシンプルに可視化</title>
+  <meta name="description" content="SubLog はサブスクリプションをひと目で管理できる iOS アプリです。">
+
+  <!-- OGP -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="AppLibrary">
+  <meta property="og:title" content="SubLog — サブスクをシンプルに可視化">
+  <meta property="og:description" content="SubLog はサブスクリプションをひと目で管理できる iOS アプリです。">
+  <!-- TODO: OGP 画像を用意したら有効化 -->
+  <!-- <meta property="og:image" content="./ogp.png"> -->
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- iOS Smart App Banner（App Store ID 取得後に有効化） -->
+  <!-- <meta name="apple-itunes-app" content="app-id=XXXXXXXXXX"> -->
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- 共通トークン（個別ページでも必ず読む） -->
+  <link rel="stylesheet" href="../../assets/css/tokens.css">
+  <!-- アプリ固有スタイル（liquid-glass を使わない場合は standard.css は読まない） -->
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <header class="hero">
+    <nav class="hero-nav">
+      <a href="../../" class="nav-back">← AppLibrary</a>
+    </nav>
+
+    <div class="hero-inner">
+      <div class="hero-icon" aria-hidden="true">S</div>
+      <h1 class="hero-title">SubLog</h1>
+      <p class="hero-tagline">サブスクを、もっとシンプルに。</p>
+      <p class="hero-desc">
+        契約中のサブスクリプションをひとつの画面でまとめて管理。<br>
+        次の請求日・月額合計・カテゴリ別の支出が一目でわかります。
+      </p>
+
+      <div class="hero-actions">
+        <!-- TODO: App Store 公開後に有効化 -->
+        <a class="btn btn-primary" href="#" aria-disabled="true">App Store（準備中）</a>
+        <a class="btn btn-ghost" href="#features">機能を見る</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <section id="features" class="features">
+      <h2 class="section-title">Features</h2>
+      <div class="feature-grid">
+        <article class="feature-card">
+          <div class="feature-icon">📅</div>
+          <h3>次の請求日が一目でわかる</h3>
+          <p>契約中のサブスクが期日順に並び、忘れがちな請求タイミングを逃しません。</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>月額合計を可視化</h3>
+          <p>毎月の固定費がひと目で把握できる。カテゴリ別の内訳も表示。</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon">🔔</div>
+          <h3>請求前に通知</h3>
+          <p>請求日の前にローカル通知でお知らせ。解約タイミングを逃しません。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="cta">
+      <h2 class="cta-title">まもなくリリース予定</h2>
+      <p class="cta-desc">App Store での公開準備中です。</p>
+    </section>
+
+  </main>
+
+  <footer class="page-footer">
+    <p>
+      <a href="./privacy.html">プライバシーポリシー</a> ·
+      <a href="../../">AppLibrary</a>
+    </p>
+    <p class="copyright">&copy; 2026 uesugiyuuto</p>
+  </footer>
+
+  <script src="./script.js"></script>
+</body>
+</html>
