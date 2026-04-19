@@ -9,36 +9,36 @@ window.APP_REGISTRY = [
     // --- 識別子（必須） ---
     slug: 'sublog',                         // フォルダ名と一致させる（apps/<slug>/）
     name: 'SubLog',                         // アプリ名
-    tagline: 'サブスクをシンプルに可視化。',  // 1-2 行の短い説明
+    tagline: '毎月のサブスクを、ひと目で。',  // 1-2 行の短い説明
 
     // --- 表示メタ ---
     platform: 'iOS',                        // iOS / macOS / Web 等
-    status: 'alpha',                        // alpha / beta / release （バッジ色に反映）
+    status: 'beta',                         // alpha / beta / release （バッジ色に反映）
     releaseDate: null,                      // 'YYYY-MM-DD' or null（審査中/未公開）
 
     // --- ビジュアル ---
-    icon: null,                             // アイコン画像ファイル名（apps/<slug>/ からの相対）例: 'icon.png'
+    icon: 'icon.png',                       // apps/<slug>/ からの相対
 
     // --- リンク ---
     appStoreUrl: null,                      // App Store URL（公開後に追加）
-    introUrl: './apps/sublog/',             // 個別紹介ページ
+    introUrl: './apps/sublog/index.html',   // 個別紹介ページ（file:// でも動くよう明示）
     privacyUrl: './apps/sublog/privacy.html', // プライバシーポリシー（App Store 審査で必須）
   },
 
   {
-    slug: 'callog',
-    name: 'CalLog',
-    tagline: '（タグラインを入れる）',
+    slug: 'caflog',
+    name: 'CafLog',
+    tagline: 'カフェインとの付き合いを、見える化。',
 
     platform: 'iOS',
-    status: 'alpha',
+    status: 'beta',
     releaseDate: null,
 
-    icon: null,
+    icon: 'icon.png',
 
     appStoreUrl: null,
-    introUrl: './apps/callog/',
-    privacyUrl: './apps/callog/privacy.html',
+    introUrl: './apps/caflog/index.html',
+    privacyUrl: './apps/caflog/privacy.html',
   },
 
   // --- 新しいアプリ追加時はここに { ... } を増やす ---

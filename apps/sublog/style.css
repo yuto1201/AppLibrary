@@ -1,17 +1,16 @@
 /* ============================================================
    SubLog 個別紹介ページ
-   共通トークン（tokens.css）を使いつつ、SubLog らしい配色/世界観に。
-   共通 standard.css は意図的に読み込んでいない（自由デザインのため）。
+   アプリアイコン（青のキューブ）に合わせたクリアな青系デザイン。
+   共通トークン（tokens.css）を継承、固有色は --sublog-* で追加。
    ============================================================ */
 
-/* アプリ固有のカラー（トークンを上書き/追加） */
 :root {
-  --sublog-bg-1:   #e8f1fb;
-  --sublog-bg-2:   #f4e8fb;
-  --sublog-ink:    #1b2140;
-  --sublog-ink-2:  #4a5278;
-  --sublog-accent: #4a6cf7;
-  --sublog-accent-2: #8a5cf6;
+  --sublog-bg-1:   #e7f2ff;
+  --sublog-bg-2:   #eaf6ff;
+  --sublog-ink:    #0e1e3a;
+  --sublog-ink-2:  #4a5b80;
+  --sublog-accent: #1e88e5;
+  --sublog-accent-2: #42a5f5;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -22,7 +21,7 @@ body {
   background:
     radial-gradient(1200px 700px at 10% -10%, var(--sublog-bg-1), transparent 70%),
     radial-gradient(900px 600px at 110% 20%, var(--sublog-bg-2), transparent 70%),
-    #fff;
+    #f7fbff;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   line-height: 1.7;
@@ -35,18 +34,9 @@ a:hover { text-decoration: underline; }
 /* ═══════════════════════════════════════════════════════════════
    Hero
    ═══════════════════════════════════════════════════════════════ */
-.hero {
-  padding: var(--space-6) var(--space-5) var(--space-12);
-}
-.hero-nav {
-  max-width: 1040px;
-  margin: 0 auto var(--space-8);
-}
-.nav-back {
-  font-size: 14px;
-  color: var(--sublog-ink-2);
-  font-weight: 500;
-}
+.hero { padding: var(--space-6) var(--space-5) var(--space-12); }
+.hero-nav { max-width: 1040px; margin: 0 auto var(--space-8); }
+.nav-back { font-size: 14px; color: var(--sublog-ink-2); font-weight: 500; }
 .hero-inner {
   max-width: 720px;
   margin: 0 auto;
@@ -54,18 +44,11 @@ a:hover { text-decoration: underline; }
   padding: var(--space-8) var(--space-4);
 }
 .hero-icon {
-  width: 96px;
-  height: 96px;
+  width: 120px;
+  height: 120px;
   margin: 0 auto var(--space-6);
-  border-radius: 24px;
-  background: linear-gradient(135deg, var(--sublog-accent), var(--sublog-accent-2));
-  color: #fff;
-  font-size: 48px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 20px 40px -12px rgba(74, 108, 247, 0.5);
+  border-radius: 28px;
+  box-shadow: 0 20px 40px -12px rgba(30, 136, 229, 0.45);
 }
 .hero-title {
   font-size: clamp(40px, 6vw, 64px);
@@ -82,11 +65,7 @@ a:hover { text-decoration: underline; }
   background-clip: text;
   color: transparent;
 }
-.hero-desc {
-  margin-top: var(--space-5);
-  font-size: 16px;
-  color: var(--sublog-ink-2);
-}
+.hero-desc { margin-top: var(--space-5); font-size: 16px; color: var(--sublog-ink-2); }
 .hero-actions {
   margin-top: var(--space-8);
   display: flex;
@@ -95,7 +74,7 @@ a:hover { text-decoration: underline; }
   flex-wrap: wrap;
 }
 
-/* Buttons (このページ専用) */
+/* Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -113,26 +92,22 @@ a:hover { text-decoration: underline; }
 .btn-primary {
   color: #fff;
   background: linear-gradient(135deg, var(--sublog-accent), var(--sublog-accent-2));
-  box-shadow: 0 10px 24px -8px rgba(74, 108, 247, 0.5);
+  box-shadow: 0 10px 24px -8px rgba(30, 136, 229, 0.5);
 }
-.btn-primary:hover { box-shadow: 0 14px 32px -8px rgba(74, 108, 247, 0.6); }
+.btn-primary:hover { box-shadow: 0 14px 32px -8px rgba(30, 136, 229, 0.6); }
 .btn-primary[aria-disabled="true"] { opacity: 0.55; cursor: not-allowed; }
 .btn-primary[aria-disabled="true"]:hover { transform: none; }
 .btn-ghost {
   color: var(--sublog-ink);
   background: #fff;
-  border-color: rgba(27, 33, 64, 0.12);
+  border-color: rgba(14, 30, 58, 0.12);
 }
-.btn-ghost:hover { background: #fafbff; }
+.btn-ghost:hover { background: #f0f7ff; }
 
 /* ═══════════════════════════════════════════════════════════════
    Main
    ═══════════════════════════════════════════════════════════════ */
-.page {
-  max-width: 1040px;
-  margin: 0 auto;
-  padding: 0 var(--space-5);
-}
+.page { max-width: 1040px; margin: 0 auto; padding: 0 var(--space-5); }
 
 .section-title {
   font-size: clamp(24px, 3vw, 32px);
@@ -153,19 +128,78 @@ a:hover { text-decoration: underline; }
   padding: var(--space-6);
   background: #fff;
   border-radius: var(--radius-lg);
-  box-shadow: 0 10px 30px -12px rgba(27, 33, 64, 0.12);
-  border: 1px solid rgba(27, 33, 64, 0.06);
+  box-shadow: 0 10px 30px -12px rgba(14, 30, 58, 0.12);
+  border: 1px solid rgba(14, 30, 58, 0.06);
 }
 .feature-icon { font-size: 32px; margin-bottom: var(--space-3); }
-.feature-card h3 {
-  font-size: 18px;
+.feature-card h3 { font-size: 18px; font-weight: 700; margin-bottom: var(--space-2); }
+.feature-card p { font-size: 14px; color: var(--sublog-ink-2); }
+
+/* Premium section */
+.pro {
+  margin: var(--space-8) 0;
+  padding: 0;
+}
+.pro-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6);
+  background: #fff;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(14, 30, 58, 0.08);
+  box-shadow: 0 10px 30px -12px rgba(14, 30, 58, 0.1);
+}
+.pro-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: linear-gradient(135deg, var(--sublog-accent), var(--sublog-accent-2));
+  color: #fff;
+  font-size: 12px;
   font-weight: 700;
+  letter-spacing: 0.04em;
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-3);
+}
+.pro-title {
+  font-size: clamp(20px, 2.6vw, 26px);
+  font-weight: 800;
   margin-bottom: var(--space-2);
 }
-.feature-card p {
+.pro-price {
   font-size: 14px;
   color: var(--sublog-ink-2);
+  margin-bottom: var(--space-5);
 }
+.pro-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+.pro-list li {
+  padding-left: 28px;
+  position: relative;
+  font-size: 15px;
+  color: var(--sublog-ink-2);
+  line-height: 1.6;
+}
+.pro-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--sublog-accent), var(--sublog-accent-2));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pro-list strong { color: var(--sublog-ink); font-weight: 700; }
 
 /* CTA */
 .cta {
@@ -175,13 +209,9 @@ a:hover { text-decoration: underline; }
   background: linear-gradient(135deg, var(--sublog-accent), var(--sublog-accent-2));
   color: #fff;
   border-radius: var(--radius-lg);
-  box-shadow: 0 20px 40px -12px rgba(74, 108, 247, 0.4);
+  box-shadow: 0 20px 40px -12px rgba(30, 136, 229, 0.4);
 }
-.cta-title {
-  font-size: clamp(22px, 3vw, 28px);
-  font-weight: 800;
-  margin-bottom: var(--space-2);
-}
+.cta-title { font-size: clamp(22px, 3vw, 28px); font-weight: 800; margin-bottom: var(--space-2); }
 .cta-desc { opacity: 0.92; }
 
 /* Footer */
@@ -198,4 +228,5 @@ a:hover { text-decoration: underline; }
   .hero { padding: var(--space-4); }
   .hero-inner { padding: var(--space-4) 0; }
   .features { padding: var(--space-8) 0; }
+  .pro-inner { padding: var(--space-6) var(--space-5); }
 }

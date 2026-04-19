@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CafLog プライバシーポリシー</title>
+  <meta name="robots" content="index,follow">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Yu Gothic UI', sans-serif;
+      color: #2d1a1a;
+      background: #fffaf5;
+      line-height: 1.8;
+      padding: 40px 20px;
+    }
+    main { max-width: 720px; margin: 0 auto; }
+    h1 { font-size: 28px; margin-bottom: 8px; }
+    .meta { color: #6d4a4a; font-size: 13px; margin-bottom: 32px; }
+    h2 { font-size: 18px; margin: 32px 0 8px; }
+    p, li { font-size: 15px; color: #3a2828; }
+    ul { padding-left: 1.4em; }
+    a { color: #ff8a3d; }
+    .todo {
+      display: block;
+      padding: 12px 16px;
+      margin: 24px 0;
+      background: #fff7dc;
+      border: 1px solid #f0d36e;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #7a5a00;
+    }
+    footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #f0d8c0;
+      font-size: 13px;
+      color: #6d4a4a;
+    }
+  </style>
+</head>
+<body>
+<main>
+
+  <h1>プライバシーポリシー</h1>
+  <p class="meta">アプリ名: CafLog / 最終更新日: 2026-04-16</p>
+
+  <p class="todo">
+    ⚠️ 公開前にこの雛形の内容を実装と照合し、<strong>App Store Connect の「App のプライバシー」回答と必ず整合</strong>を取ってください。
+    特に HealthKit / iCloud / 解析 SDK の記述は実態に合わせて調整すること。
+  </p>
+
+  <h2>1. はじめに</h2>
+  <p>
+    本プライバシーポリシーは、uesugiyuuto（以下「開発者」）が提供する iOS アプリ
+    「CafLog」（以下「本アプリ」）における、ユーザー情報の取り扱いについて説明するものです。
+  </p>
+
+  <h2>2. 収集する情報</h2>
+  <p>本アプリは、以下の情報を<strong>ユーザーの端末内にのみ</strong>保存します。開発者のサーバーに送信することはありません。</p>
+  <ul>
+    <li>カフェイン摂取記録（日時・ドリンク名・カフェイン量・容量・カテゴリ）</li>
+    <li>ユーザーが登録したカスタムドリンクテンプレートおよびお気に入り設定</li>
+    <li>「カフェインゼロ日」の記録</li>
+    <li>アプリの設定情報（就寝時刻、通知、表示テーマ、言語、単位など）</li>
+    <li>称号・実績の達成状況</li>
+  </ul>
+  <p>本アプリは、氏名・メールアドレス・電話番号・位置情報・連絡先などの個人を特定する情報を<strong>一切収集しません</strong>。</p>
+
+  <h2>3. iCloud 同期（Pro 機能）</h2>
+  <p>
+    Pro プランを購入したユーザーに対しては、Apple が提供する iCloud / CloudKit を用いて、
+    ユーザー自身の Apple ID に紐づくプライベートな領域にカフェイン記録を同期する機能を提供します。
+    同期されたデータは Apple のプライバシーポリシーに基づいて管理され、開発者がアクセスすることはできません。
+    iCloud 同期は iOS の「設定 App」または本アプリ内設定でいつでも無効化できます。
+  </p>
+
+  <h2>4. HealthKit 連携（Pro 機能）</h2>
+  <p>
+    Pro プランを購入したユーザーに対しては、Apple の HealthKit と連携して、
+    カフェイン摂取量を「ヘルスケア」App の栄養データ（caffeine）として読み書きする機能を提供します。
+  </p>
+  <ul>
+    <li>HealthKit から読み取ったデータは本アプリ内でのみ使用し、開発者サーバーや第三者に送信することはありません。</li>
+    <li>HealthKit への書き込みは、ユーザーが本アプリで記録したカフェイン摂取データに限定されます。</li>
+    <li>HealthKit のアクセス権限はユーザーが iOS の「設定 &gt; プライバシーとセキュリティ &gt; ヘルスケア」からいつでも取り消せます。</li>
+  </ul>
+
+  <h2>5. 課金情報</h2>
+  <p>
+    Pro プランの購入処理は Apple の StoreKit を通じて行われます。
+    開発者はクレジットカード情報等の決済情報を取得・保存しません。
+    購入状態（Pro 購入済みか否か）のみをアプリ内で参照します。
+  </p>
+
+  <h2>6. 第三者への提供</h2>
+  <p>本アプリは、ユーザーのデータを第三者に提供・販売することはありません。</p>
+
+  <h2>7. 解析・広告</h2>
+  <p>
+    <!-- TODO: 解析 SDK を入れる場合はここを書き換える -->
+    本アプリは、解析ツールや広告 SDK を一切組み込んでいません。クラッシュレポートも収集しません。
+  </p>
+
+  <h2>8. 通知</h2>
+  <p>
+    本アプリはローカル通知のみを使用し、プッシュ通知サーバーとの通信は行いません。
+    通知は iOS の「設定」からいつでも無効化できます。
+  </p>
+
+  <h2>9. 子どもの個人情報</h2>
+  <p>本アプリは 13 歳未満の子どもを対象としておらず、意図的に子どもの個人情報を収集することはありません。</p>
+
+  <h2>10. ユーザーによるデータ削除</h2>
+  <p>
+    ユーザーは、以下の方法で本アプリのデータを削除できます。
+  </p>
+  <ul>
+    <li>本アプリをアンインストール → 端末内のすべてのローカルデータが削除されます。</li>
+    <li>iCloud に同期されたデータは「設定 &gt; Apple ID &gt; iCloud &gt; iCloud 使用中のアプリ &gt; CafLog」から削除できます。</li>
+    <li>HealthKit に書き込まれたカフェインデータは「ヘルスケア App &gt; データとアクセス」から個別に削除できます。</li>
+  </ul>
+
+  <h2>11. ポリシーの変更</h2>
+  <p>本ポリシーは、必要に応じて変更されることがあります。変更があった場合は、本ページで通知します。</p>
+
+  <h2>12. お問い合わせ</h2>
+  <p>
+    本ポリシーに関するお問い合わせは、以下までお願いします。<br>
+    <!-- TODO: 連絡先メールアドレスを記入 -->
+    連絡先: <a href="mailto:your-email@example.com">your-email@example.com</a>
+  </p>
+
+  <footer>
+    <p><a href="../../index.html">AppLibrary に戻る</a> · <a href="./index.html">CafLog に戻る</a></p>
+  </footer>
+
+</main>
+</body>
+</html>

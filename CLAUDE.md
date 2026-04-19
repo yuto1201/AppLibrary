@@ -61,6 +61,23 @@ GitHub Pages では `https://<user>.github.io/AppLibrary/` のようにサブデ
 
 例外: `404.html` の「トップに戻る」リンクは `/` を使ってよい（GitHub Pages が任意深さで返すため）。
 
+**ディレクトリ URL を使わない（必ず `index.html` まで書く）:**
+`./apps/sublog/` のようにディレクトリで終わる URL は、サーバー配信時は index.html が返るが、
+ローカルで `file://` 直開きするとブラウザがディレクトリ一覧を表示してしまう。
+GitHub Pages・ローカル両方で動くよう、リンクは必ず `./apps/sublog/index.html` まで書く。
+
+```html
+<!-- ✅ OK -->
+<a href="../../index.html">← AppLibrary</a>
+<a href="./apps/sublog/index.html">SubLog を見る</a>
+
+<!-- ❌ NG（file:// で一覧表示される） -->
+<a href="../../">← AppLibrary</a>
+<a href="./apps/sublog/">SubLog を見る</a>
+```
+
+`registry.js` の `introUrl` / `privacyUrl` も同様に `index.html` / `privacy.html` まで明示する。
+
 ### 2. デザイントークンは `assets/css/tokens.css` から継承
 
 - 色・余白・角丸・shadow をハードコードしない → `var(--xxx)` を使う

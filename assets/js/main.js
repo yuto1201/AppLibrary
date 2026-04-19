@@ -18,7 +18,7 @@
 
   function cardHTML(app) {
     const status = STATUS_BADGE[app.status];
-    const href = app.introUrl || `./apps/${app.slug}/`;
+    const href = app.introUrl || `./apps/${app.slug}/index.html`;
     const iconSrc = app.icon ? `./apps/${app.slug}/${app.icon}` : null;
     return `
       <a class="app-card" href="${esc(href)}">
