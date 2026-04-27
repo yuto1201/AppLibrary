@@ -1,0 +1,30 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs / temp
+*.log
+*.tmp
+
+# Env / secrets
+.env
+.env.local
+.env.*.local
+
+# Build artifacts（現状ビルド工程は無いが将来用）
+dist/
+build/
+node_modules/
