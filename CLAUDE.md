@@ -19,13 +19,18 @@ AppLibrary/
 ├── 404.html                    # 404（GitHub Pages 用、スタイル自己完結）
 ├── CLAUDE.md                   # この規定
 ├── README.md
+├── TODO.md                     # 進行中タスクと持ち越し事項
+├── docs/                       # ドキュメント（軽量に保つ）
+│   ├── design.md               # 画面デザイン仕様（トップページ）
+│   └── apps.md                 # アプリカタログ（registry.js の人間用ビュー）
 ├── assets/                     # 共通資産
 │   ├── css/
 │   │   ├── tokens.css          # デザイントークン（全ページ必読）
 │   │   └── standard.css        # 共通ページ用コンポーネント
 │   ├── js/
 │   │   ├── glass-filter.js     # SVG filter 注入（liquid-glass 使用時）
-│   │   └── main.js             # トップページのレンダラー
+│   │   ├── main.js             # トップページのレンダラー
+│   │   └── site-data.js        # プロフィール / お知らせ / SNS / i18n ラベル
 │   └── img/                    # 背景画像・OGP 画像等
 └── apps/
     ├── registry.js             # アプリメタデータ（唯一の真実）
@@ -35,11 +40,6 @@ AppLibrary/
         ├── script.js
         └── privacy.html        # プライバシーポリシー（必須）
 ```
-
-### 削除予定（旧テンプレ由来）
-
-- `src/` `docs/` は Web 開発テンプレの雛形。本プロジェクトでは使わない方針。
-  整理タイミングで削除してよい。
 
 ---
 

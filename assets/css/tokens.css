@@ -31,16 +31,18 @@
   --glass-blur-sm: 14px;
   --glass-tint: rgba(255, 255, 255, 0.08);
   --glass-tint-md: rgba(255, 255, 255, 0.12);
-  --glass-tint-hover: rgba(255, 255, 255, 0.15);
+  --glass-tint-hover: rgba(255, 255, 255, 0.18);
   --glass-border: rgba(255, 255, 255, 0.4);
   --glass-border-dim: rgba(255, 255, 255, 0.2);
   --glass-border-bright: rgba(255, 255, 255, 0.6);
   --glass-glow: 0 0 16px -6px rgba(255, 255, 255, 0.25);
   --glass-glow-lg: 0 0 24px -6px rgba(255, 255, 255, 0.35);
   --glass-inset: inset 0 0 10px -3px rgba(255, 255, 255, 0.6);
+  --glass-accent: rgba(0, 122, 255, 0.4);
   --glass-text: #ffffff;
   --glass-text-dim: rgba(255, 255, 255, 0.7);
-  --glass-text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --glass-text-faint: rgba(255, 255, 255, 0.5);
+  --glass-text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 
   /* --- Shadow --- */
   --shadow-out:    0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
@@ -63,4 +65,30 @@
   --orange: #FF9F0A;
   --teal:   #64D2B1;
   --indigo: #5856D6;
+
+  /* --- Tweakable runtime tokens (top page) --- */
+  --card-pad: 22px;
+  --font-serif: 'Iowan Old Style', Palatino, 'Hiragino Mincho ProN', 'Yu Mincho', Georgia, serif;
+  --font-stack: var(--font-sans);
+}
+
+/* --- Tweaks: density / font (top page only) --- */
+[data-density="tight"]    { --card-pad: 16px; }
+[data-density="relaxed"]  { --card-pad: 22px; }
+[data-density="spacious"] { --card-pad: 30px; }
+[data-font="sans"]  { --font-stack: var(--font-sans); }
+[data-font="serif"] { --font-stack: var(--font-serif); }
+[data-font="mono"]  { --font-stack: var(--font-mono); }
+
+/* --- Light theme override (top page only — sub-pages are self-contained) --- */
+[data-theme="light"] {
+  --glass-text:        #1d1d1f;
+  --glass-text-dim:    rgba(29, 29, 31, 0.7);
+  --glass-text-faint:  rgba(29, 29, 31, 0.5);
+  --glass-text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+  --glass-tint:        rgba(255, 255, 255, 0.3);
+  --glass-tint-md:     rgba(255, 255, 255, 0.45);
+  --glass-tint-hover:  rgba(255, 255, 255, 0.6);
+  --glass-border:      rgba(255, 255, 255, 0.7);
+  --glass-border-dim:  rgba(255, 255, 255, 0.45);
 }
