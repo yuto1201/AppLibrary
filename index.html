@@ -23,6 +23,22 @@
   <!-- Design System -->
   <link rel="stylesheet" href="./assets/css/tokens.css">
   <link rel="stylesheet" href="./assets/css/standard.css">
+
+  <!-- FOUC 対策: 保存済みテーマ等を first paint 前に当てる -->
+  <script>
+    (function () {
+      try {
+        var s = JSON.parse(localStorage.getItem('applibrary_state') || 'null');
+        if (!s) return;
+        var html = document.documentElement;
+        if (s.theme)   html.setAttribute('data-theme',   s.theme);
+        if (s.layout)  html.setAttribute('data-layout',  s.layout);
+        if (s.density) html.setAttribute('data-density', s.density);
+        if (s.font)    html.setAttribute('data-font',    s.font);
+        if (s.accent)  html.style.setProperty('--accent', s.accent);
+      } catch (_) { /* localStorage unavailable */ }
+    })();
+  </script>
 </head>
 <body>
 

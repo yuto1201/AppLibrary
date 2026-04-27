@@ -28,6 +28,12 @@
   let modalApp = null;
   let tweaksOpen = false;
   let revealObserver = null;
+  let mobileNavOpen = false;
+  let previouslyFocused = null;
+  let composing = false;
+  const isDev = (function () {
+    try { return new URLSearchParams(location.search).has('dev'); } catch (_) { return false; }
+  })();
 
   function loadState() {
     try {
@@ -90,6 +96,9 @@
   const ICON_SLIDER = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="21" y2="21"/><line x1="4" x2="20" y1="10" y2="10"/><line x1="12" x2="12" y1="21" y2="14"/><line x1="12" x2="12" y1="10" y2="3"/><line x1="4" x2="20" y1="14" y2="14"/><line x1="8" x2="8" y1="14" y2="21"/><line x1="16" x2="16" y1="3" y2="10"/></svg>`;
   const ICON_APPLE = `<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 12.5c0-2.6 2.1-3.8 2.2-3.9-1.2-1.7-3-2-3.7-2-1.6-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.9-1.7 0-3.3 1-4.1 2.5-1.8 3-.5 7.5 1.2 9.9.9 1.2 1.9 2.5 3.2 2.5 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.3.8 1.4 0 2.3-1.2 3.1-2.4.7-1 1.3-2.1 1.7-3.3-1.6-.6-2.9-2.4-3.1-4.3ZM14.7 5.1c.7-.9 1.2-2.1 1.1-3.3-1 0-2.3.7-3 1.6-.6.8-1.2 2-1.1 3.2 1.1.1 2.2-.6 3-1.5Z"/></svg>`;
   const ICON_ARROW_NE = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>`;
+  const ICON_ARROW_DOWN = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>`;
+  const ICON_MENU = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>`;
+  const ICON_CLOSE = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
 
   // ────────────────────────────────────────────────────────────
   // Section renderers
@@ -100,21 +109,24 @@
     const themeIcon = state.theme === 'dark' ? ICON_SUN : ICON_MOON;
     const langLabel = state.lang === 'ja' ? 'EN' : 'JA';
     const hasPosts = (window.SITE_DATA.posts || []).length > 0;
+    const navOpenClass = mobileNavOpen ? ' is-open' : '';
+    const navToggleIcon = mobileNavOpen ? ICON_CLOSE : ICON_MENU;
     return `
-      <nav class="nav">
+      <nav class="nav${navOpenClass}" aria-label="Primary">
         <div class="nav-inner glass">
           <div class="nav-brand">${esc(profile.name)}</div>
-          <div class="nav-links">
-            <a href="#apps">${esc(T.nav.apps)}</a>
-            ${hasPosts ? `<a href="#posts">${esc(T.nav.posts)}</a>` : ''}
-            <a href="#contact">${esc(T.nav.contact)}</a>
+          <div class="nav-links" id="primary-nav">
+            <a href="#apps" data-action="close-mobile-nav">${esc(T.nav.apps)}</a>
+            ${hasPosts ? `<a href="#posts" data-action="close-mobile-nav">${esc(T.nav.posts)}</a>` : ''}
+            <a href="#contact" data-action="close-mobile-nav">${esc(T.nav.contact)}</a>
           </div>
           <div class="nav-tools">
-            <button class="icon-btn" data-action="toggle-lang"  title="Language">
+            <button class="icon-btn" data-action="toggle-lang" title="Language" aria-label="${attr(state.lang === 'ja' ? 'Switch to English' : '日本語に切替')}">
               <span style="font-size:12px;font-weight:600;">${esc(langLabel)}</span>
             </button>
-            <button class="icon-btn" data-action="toggle-theme" title="Theme">${themeIcon}</button>
-            <button class="icon-btn" data-action="toggle-tweaks" title="Tweaks">${ICON_SLIDER}</button>
+            <button class="icon-btn" data-action="toggle-theme" title="Theme" aria-label="${attr(state.theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode')}">${themeIcon}</button>
+            ${isDev ? `<button class="icon-btn" data-action="toggle-tweaks" title="Tweaks (dev)" aria-label="Open tweaks panel">${ICON_SLIDER}</button>` : ''}
+            <button class="icon-btn nav-toggle" data-action="toggle-mobile-nav" aria-expanded="${mobileNavOpen ? 'true' : 'false'}" aria-controls="primary-nav" aria-label="${attr(mobileNavOpen ? 'Close menu' : 'Open menu')}">${navToggleIcon}</button>
           </div>
         </div>
       </nav>
@@ -137,15 +149,22 @@
           <span>● ${total} ${esc(T.hero_meta_apps)}</span>
           <span>● Swift · SwiftUI</span>
         </div>
+        <div class="hero-cta-wrap reveal" style="transition-delay:320ms;">
+          <a class="cta-btn" href="#apps">
+            <span>${esc(T.hero_cta)}</span>
+            ${ICON_ARROW_DOWN}
+          </a>
+        </div>
       </section>
     `;
   }
 
   function visibleCategories() {
-    const all = window.SITE_DATA.categories || ['すべて'];
+    const labels = window.SITE_DATA.allCategoryLabel || { ja: 'すべて', en: 'All' };
+    const allLabel = labels[state.lang] || labels.ja || 'All';
     const used = new Set();
     (window.APP_REGISTRY || []).forEach((a) => { if (a.category) used.add(a.category); });
-    return all.filter((c, i) => i === 0 || used.has(c));
+    return [allLabel, ...Array.from(used).sort((a, b) => a.localeCompare(b, state.lang))];
   }
 
   function renderApps() {
@@ -198,7 +217,6 @@
   }
 
   function renderAppCard(app, i) {
-    const T = t();
     const styleVars = `--card-color:${esc(app.color || 'rgba(255,255,255,0.4)')};` +
                       `--card-accent:${esc(app.accent || 'rgba(255,255,255,0.2)')};` +
                       `transition-delay:${Math.min(i * 40, 200)}ms;`;
@@ -210,9 +228,13 @@
       : `<span class="app-status">${esc(statusLabel(app.status))}</span>`;
     const priceHTML = app.price ? `<span>${esc(app.price)}</span>` : '<span>iOS</span>';
     const featured = app.featured ? ' featured' : '';
+    const introHref = app.introUrl ? attr(app.introUrl) : '';
+    const directLinkLabel = state.lang === 'ja' ? `${app.name} の個別ページへ` : `Open ${app.name} site`;
     return `
-      <button class="app-card glass reveal${featured}" style="${styleVars}"
-              data-action="open-modal" data-slug="${attr(app.slug)}">
+      <article class="app-card glass reveal${featured}" style="${styleVars}"
+               role="button" tabindex="0"
+               data-action="open-modal" data-slug="${attr(app.slug)}"
+               aria-label="${attr(app.name + ' — ' + (app.tagline || ''))}">
         <div class="bg-shape"></div>
         <div class="app-icon">${appIconHTML(app)}</div>
         <div class="app-body">
@@ -224,7 +246,10 @@
             ${priceHTML}
           </div>
         </div>
-      </button>
+        ${introHref ? `<a class="app-card-direct" href="${introHref}"
+                          data-stop-card aria-label="${attr(directLinkLabel)}"
+                          title="${attr(directLinkLabel)}">${ICON_ARROW_NE}</a>` : ''}
+      </article>
     `;
   }
 
@@ -255,7 +280,19 @@
 
   function renderContact() {
     const T = t();
-    const social = window.SITE_DATA.social || [];
+    const allSocial = window.SITE_DATA.social || [];
+    // url が空 / `#` のエントリは未公開とみなして描画しない（プレースホルダー隠し）
+    const social = allSocial.filter((s) => s.url && s.url !== '#');
+    if (social.length === 0) {
+      return `
+        <section class="section" id="contact">
+          <div class="contact glass reveal">
+            <h2>${esc(T.contact_h)}</h2>
+            <p>${esc(T.contact_p)}</p>
+          </div>
+        </section>
+      `;
+    }
     return `
       <section class="section" id="contact">
         <div class="contact glass reveal">
@@ -373,8 +410,45 @@
     document.body.style.overflow = 'hidden';
   }
 
-  function openModal(app) { modalApp = app; renderModal(); }
-  function closeModal() { modalApp = null; renderModal(); }
+  function openModal(app) {
+    previouslyFocused = document.activeElement;
+    modalApp = app;
+    renderModal();
+    requestAnimationFrame(() => {
+      const modal = document.querySelector('#modal-root .modal');
+      if (!modal) return;
+      const close = modal.querySelector('.modal-close');
+      if (close) close.focus();
+    });
+  }
+  function closeModal() {
+    const restoreTo = previouslyFocused;
+    previouslyFocused = null;
+    modalApp = null;
+    renderModal();
+    if (restoreTo && typeof restoreTo.focus === 'function') {
+      try { restoreTo.focus(); } catch (_) {}
+    }
+  }
+
+  // フォーカストラップ: modal が開いているとき Tab を modal 内で循環させる
+  function trapFocus(ev) {
+    if (!modalApp) return;
+    const modal = document.querySelector('#modal-root .modal');
+    if (!modal) return;
+    const focusable = Array.from(modal.querySelectorAll(
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )).filter((el) => el.getAttribute('aria-disabled') !== 'true' && el.offsetParent !== null);
+    if (focusable.length === 0) { ev.preventDefault(); return; }
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const active = document.activeElement;
+    if (ev.shiftKey) {
+      if (active === first || !modal.contains(active)) { ev.preventDefault(); last.focus(); }
+    } else {
+      if (active === last || !modal.contains(active)) { ev.preventDefault(); first.focus(); }
+    }
+  }
 
   // ────────────────────────────────────────────────────────────
   // Tweaks panel
@@ -475,8 +549,25 @@
   // ────────────────────────────────────────────────────────────
   // Event delegation
   // ────────────────────────────────────────────────────────────
+  function rerenderApps() {
+    const sectionEl = document.getElementById('apps');
+    if (!sectionEl) return;
+    sectionEl.outerHTML = renderApps();
+    setupReveal();
+    const input = document.getElementById('search-input');
+    if (input) {
+      input.focus();
+      const len = input.value.length;
+      try { input.setSelectionRange(len, len); } catch (_) {}
+    }
+  }
+
   function bindEvents() {
     document.addEventListener('click', (ev) => {
+      // 直行リンク（カード内 <a>）はカードクリックを発火させない
+      if (ev.target.closest('[data-stop-card]')) {
+        return;
+      }
       const target = ev.target.closest('[data-action]');
       if (!target) return;
       const action = target.dataset.action;
@@ -490,6 +581,16 @@
         case 'toggle-tweaks':
           tweaksOpen = !tweaksOpen;
           renderTweaks();
+          break;
+        case 'toggle-mobile-nav':
+          mobileNavOpen = !mobileNavOpen;
+          render();
+          break;
+        case 'close-mobile-nav':
+          if (mobileNavOpen) {
+            mobileNavOpen = false;
+            render();
+          }
           break;
         case 'set-cat': {
           const next = Number(target.dataset.cat || 0);
@@ -521,29 +622,43 @@
       }
     });
 
-    // Search — listen on document so it works after re-renders
-    document.addEventListener('input', (ev) => {
-      if (ev.target && ev.target.id === 'search-input') {
-        search = ev.target.value;
-        // Targeted re-render: rebuild only the mosaic to preserve focus
-        const sectionEl = document.getElementById('apps');
-        if (sectionEl) {
-          sectionEl.outerHTML = renderApps();
-          setupReveal();
-          // Restore focus + caret
-          const input = document.getElementById('search-input');
-          if (input) {
-            input.focus();
-            const len = input.value.length;
-            try { input.setSelectionRange(len, len); } catch (_) {}
-          }
-        }
+    // app-card は <article role="button"> なのでキーボード活性化を自前で
+    document.addEventListener('keydown', (ev) => {
+      if ((ev.key === 'Enter' || ev.key === ' ') && ev.target.classList && ev.target.classList.contains('app-card')) {
+        ev.preventDefault();
+        ev.target.click();
       }
     });
 
-    // Esc to close modal
+    // IME 入力対応: 変換中は再描画しない
+    document.addEventListener('compositionstart', (ev) => {
+      if (ev.target && ev.target.id === 'search-input') composing = true;
+    });
+    document.addEventListener('compositionend', (ev) => {
+      if (ev.target && ev.target.id === 'search-input') {
+        composing = false;
+        search = ev.target.value;
+        rerenderApps();
+      }
+    });
+
+    // 検索 input — composing 中はスキップ
+    document.addEventListener('input', (ev) => {
+      if (ev.target && ev.target.id === 'search-input' && !composing) {
+        search = ev.target.value;
+        rerenderApps();
+      }
+    });
+
+    // Esc / Tab トラップ
     document.addEventListener('keydown', (ev) => {
-      if (ev.key === 'Escape' && modalApp) closeModal();
+      if (modalApp && ev.key === 'Escape') {
+        closeModal();
+        return;
+      }
+      if (modalApp && ev.key === 'Tab') {
+        trapFocus(ev);
+      }
     });
   }
 

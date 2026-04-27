@@ -10,13 +10,15 @@ window.SITE_DATA = {
   profile: {
     name: 'uesugiyuuto',
     tagline: 'iOS App Maker',
+    // TODO: 実情に合わせて書き換える（職業、活動、好きなもの等）
     bio: 'Xcode で作ったアプリたち。日々を少しだけ丁寧にする、小さな道具を作っています。',
     location: '東京, 日本',
   },
 
-  /* --- カテゴリチップ ---
-     `null` は「すべて」を表す。registry.js の app.category と一致させる。 */
-  categories: ['すべて', 'ファイナンス', 'ヘルスケア', '生産性', 'ユーティリティ', 'ライフスタイル'],
+  /* --- カテゴリの先頭（「すべて」相当）のラベル ---
+     ※ それ以降のカテゴリ一覧は registry.js から自動収集される（main.js: visibleCategories）。
+     新規カテゴリを追加するときは registry.js の `category` を書くだけで良い。 */
+  allCategoryLabel: { ja: 'すべて', en: 'All' },
 
   /* --- お知らせ／リリースノート ---
      空配列にすればセクション自体が非表示になる。 */
@@ -29,11 +31,12 @@ window.SITE_DATA = {
   ],
 
   /* --- SNS / 連絡先 ---
-     URL を `#` のままにしておくと、未公開扱いとして表示される（ホバーで誘導）。 */
+     `url` が `#` 始まり、空、未設定のエントリは描画されない（プレースホルダー隠し）。
+     公開する分だけ実 URL を埋めれば、その項目だけ表示される。 */
   social: [
-    { label: 'X',      handle: '@uesugiyuuto',    url: '#' },
-    { label: 'GitHub', handle: 'uesugiyuuto',     url: 'https://github.com/uesugiyuuto' },
-    { label: 'Email',  handle: 'hello@example.com', url: 'mailto:hello@example.com' },
+    { label: 'X',      handle: '@uesugiyuuto', url: '#' },                                  // TODO: 実 URL を入れる
+    { label: 'GitHub', handle: 'uesugiyuuto',  url: 'https://github.com/uesugiyuuto' },
+    // { label: 'Email', handle: 'hello@example.com', url: 'mailto:hello@example.com' },    // TODO: 実アドレスに
   ],
 
   /* --- i18n（UI ラベルのみ） --- */
@@ -44,6 +47,7 @@ window.SITE_DATA = {
       hero_h1_a: '小さなアプリを、',
       hero_h1_b: '丁寧に。',
       hero_meta_apps: '個のアプリ',
+      hero_cta: 'アプリを見る',
       section_apps: 'App Library',
       section_apps_sub: 'Xcode で作ったアプリたち',
       section_posts: 'Notes',
@@ -85,6 +89,7 @@ window.SITE_DATA = {
       hero_h1_a: 'Small apps,',
       hero_h1_b: 'made with care.',
       hero_meta_apps: 'apps',
+      hero_cta: 'Browse apps',
       section_apps: 'App Library',
       section_apps_sub: 'Apps crafted in Xcode',
       section_posts: 'Notes',

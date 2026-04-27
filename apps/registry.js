@@ -39,7 +39,7 @@ window.APP_REGISTRY = [
     iconGlyph: '￥',                         // 画像読み込み失敗時のフォールバック
     color:  '#E8E1F2',                      // 背景グラデ開始
     accent: '#6B5B8E',                      // 背景グラデ終了＋光彩
-    featured: true,                         // モザイクで大きく表示
+    // featured: true,                      // モザイクで大きく表示（アプリ数が増えてから差別化）
 
     // --- 詳細（モーダル） ---
     category: 'ファイナンス',
