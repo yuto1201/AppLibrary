@@ -24,19 +24,33 @@
   <link rel="stylesheet" href="./assets/css/tokens.css">
   <link rel="stylesheet" href="./assets/css/standard.css">
 
-  <!-- FOUC 対策: 保存済みテーマ等を first paint 前に当てる -->
+  <!-- FOUC 対策: 保存済みテーマ等を first paint 前に当てる + Hero opening 判定 -->
   <script>
     (function () {
+      var html = document.documentElement;
       try {
         var s = JSON.parse(localStorage.getItem('applibrary_state') || 'null');
-        if (!s) return;
-        var html = document.documentElement;
-        if (s.theme)   html.setAttribute('data-theme',   s.theme);
-        if (s.layout)  html.setAttribute('data-layout',  s.layout);
-        if (s.density) html.setAttribute('data-density', s.density);
-        if (s.font)    html.setAttribute('data-font',    s.font);
-        if (s.accent)  html.style.setProperty('--accent', s.accent);
+        if (s) {
+          if (s.theme)   html.setAttribute('data-theme',   s.theme);
+          if (s.layout)  html.setAttribute('data-layout',  s.layout);
+          if (s.density) html.setAttribute('data-density', s.density);
+          if (s.font)    html.setAttribute('data-font',    s.font);
+          if (s.accent)  html.style.setProperty('--accent', s.accent);
+        }
       } catch (_) { /* localStorage unavailable */ }
+
+      try {
+        var seen = sessionStorage.getItem('applibrary_hero_seen');
+        var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (seen || prefersReducedMotion) {
+          html.setAttribute('data-hero-opening', 'off');
+        } else {
+          html.setAttribute('data-hero-opening', 'play');
+          sessionStorage.setItem('applibrary_hero_seen', '1');
+        }
+      } catch (_) {
+        html.setAttribute('data-hero-opening', 'off');
+      }
     })();
   </script>
 </head>
