@@ -264,10 +264,9 @@ body {
 
 /* --- Hero opening animation: play モード（初回訪問時のみ） --- */
 [data-hero-opening="play"] .hero .reveal {
-  /* 既存 .reveal の opacity:0 / translateY を打ち消し、新 keyframes に任せる。
-     IntersectionObserver が .in を付けても上書きしないよう important。 */
-  opacity: 1 !important;
-  transform: none !important;
+  /* 既存 .reveal の transition を打ち消す（keyframe アニメーションに任せる）。
+     opacity/transform は keyframe 側 fill-mode:both が both 端を抑えるので CSS 静的値は
+     上書きしない（!important で固定すると keyframe の opacity:0→1 が打ち消される）。 */
   transition: none !important;
 }
 [data-hero-opening="play"] .hero .hero-eyebrow {
