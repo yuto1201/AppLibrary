@@ -193,17 +193,34 @@ body {
   max-width: 16ch;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
 }
-.hero h1 .accent {
-  background: linear-gradient(120deg, #ffd4b4 0%, #ff8fd0 50%, #9cc7ff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* --- Hero h1: line/letter 分割構造（renderHero で生成） --- */
+.hero-h1 {
+  perspective: 800px; /* letter-rise の rotateX 用（将来用、現状は translateY のみ） */
 }
-[data-theme="light"] .hero h1 .accent {
-  background: linear-gradient(120deg, #e85b8a 0%, #af52de 50%, #0a84ff 100%);
+.hero-h1 .hero-line {
+  display: block;
+}
+.hero-h1 .hero-line.accent {
+  background: linear-gradient(120deg, #ffd4b4 0%, #ff8fd0 50%, #9cc7ff 100%);
+  background-size: 200% 200%;
+  background-position: 0% 50%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+[data-theme="light"] .hero-h1 .hero-line.accent {
+  background: linear-gradient(120deg, #e85b8a 0%, #af52de 50%, #0a84ff 100%);
+  background-size: 200% 200%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.hero-h1 .hero-letter {
+  display: inline-block;
+  white-space: pre; /* &nbsp; を確実に幅として出す */
 }
 .hero-bio {
   font-size: 19px;
