@@ -70,6 +70,14 @@
   --card-pad: 22px;
   --font-serif: 'Iowan Old Style', Palatino, 'Hiragino Mincho ProN', 'Yu Mincho', Georgia, serif;
   --font-stack: var(--font-sans);
+
+  /* --- Hero opening animation --- */
+  --hero-anim-duration: 0.5s;
+  --hero-letter-duration: 0.4s;
+  --hero-anim-easing: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --hero-letter-easing: cubic-bezier(0.16, 1, 0.3, 1);
+  --hero-letter-base: 150ms;
+  --hero-letter-stagger: 24ms;
 }
 
 /* --- Tweaks: density / font (top page only) --- */
