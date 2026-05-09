@@ -222,6 +222,62 @@ body {
   display: inline-block;
   white-space: pre; /* &nbsp; を確実に幅として出す */
 }
+
+/* --- Hero opening animation: keyframes --- */
+@keyframes hero-fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes hero-letter-rise {
+  from { opacity: 0; transform: translateY(0.5em); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes hero-grad-flow {
+  from { background-position: 0% 50%; }
+  to   { background-position: 100% 50%; }
+}
+@keyframes hero-cta-glow {
+  0%   { box-shadow: 0 6px 24px rgba(0, 122, 255, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.5); }
+  50%  { box-shadow: 0 10px 40px rgba(0, 122, 255, 0.55), 0 0 60px rgba(90, 200, 250, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.6); }
+  100% { box-shadow: 0 6px 24px rgba(0, 122, 255, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.5); }
+}
+
+/* --- Hero opening animation: play モード（初回訪問時のみ） --- */
+[data-hero-opening="play"] .hero .reveal {
+  /* 既存 .reveal の opacity:0 / translateY を打ち消し、新 keyframes に任せる。
+     IntersectionObserver が .in を付けても上書きしないよう important。 */
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+[data-hero-opening="play"] .hero .hero-eyebrow {
+  animation: hero-fade-up var(--hero-anim-duration) var(--hero-anim-easing) 50ms both;
+}
+[data-hero-opening="play"] .hero .hero-h1 {
+  /* h1 自体は静止、letter が立ち上がる */
+  opacity: 1;
+}
+[data-hero-opening="play"] .hero-h1 .hero-letter {
+  opacity: 0;
+  transform: translateY(0.5em);
+  animation: hero-letter-rise var(--hero-letter-duration) var(--hero-letter-easing)
+             calc(var(--hero-letter-base) + var(--i, 0) * var(--hero-letter-stagger)) both;
+}
+[data-hero-opening="play"] .hero-h1 .hero-line.accent {
+  animation: hero-grad-flow 1.2s var(--hero-anim-easing) 200ms both;
+}
+[data-hero-opening="play"] .hero .hero-bio {
+  animation: hero-fade-up var(--hero-anim-duration) var(--hero-anim-easing) 450ms both;
+}
+[data-hero-opening="play"] .hero .hero-meta {
+  animation: hero-fade-up var(--hero-anim-duration) var(--hero-anim-easing) 550ms both;
+}
+[data-hero-opening="play"] .hero .hero-cta-wrap {
+  animation: hero-fade-up var(--hero-anim-duration) var(--hero-anim-easing) 650ms both;
+}
+[data-hero-opening="play"] .hero .cta-btn {
+  animation: hero-cta-glow 0.6s var(--hero-anim-easing) 1100ms both;
+}
 .hero-bio {
   font-size: 19px;
   color: var(--glass-text-dim);
