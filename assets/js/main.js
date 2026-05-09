@@ -87,6 +87,19 @@
     return esc(app.iconGlyph || app.name.slice(0, 1));
   }
 
+  // 文字分割: 1 行のテキストを <span class="hero-letter" style="--i:N"> 群に変換。
+  // サロゲートペア対応のため Array.from を使う。スペースは &nbsp; に置換。
+  // baseIndex は連番の開始値（複数行で letter index を通し番号にしたいときに使う）。
+  function splitToLetters(text, baseIndex) {
+    if (text == null) return { html: '', count: 0 };
+    var chars = Array.from(String(text));
+    var html = chars.map(function (ch, i) {
+      var safe = ch === ' ' ? '&nbsp;' : esc(ch);
+      return '<span class="hero-letter" style="--i:' + (baseIndex + i) + '">' + safe + '</span>';
+    }).join('');
+    return { html: html, count: chars.length };
+  }
+
   // ────────────────────────────────────────────────────────────
   // SVG icons (inline)
   // ────────────────────────────────────────────────────────────
@@ -137,11 +150,17 @@
     const T = t();
     const profile = window.SITE_DATA.profile;
     const total = (window.APP_REGISTRY || []).length;
+
+    const lineA = splitToLetters(T.hero_h1_a, 0);
+    const lineB = splitToLetters(T.hero_h1_b, lineA.count);
+    const ariaLabel = (T.hero_h1_a || '') + (T.hero_h1_b || '');
+
     return `
       <section class="hero">
         <div class="hero-eyebrow reveal">${esc(T.hero_eyebrow)} · ${esc(profile.tagline)}</div>
-        <h1 class="reveal" style="transition-delay:80ms;">
-          ${esc(T.hero_h1_a)}<br><span class="accent">${esc(T.hero_h1_b)}</span>
+        <h1 class="hero-h1 reveal" style="transition-delay:80ms;" aria-label="${attr(ariaLabel)}">
+          <span class="hero-line" aria-hidden="true">${lineA.html}</span>
+          <span class="hero-line accent" aria-hidden="true">${lineB.html}</span>
         </h1>
         <p class="hero-bio reveal" style="transition-delay:160ms;">${esc(profile.bio)}</p>
         <div class="hero-meta reveal" style="transition-delay:240ms;">
