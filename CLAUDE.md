@@ -177,6 +177,20 @@ liquid-glass（Apple 風フロストガラス）を標準として採用。
 - `tokens.css` の `--glass-*` トークン名（標準を崩すので、色味変えるなら値だけ変更）
 - アプリカードの DOM 構造（`main.js` とデータ構造が合わなくなる）
 
+### Hero オープニング演出（初回訪問のみ）
+
+トップを開いた瞬間に Hero が文字単位で立ち上がるオープニングシーケンス。
+sessionStorage キー `applibrary_hero_seen` で同セッション中の再生を抑制。
+`prefers-reduced-motion: reduce` で自動的に無効化。
+
+**開発中にもう一度見たいとき:**
+DevTools コンソールで以下を実行:
+```js
+sessionStorage.removeItem('applibrary_hero_seen'); location.reload();
+```
+
+設計詳細は `docs/superpowers/specs/2026-05-09-home-hero-opening-design.md`。
+
 ---
 
 ## 個別アプリページ（`apps/<slug>/`）

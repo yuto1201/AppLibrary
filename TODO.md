@@ -32,6 +32,7 @@
 
 ## 完了済み
 
+- [x] 2026-05-09 ホーム Hero オープニング演出追加（初回訪問のみ文字分割リビール、reduced-motion フォールバック付き）
 - [x] 2026-05-09 個別アプリページ デザイン方針確定（共通骨格＋個別色トークン）／sublog・caflog を新方式にリファクタ／apps/_template/ 整備／sublog に screenshots セクション追加
 - [x] 2026-04-27 トップページを liquid-glass デザインに刷新（Claude Design 由来）
 - [x] 2026-04-27 旧テンプレ由来の `src/` `docs/{infrastructure,spec,todo,ui}` を削除
