@@ -1,7 +1,7 @@
 # TODO — AppLibrary
 
 ステータス: 作成中
-最終更新日: 2026-04-27
+最終更新日: 2026-05-09
 
 進行中の改善タスクと持ち越し事項。完了したものはチェックを入れる、もしくは「完了済み」に移動する。
 
@@ -17,11 +17,10 @@
 ## 🟡 優先度: 中（仕上げ）
 
 - [ ] **OGP 画像作成** — `assets/img/ogp.png`（1200×630）を作って `index.html` の `<meta property="og:image">` を有効化
+- [ ] **caflog スクリーンショット撮影と配置** — `apps/caflog/screenshots/1.png`〜 を撮影して配置、`apps/caflog/index.html` に `<section id="screenshots">` を追加
 
 ## アプリごと
 
-- [ ] sublog: 個別ページデザイン方針確定（liquid-glass 共通化 vs 独自）
-- [ ] caflog: 同上
 - [ ] sublog / caflog: App Store 公開後 `appStoreUrl` を `apps/registry.js` に追加（バッジボタンが自動有効化される）
 - [ ] App Store 審査用に各 `privacy.html` の中身を実態に合わせて確認
 
@@ -33,6 +32,7 @@
 
 ## 完了済み
 
+- [x] 2026-05-09 個別アプリページ デザイン方針確定（共通骨格＋個別色トークン）／sublog・caflog を新方式にリファクタ／apps/_template/ 整備／sublog に screenshots セクション追加
 - [x] 2026-04-27 トップページを liquid-glass デザインに刷新（Claude Design 由来）
 - [x] 2026-04-27 旧テンプレ由来の `src/` `docs/{infrastructure,spec,todo,ui}` を削除
 - [x] 2026-04-27 ドキュメント刷新（`TODO.md` / `docs/design.md` / `docs/apps.md`）
