@@ -222,6 +222,26 @@ body {
   display: inline-block;
   white-space: pre; /* &nbsp; を確実に幅として出す */
 }
+/* accent gradient はテキストを持つ .hero-letter 側にも適用しないと
+   background-clip:text のクリップ対象が無く透明文字になる */
+.hero-h1 .hero-line.accent .hero-letter {
+  background: linear-gradient(120deg, #ffd4b4 0%, #ff8fd0 50%, #9cc7ff 100%);
+  background-size: 200% 200%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+[data-theme="light"] .hero-h1 .hero-line.accent .hero-letter {
+  background: linear-gradient(120deg, #e85b8a 0%, #af52de 50%, #0a84ff 100%);
+  background-size: 200% 200%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
 
 /* --- Hero opening animation: keyframes --- */
 @keyframes hero-fade-up {
@@ -263,8 +283,12 @@ body {
   animation: hero-letter-rise var(--hero-letter-duration) var(--hero-letter-easing)
              calc(var(--hero-letter-base) + var(--i, 0) * var(--hero-letter-stagger)) both;
 }
-[data-hero-opening="play"] .hero-h1 .hero-line.accent {
-  animation: hero-grad-flow 1.2s var(--hero-anim-easing) 200ms both;
+[data-hero-opening="play"] .hero-h1 .hero-line.accent .hero-letter {
+  /* letter-rise に加えて grad-flow も走らせる（gradient は letter 側にあるため） */
+  animation:
+    hero-letter-rise var(--hero-letter-duration) var(--hero-letter-easing)
+      calc(var(--hero-letter-base) + var(--i, 0) * var(--hero-letter-stagger)) both,
+    hero-grad-flow 1.4s var(--hero-anim-easing) 200ms both;
 }
 [data-hero-opening="play"] .hero .hero-bio {
   animation: hero-fade-up var(--hero-anim-duration) var(--hero-anim-easing) 450ms both;
