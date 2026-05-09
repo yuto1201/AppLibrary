@@ -1161,4 +1161,16 @@ body {
   .visit-btn:hover { transform: none; }
   .badge-btn:hover { transform: none; }
   .icon-btn:hover { transform: none; }
+  /* hero opening を CSS 側でも無効化（FOUC スクリプトが先に off にしているはずだが二重防御） */
+  [data-hero-opening="play"] .hero-h1 .hero-letter,
+  [data-hero-opening="play"] .hero-h1 .hero-line.accent,
+  [data-hero-opening="play"] .hero .hero-eyebrow,
+  [data-hero-opening="play"] .hero .hero-bio,
+  [data-hero-opening="play"] .hero .hero-meta,
+  [data-hero-opening="play"] .hero .hero-cta-wrap,
+  [data-hero-opening="play"] .hero .cta-btn {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
