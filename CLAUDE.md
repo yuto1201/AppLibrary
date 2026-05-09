@@ -26,7 +26,8 @@ AppLibrary/
 ├── assets/                     # 共通資産
 │   ├── css/
 │   │   ├── tokens.css          # デザイントークン（全ページ必読）
-│   │   └── standard.css        # 共通ページ用コンポーネント
+│   │   ├── standard.css        # 共通トップページ用コンポーネント（liquid-glass）
+│   │   └── app-page.css        # 個別アプリページ用の共通骨格
 │   ├── js/
 │   │   ├── glass-filter.js     # SVG filter 注入（liquid-glass 使用時）
 │   │   ├── main.js             # トップページのレンダラー
@@ -34,11 +35,14 @@ AppLibrary/
 │   └── img/                    # 背景画像・OGP 画像等
 └── apps/
     ├── registry.js             # アプリメタデータ（唯一の真実）
+    ├── _template/              # 新規アプリ作成時の雛形（cp して使う）
     └── <slug>/                 # アプリごとのフォルダ（slug = 英小文字+ハイフン）
-        ├── index.html          # 個別紹介ページ（自由デザイン OK）
-        ├── style.css
+        ├── index.html          # 個別紹介ページ
+        ├── style.css           # 色トークン上書き + 任意カスタム
         ├── script.js
-        └── privacy.html        # プライバシーポリシー（必須）
+        ├── privacy.html        # プライバシーポリシー（必須）
+        ├── icon.png
+        └── screenshots/        # 1.png 2.png 3.png ...
 ```
 
 ---
@@ -78,12 +82,26 @@ GitHub Pages・ローカル両方で動くよう、リンクは必ず `./apps/su
 
 `registry.js` の `introUrl` / `privacyUrl` も同様に `index.html` / `privacy.html` まで明示する。
 
-### 2. デザイントークンは `assets/css/tokens.css` から継承
+### 2. デザイントークンは継承する
 
-- 色・余白・角丸・shadow をハードコードしない → `var(--xxx)` を使う
-- 個別アプリページも必ず `tokens.css` を読み込む（`../../assets/css/tokens.css`）
-- トークンの値を変えたい時は `tokens.css` 自体を編集する
-- 個別ページで独自色を追加したい場合は `:root { --<app>-xxx: ... }` のように**プレフィックス付き**で追加
+- 全ページ共通：`assets/css/tokens.css`（色・余白・角丸・shadow の土台）
+- 個別アプリページ専用：`assets/css/app-page.css`（hero / features / screenshots / pro / cta / footer のレイアウト）
+- 個別アプリの `style.css` は **`--app-*` トークン上書きだけ**を持つ：
+
+  ```css
+  :root {
+    --app-bg-1:     #e7f2ff;
+    --app-bg-2:     #eaf6ff;
+    --app-bg-base:  #f7fbff;
+    --app-ink:      #0e1e3a;
+    --app-ink-2:    #4a5b80;
+    --app-accent:   #1e88e5;
+    --app-accent-2: #42a5f5;
+  }
+  ```
+
+- 独自色を足したい場合は `--<slug>-xxx` プレフィックスで追加（例：`--sublog-glow`）
+- レイアウト調整したい時は `app-page.css` を変えると全アプリに影響するので注意。片方だけ変えたい時は個別 `style.css` で `.hero { ... }` 等を override する
 
 ### 3. アプリメタデータは `apps/registry.js` に集約
 
@@ -163,36 +181,61 @@ liquid-glass（Apple 風フロストガラス）を標準として採用。
 
 ## 個別アプリページ（`apps/<slug>/`）
 
-### 方針
+### 共通骨格（必須）
 
-**アプリの雰囲気に合わせた自由デザイン OK**。
-ただし以下のルールは守る:
+セクション順序は以下を厳守：
+
+1. `hero` — icon / title / tagline / desc / CTA
+2. `features` — カード 6 枚程度
+3. `screenshots` — `apps/<slug>/screenshots/<番号>.png` から表示
+4. `pro` — オプション挿入（Pro プランがあるアプリのみ）
+5. `cta` — リリース予告 or App Store ボタン
+6. `footer` — プライバシー・戻り導線・コピーライト
+
+### CSS 階層（読み込み順）
+
+```html
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/app-page.css">
+<link rel="stylesheet" href="./style.css">
+```
+
+### スクリーンショット規約
+
+- `apps/<slug>/screenshots/` に `1.png` 〜 `N.png` を連番配置（推奨 3〜5 枚、最大 6 枚）
+- 縦長 iPhone スクショ前提（`aspect-ratio: 9/19.5`）
+- WebP 化は任意（最初は PNG のまま OK）
+- `<img loading="lazy">` を必ず付ける
+
+### 守るべきこと
 
 | 項目 | ルール |
 |---|---|
-| トークン | `tokens.css` を読み込む（色・余白の土台を共有） |
-| ハードコード | アプリ固有色は `:root { --<slug>-xxx }` で追加、他はトークン参照 |
-| 戻り導線 | `← AppLibrary` のようにトップへ戻れるリンクを必ず配置 |
+| トークン | `tokens.css` と `app-page.css` を読み込む |
+| 色トークン | `--app-*` を `style.css` で上書きするだけで色替え完了 |
+| 独自色 | `--<slug>-xxx` プレフィックスで追加 |
+| 戻り導線 | `← AppLibrary` リンクを hero-nav に配置 |
 | フッター | プライバシーポリシーへのリンクを配置 |
-| OGP | 上記のメタタグ一式を入れる |
+| OGP | 共通の meta タグ一式を入れる |
 | lang | `lang="ja"` |
 
 ### 個別ページから liquid-glass を使いたい場合
 
-`standard.css` と `glass-filter.js` を読み込めば共通ページと同じ見た目が使える。
-アプリごとに雰囲気を変えたい場合は独自 CSS を書く（SubLog がその例）。
+`standard.css` と `glass-filter.js` を読み込めば共通トップページと同じ見た目が使える。アプリの雰囲気を変えたい場合は `app-page.css` ベースで色トークンだけ変える。
 
 ---
 
 ## アプリを新しく追加する手順
 
-1. `apps/<slug>/` フォルダを作る（slug は英小文字+ハイフン）
-2. `apps/sublog/` を参考に `index.html` / `style.css` / `script.js` / `privacy.html` を作成
-3. アイコンがあれば `apps/<slug>/icon.png` として配置
-4. `apps/registry.js` にエントリを追加
-5. トップを `open index.html` で開いてカードが出ることを確認
-6. 個別ページを `open apps/<slug>/index.html` で確認
-7. スマホ幅（〜479px）で崩れないかレスポンシブ確認
+1. テンプレをコピー：`cp -R apps/_template apps/<slug>`（slug は英小文字+ハイフン）
+2. `apps/_template/README.md` の「手順」に沿って placeholder を一括置換
+3. `style.css` の `--app-*` トークン値をアプリ色に差し替え
+4. `apps/<slug>/icon.png` を配置（128×128 以上、正方形）
+5. `apps/<slug>/screenshots/1.png` 〜 `N.png` を配置
+6. `apps/<slug>/privacy.html` の中身を実態に合わせて修正
+7. `apps/registry.js` にエントリを 1 件追加
+8. トップを `open index.html` でカード表示確認、`open apps/<slug>/index.html` で個別ページ確認
+9. スマホ幅（〜479px）でレスポンシブ確認
 
 ---
 
@@ -239,6 +282,7 @@ liquid-glass（Apple 風フロストガラス）を標準として採用。
 - ❌ **画像をフルサイズのまま貼る** — WebP 化 + `loading="lazy"`
 - ❌ **`innerHTML` にユーザー入力を直接代入する** — 常に `escape` してから
 - ❌ **ビルドツールを導入する（今は）** — 規模に見合わない複雑性
+- ❌ **個別 `style.css` にレイアウト CSS を書く** — `app-page.css` 側に集約、個別は色トークンと最小限の override だけ
 
 ---
 
