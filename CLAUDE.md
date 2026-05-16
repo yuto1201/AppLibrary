@@ -189,7 +189,7 @@ DevTools コンソールで以下を実行:
 sessionStorage.removeItem('applibrary_hero_seen'); location.reload();
 ```
 
-設計詳細は `docs/superpowers/specs/2026-05-09-home-hero-opening-design.md`。
+設計詳細は `docs/superpowers/completed/specs/2026-05-09-home-hero-opening-design.md`。
 
 ---
 
