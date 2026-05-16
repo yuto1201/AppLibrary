@@ -69,7 +69,7 @@ python3 -m http.server 8000
 
 ## 既知の運用上の注意
 
-- `assets/js/site-data.js` のプロフィールや SNS には未確定値が残っている可能性あり(`TODO.md` を参照)
+- `assets/js/site-data.js` のプロフィールや SNS には未確定値が残っている可能性あり([TODO.md](./TODO.md) を参照)
 - OGP 画像(`assets/img/ogp.png`)は未作成の可能性がある。有効化前にファイル存在確認
 - `caflog` のスクリーンショットは未配置(2026-05-16 時点)
 - トップページの Hero オープニングは `sessionStorage` の `applibrary_hero_seen` で同一セッション内の再生を抑制(開発中の確認手順は [design/components.md](./design/components.md) を参照)

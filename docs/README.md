@@ -20,11 +20,12 @@
 | [apps/<slug>.md](./apps/) | 各アプリの「registry.js にない情報」(経緯・履歴・設計判断・ノウハウ) |
 | [decisions/README.md](./decisions/README.md) | ADR(意思決定の履歴)インデックス |
 | [decisions/YYYY-MM-DD-*.md](./decisions/) | 個別 ADR |
+| [TODO.md](./TODO.md) | 進行中タスク・持ち越し事項(作業ログ、`ステータス:` 行なし) |
 | [superpowers/specs/](./superpowers/specs/) | 進行中の design spec(brainstorming skill の出力) |
 | [superpowers/plans/](./superpowers/plans/) | 進行中の implementation plan(writing-plans skill の出力) |
 | [superpowers/completed/](./superpowers/completed/) | 完了 spec/plan のアーカイブ |
 
-ルート直下の `CLAUDE.md` / `AGENTS.md` / `TODO.md` / `README.md` は本フォルダの管轄外(変更ルールは別)。
+ルート直下の `CLAUDE.md` / `AGENTS.md` / `README.md` は本フォルダの管轄外(変更ルールは別)。
 
 ---
 
@@ -60,7 +61,7 @@ Claude Code は**大きな実装・コミット時に、変更内容を見て関
 ### 迷ったら
 - 「これは現状の記録か?(状態)」→ `docs/` の該当カテゴリ(architecture / operations / design / apps)
 - 「これはルールか?(規範)」→ ルート `CLAUDE.md`(本フォルダのスコープ外、ユーザー判断)
-- 「これは作業中の覚書か?」→ ルート `TODO.md`(本フォルダのスコープ外)
+- 「これは作業中の覚書か?」→ [TODO.md](./TODO.md)
 
 ---
 
@@ -76,6 +77,7 @@ Claude Code は**大きな実装・コミット時に、変更内容を見て関
 
 - 内容を実質的に更新したら `最終更新日` を当日に更新する
 - ステータス値は CLAUDE.md ルールに従う
+- 例外: `TODO.md` は作業ログのため `ステータス:` 行を持たない(`最終更新日:` のみ)
 
 ADR のファイル名は `YYYY-MM-DD-<topic>.md`、spec/plan は `YYYY-MM-DD-<topic>-design.md` / `YYYY-MM-DD-<topic>.md`。
 完了した spec/plan は `superpowers/completed/{specs,plans}/` に**同名のまま**移動する(ファイル名は変えない)。

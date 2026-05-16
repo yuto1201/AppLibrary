@@ -11,12 +11,12 @@ GitHub Pages での公開を前提に、HTML / CSS / JavaScript のみで構成�
 - 共通 CSS: `assets/css/tokens.css`, `assets/css/standard.css`, `assets/css/app-page.css`
 - 共通 JS: `assets/js/main.js`, `assets/js/site-data.js`, `assets/js/glass-filter.js`
 - 詳細な既存規定: `CLAUDE.md`
-- 進行中タスク: `TODO.md`
+- 進行中タスク: `docs/TODO.md`
 
 ## 作業前に確認すること
 
 1. `CLAUDE.md` を確認し、既存ルールと衝突しないようにする。
-2. 公開前の未確定事項は `TODO.md` を確認する。
+2. 公開前の未確定事項は `docs/TODO.md` を確認する。
 3. 既存の未コミット変更がある場合は、ユーザー作業として扱い、勝手に戻さない。
 
 ## 基本方針
@@ -175,7 +175,7 @@ python3 -m http.server 8000
 
 ## 注意する既知事項
 
-- `assets/js/site-data.js` のプロフィールや SNS は未確定値が残っている可能性がある。`TODO.md` を確認する。
+- `assets/js/site-data.js` のプロフィールや SNS は未確定値が残っている可能性がある。`docs/TODO.md` を確認する。
 - OGP 画像は未作成の可能性がある。有効化する前に実ファイルの存在を確認する。
 - `caflog` のスクリーンショットは未配置の可能性がある。
 - トップページの Hero オープニングは `sessionStorage` の `applibrary_hero_seen` で同一セッション内の再生を抑制する。

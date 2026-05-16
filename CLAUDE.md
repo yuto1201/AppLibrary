@@ -19,8 +19,7 @@ AppLibrary/
 ├── 404.html                    # 404（GitHub Pages 用、スタイル自己完結）
 ├── CLAUDE.md                   # この規定
 ├── README.md
-├── TODO.md                     # 進行中タスクと持ち越し事項
-├── docs/                       # ドキュメント（軽量に保つ）
+├── docs/                       # ドキュメント（軽量に保つ・TODO.md もここ）
 │   ├── design.md               # 画面デザイン仕様（トップページ）
 │   └── apps.md                 # アプリカタログ（registry.js の人間用ビュー）
 ├── assets/                     # 共通資産

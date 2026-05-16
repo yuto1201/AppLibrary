@@ -32,8 +32,8 @@ AppLibrary/
 ├── index.html                      共通トップページ
 ├── 404.html                        404(スタイル自己完結)
 ├── CLAUDE.md / AGENTS.md           プロジェクト規定
-├── README.md / TODO.md
-├── docs/                           本フォルダ(規定とドキュメント)
+├── README.md
+├── docs/                           本フォルダ(規定とドキュメント、TODO.md もここ)
 ├── assets/
 │   ├── css/
 │   │   ├── tokens.css              デザイントークン(全ページ必読)
