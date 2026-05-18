@@ -254,13 +254,25 @@ sessionStorage.removeItem('applibrary_hero_seen'); location.reload();
 
 ## デプロイ
 
-### GitHub Pages（現在）
+### Cloudflare Pages（本番、Phase 3 以降）
 
-- リポジトリの Settings → Pages → Branch を `main` / root に
-- `https://<user>.github.io/AppLibrary/` で公開
-- 反映まで数分
+- `main` への push で Cloudflare Pages に自動デプロイ
+- プレビュー URL: `https://applibrary.pages.dev`（カスタムドメイン設定後は実ドメインへ）
+- PR ごとにプレビューデプロイが自動生成され PR コメントに通知される
+- 関連設定:
+  - `_headers` — キャッシュ + CSP + セキュリティヘッダ（リポジトリ直下、Cloudflare Pages 標準形式）
+- 手順書:
+  - `docs/deploy/cloudflare-publish-plan.md` — 公開までの全体プラン (Phase 0〜5)
+  - `docs/deploy/cloudflare-pages.md` — Pages プロジェクト作成・ビルド設定
+  - `docs/deploy/custom-domain.md` — カスタムドメイン接続・SSL・WWW リダイレクト
 
-### 独自サーバー移行時（将来）
+### GitHub Pages（過去の運用、Phase 5 で停止予定）
+
+- 旧公開先: `https://yuto1201.github.io/AppLibrary/`
+- Cloudflare Pages への切替完了後、GitHub repo Settings → Pages → Source を **None** に
+- `.nojekyll` ファイルは Cloudflare Pages でも無害なので残置
+
+### 独自サーバー移行時（将来の選択肢）
 
 - すべて静的ファイルなので `AppLibrary/` の中身をそのまま配信すれば OK
 - 相対パス縛りを守っていれば追加作業なし
