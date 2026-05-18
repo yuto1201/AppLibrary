@@ -10,10 +10,11 @@
 
 ## 🔴 優先度: 高（公開前ブロッカー）
 
-- [ ] **プレースホルダー実値の差し替え（ユーザー入力待ち）**
-  - [ ] `assets/js/site-data.js` の `profile.bio` を実情の文に
-  - [ ] `social[]` の X URL（現在 `#`、未表示）を実 URL に
-  - [ ] `social[]` の Email（現在コメントアウト）を実アドレスに復帰
+- [x] **プレースホルダー実値の差し替え** — 2026-05-18 完了
+  - [x] `assets/js/site-data.js` の `profile.bio` は現状文を確定として維持
+  - [x] `social[]` の X を `https://x.com/Yuto_Program`（handle `@Yuto_Program`）に
+  - [x] `social[]` の Email は **非公開方針**でエントリ削除
+  - [x] GitHub アカウント名を `yuto1201` に統一（旧 `uesugiyuuto` から修正）
 
 ## 🟡 優先度: 中（仕上げ）
 
@@ -33,6 +34,7 @@
 
 ## 完了済み
 
+- [x] 2026-05-18 Phase 1A 完了: site-data.js プレースホルダー実値化 / ルート README.md 拡充 / docs/deploy/cloudflare-publish-plan.md 作成
 - [x] 2026-05-18 sublog / caflog: App Store 公開対応（status=release、appStoreUrl 設定、個別ページの「公開予定」UI を実リンクに置換、Smart App Banner 有効化）
 - [x] 2026-05-09 ホーム Hero オープニング演出追加（初回訪問のみ文字分割リビール、reduced-motion フォールバック付き）
 - [x] 2026-05-09 個別アプリページ デザイン方針確定（共通骨格＋個別色トークン）／sublog・caflog を新方式にリファクタ／apps/_template/ 整備／sublog に screenshots セクション追加

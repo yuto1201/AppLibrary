@@ -10,7 +10,6 @@ window.SITE_DATA = {
   profile: {
     name: 'uesugiyuuto',
     tagline: 'iOS App Maker',
-    // TODO: 実情に合わせて書き換える（職業、活動、好きなもの等）
     bio: 'Xcode で作ったアプリたち。日々を少しだけ丁寧にする、小さな道具を作っています。',
     location: '東京, 日本',
   },
@@ -34,9 +33,8 @@ window.SITE_DATA = {
      `url` が `#` 始まり、空、未設定のエントリは描画されない（プレースホルダー隠し）。
      公開する分だけ実 URL を埋めれば、その項目だけ表示される。 */
   social: [
-    { label: 'X',      handle: '@uesugiyuuto', url: '#' },                                  // TODO: 実 URL を入れる
-    { label: 'GitHub', handle: 'uesugiyuuto',  url: 'https://github.com/uesugiyuuto' },
-    // { label: 'Email', handle: 'hello@example.com', url: 'mailto:hello@example.com' },    // TODO: 実アドレスに
+    { label: 'X',      handle: '@Yuto_Program', url: 'https://x.com/Yuto_Program' },
+    { label: 'GitHub', handle: 'yuto1201',      url: 'https://github.com/yuto1201' },
   ],
 
   /* --- i18n（UI ラベルのみ） --- */
