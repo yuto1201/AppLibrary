@@ -243,6 +243,19 @@ a:hover { text-decoration: underline; }
 }
 .cta-title { font-size: clamp(22px, 3vw, 28px); font-weight: 800; margin-bottom: var(--space-2); }
 .cta-desc { opacity: 0.92; }
+.cta-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-top: var(--space-5);
+}
+.cta .btn-ghost {
+  background: #fff;
+  color: var(--app-accent);
+  border-color: transparent;
+}
+.cta .btn-ghost:hover { background: color-mix(in srgb, #fff 88%, var(--app-accent)); }
 
 /* ═══ Footer ═══ */
 .page-footer {

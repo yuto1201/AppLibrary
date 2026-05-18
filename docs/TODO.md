@@ -1,6 +1,6 @@
 # TODO — AppLibrary
 
-最終更新日: 2026-05-16
+最終更新日: 2026-05-18
 
 進行中の改善タスクと持ち越し事項。完了したものはチェックを入れる、もしくは「完了済み」に移動する。
 
@@ -22,8 +22,8 @@
 
 ## アプリごと
 
-- [ ] sublog / caflog: App Store 公開後 `appStoreUrl` を `apps/registry.js` に追加（バッジボタンが自動有効化される）
 - [ ] App Store 審査用に各 `privacy.html` の中身を実態に合わせて確認
+- [ ] `apps/registry.js` の sublog/caflog に正確な `releaseDate` ('YYYY-MM-DD') を入れる（現状 `year: 2026` だけ）
 
 ## 運用
 
@@ -33,6 +33,7 @@
 
 ## 完了済み
 
+- [x] 2026-05-18 sublog / caflog: App Store 公開対応（status=release、appStoreUrl 設定、個別ページの「公開予定」UI を実リンクに置換、Smart App Banner 有効化）
 - [x] 2026-05-09 ホーム Hero オープニング演出追加（初回訪問のみ文字分割リビール、reduced-motion フォールバック付き）
 - [x] 2026-05-09 個別アプリページ デザイン方針確定（共通骨格＋個別色トークン）／sublog・caflog を新方式にリファクタ／apps/_template/ 整備／sublog に screenshots セクション追加
 - [x] 2026-04-27 トップページを liquid-glass デザインに刷新（Claude Design 由来）

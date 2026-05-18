@@ -150,10 +150,17 @@
     const T = t();
     const profile = window.SITE_DATA.profile;
     const total = (window.APP_REGISTRY || []).length;
+    const latestPost = (window.SITE_DATA.posts || [])[0];
 
     const lineA = splitToLetters(T.hero_h1_a, 0);
     const lineB = splitToLetters(T.hero_h1_b, lineA.count);
     const ariaLabel = (T.hero_h1_a || '') + (T.hero_h1_b || '');
+    const latestPostHTML = latestPost
+      ? `<a class="hero-note-link" href="#posts">
+           <span class="hero-note-date">${esc(latestPost.date)}</span>
+           <span>${esc(latestPost.title)}</span>
+         </a>`
+      : '';
 
     return `
       <section class="hero">
@@ -173,6 +180,7 @@
             <span>${esc(T.hero_cta)}</span>
             ${ICON_ARROW_DOWN}
           </a>
+          ${latestPostHTML}
         </div>
       </section>
     `;
@@ -192,6 +200,7 @@
     const all = window.APP_REGISTRY || [];
     const q = search.trim().toLowerCase();
     const catName = cats[activeCat];
+    const hasFilters = Boolean(q || activeCat > 0);
     const filtered = all.filter((app) => {
       if (activeCat > 0 && app.category !== catName) return false;
       if (!q) return true;
@@ -203,14 +212,21 @@
       ? `<div class="empty">
            <div class="empty-title">${esc(T.empty_title)}</div>
            <div>${esc(T.empty_sub)}</div>
+           ${hasFilters ? `<button class="clear-filters empty-clear" type="button" data-action="clear-filters">${esc(T.clear_filters)}</button>` : ''}
          </div>`
       : filtered.map((app, i) => renderAppCard(app, i)).join('');
 
     const chipsHTML = cats.map((c, i) => `
-      <button class="chip${i === activeCat ? ' active' : ''}" data-action="set-cat" data-cat="${i}">
+      <button class="chip${i === activeCat ? ' active' : ''}" type="button" data-action="set-cat" data-cat="${i}">
         ${esc(c)}
       </button>
     `).join('');
+    const filterActionsHTML = hasFilters && filtered.length > 0
+      ? `<div class="filter-actions">
+           <span class="filter-state">${esc(T.active_filters)}</span>
+           <button class="clear-filters" type="button" data-action="clear-filters">${esc(T.clear_filters)}</button>
+         </div>`
+      : '';
 
     return `
       <section class="section" id="apps">
@@ -229,8 +245,9 @@
                    autocomplete="off">
           </div>
           <div class="chips">${chipsHTML}</div>
+          ${filterActionsHTML}
         </div>
-        <div class="mosaic">${cardsHTML}</div>
+        <div class="mosaic" aria-live="polite">${cardsHTML}</div>
       </section>
     `;
   }
@@ -615,9 +632,14 @@
           const next = Number(target.dataset.cat || 0);
           if (next === activeCat) return;
           activeCat = next;
-          render();
+          rerenderApps();
           break;
         }
+        case 'clear-filters':
+          search = '';
+          activeCat = 0;
+          rerenderApps();
+          break;
         case 'open-modal': {
           const slug = target.dataset.slug;
           const app = (window.APP_REGISTRY || []).find((a) => a.slug === slug);

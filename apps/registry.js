@@ -31,8 +31,9 @@ window.APP_REGISTRY = [
 
     // --- 表示メタ ---
     platform: 'iOS',
-    status: 'beta',                         // alpha / beta / release
-    releaseDate: null,                      // 'YYYY-MM-DD' or null（審査中／未公開）
+    status: 'release',                      // alpha / beta / release
+    releaseDate: null,                      // 'YYYY-MM-DD' or null（不明な場合は year を使用）
+    year: 2026,
 
     // --- ビジュアル（カード／モーダル） ---
     icon: 'icon.png',                       // apps/sublog/icon.png
@@ -49,7 +50,7 @@ window.APP_REGISTRY = [
     version: '1.0',
 
     // --- リンク ---
-    appStoreUrl: null,                      // App Store URL（公開後に追加）
+    appStoreUrl: 'https://apps.apple.com/us/app/sublog/id6761677813',
     introUrl: './apps/sublog/index.html',   // 個別紹介ページ
     privacyUrl: './apps/sublog/privacy.html',
   },
@@ -60,8 +61,9 @@ window.APP_REGISTRY = [
     tagline: 'カフェインとの付き合いを、見える化。',
 
     platform: 'iOS',
-    status: 'beta',
+    status: 'release',
     releaseDate: null,
+    year: 2026,
 
     icon: 'icon.png',
     iconGlyph: '☕',
@@ -74,7 +76,7 @@ window.APP_REGISTRY = [
     price: '無料',
     version: '1.0',
 
-    appStoreUrl: null,
+    appStoreUrl: 'https://apps.apple.com/us/app/caflog/id6760961086',
     introUrl: './apps/caflog/index.html',
     privacyUrl: './apps/caflog/privacy.html',
   },
