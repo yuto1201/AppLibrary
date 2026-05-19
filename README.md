@@ -1,5 +1,5 @@
 ステータス：運用中
-最終更新日：2026-05-18
+最終更新日：2026-05-20
 
 ---
 
@@ -9,7 +9,8 @@ Xcode で作った iOS / macOS アプリを紹介する静的 Web サイト。li
 
 - 制作: [@Yuto_Program](https://x.com/Yuto_Program)
 - リポジトリ: <https://github.com/yuto1201/AppLibrary>
-- 公開先: GitHub Pages（Cloudflare Pages + 独自ドメインへ移行予定 — 2026-05-24 完了見込み）
+- 公開先: <https://app.yutodev.com/>（Cloudflare Pages + 独自ドメイン、2026-05-20 公開）
+- Pages サブドメイン: <https://applibrary-ag2.pages.dev/>（内部 / プレビュー用）
 
 ---
 

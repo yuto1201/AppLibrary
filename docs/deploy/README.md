@@ -1,5 +1,5 @@
 ステータス：確定
-最終更新日：2026-05-18
+最終更新日：2026-05-20
 
 ---
 
@@ -19,9 +19,12 @@ AppLibrary の公開設定とリリース手順をまとめたディレクトリ
 
 | 種別 | URL | 状態 |
 |---|---|---|
-| 本番（Cloudflare Pages） | TBD（Phase 3 で確定） | 準備中 |
-| プレビュー（PR ごと自動） | `https://<hash>.applibrary.pages.dev` | Phase 3 で有効化 |
-| 旧（GitHub Pages） | <https://yuto1201.github.io/AppLibrary/> | Phase 5 で無効化予定 |
+| 本番（カスタムドメイン） | <https://app.yutodev.com/> | 運用中（2026-05-20 公開） |
+| Pages サブドメイン | <https://applibrary-ag2.pages.dev/> | 運用中（内部・プレビュー用） |
+| プレビュー（PR ごと自動） | `https://<hash>.applibrary-ag2.pages.dev` | 有効 |
+| 旧（GitHub Pages） | <https://yuto1201.github.io/AppLibrary/> | 停止予定（Source: None 切替待ち） |
+
+> 補足: `applibrary.pages.dev` は他テナント占有のため、プロジェクトサブドメインは `applibrary-ag2` になっている。実利用は本番カスタムドメイン側で完結する想定。
 
 ## デプロイ関連の設定ファイル
 

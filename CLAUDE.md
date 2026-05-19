@@ -254,10 +254,11 @@ sessionStorage.removeItem('applibrary_hero_seen'); location.reload();
 
 ## デプロイ
 
-### Cloudflare Pages（本番、Phase 3 以降）
+### Cloudflare Pages（本番）
 
+- 本番 URL: <https://app.yutodev.com/>（カスタムドメイン）
+- Pages サブドメイン: `https://applibrary-ag2.pages.dev/`（`applibrary` は他テナントで占有済のため `-ag2` サフィックス付き）
 - `main` への push で Cloudflare Pages に自動デプロイ
-- プレビュー URL: `https://applibrary.pages.dev`（カスタムドメイン設定後は実ドメインへ）
 - PR ごとにプレビューデプロイが自動生成され PR コメントに通知される
 - 関連設定:
   - `_headers` — キャッシュ + CSP + セキュリティヘッダ（リポジトリ直下、Cloudflare Pages 標準形式）
@@ -266,10 +267,11 @@ sessionStorage.removeItem('applibrary_hero_seen'); location.reload();
   - `docs/deploy/cloudflare-pages.md` — Pages プロジェクト作成・ビルド設定
   - `docs/deploy/custom-domain.md` — カスタムドメイン接続・SSL・WWW リダイレクト
 
-### GitHub Pages（過去の運用、Phase 5 で停止予定）
+### GitHub Pages（過去の運用、停止予定）
 
 - 旧公開先: `https://yuto1201.github.io/AppLibrary/`
-- Cloudflare Pages への切替完了後、GitHub repo Settings → Pages → Source を **None** に
+- Cloudflare Pages への切替は完了済み（2026-05-20）
+- GitHub repo Settings → Pages → Source を **None** に切替する必要あり（残タスク）
 - `.nojekyll` ファイルは Cloudflare Pages でも無害なので残置
 
 ### 独自サーバー移行時（将来の選択肢）

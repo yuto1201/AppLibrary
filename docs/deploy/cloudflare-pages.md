@@ -1,5 +1,5 @@
 ステータス：確定
-最終更新日：2026-05-18
+最終更新日：2026-05-20
 
 ---
 
@@ -25,7 +25,8 @@ GitHub repo `yuto1201/AppLibrary` を Cloudflare Pages に接続し、`main` へ
 
 | 項目 | 値 |
 |---|---|
-| Project name | `applibrary`（サブドメイン `applibrary.pages.dev` になる） |
+| Project name | `applibrary` |
+| Pages サブドメイン | `applibrary-ag2.pages.dev`（`applibrary` は他テナント占有のため `-ag2` サフィックスが自動付与された） |
 | Production branch | `main` |
 | Framework preset | **None** |
 | Build command | **（空欄）** ※ ビルドツール不使用 |
@@ -37,7 +38,7 @@ GitHub repo `yuto1201/AppLibrary` を Cloudflare Pages に接続し、`main` へ
 
 ## 3. 初回デプロイの動作確認
 
-数十秒でデプロイ完了。`https://applibrary.pages.dev` を開き以下を確認:
+数十秒でデプロイ完了。`https://applibrary-ag2.pages.dev` を開き以下を確認:
 
 - liquid-glass デザイン / hero opening が再生される
 - アプリカードからの sublog / caflog ページ遷移
@@ -48,7 +49,7 @@ GitHub repo `yuto1201/AppLibrary` を Cloudflare Pages に接続し、`main` へ
 ### `_headers` の反映確認
 
 ```bash
-curl -I https://applibrary.pages.dev
+curl -I https://applibrary-ag2.pages.dev
 ```
 
 期待されるヘッダー:
@@ -61,7 +62,7 @@ curl -I https://applibrary.pages.dev
 アセットも確認:
 
 ```bash
-curl -I https://applibrary.pages.dev/assets/css/standard.css
+curl -I https://applibrary-ag2.pages.dev/assets/css/standard.css
 # → cache-control: public, max-age=31536000, immutable
 ```
 
@@ -69,7 +70,7 @@ curl -I https://applibrary.pages.dev/assets/css/standard.css
 
 PR を作成すると、Cloudflare Pages が自動で **プレビュー URL** を生成し PR コメントに投稿する:
 
-- 形式: `https://<commit-hash>.applibrary.pages.dev`
+- 形式: `https://<commit-hash>.applibrary-ag2.pages.dev`
 - マージ前の動作確認に使う
 - PR がマージ・クローズされても URL は当面残る
 
