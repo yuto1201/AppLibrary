@@ -28,3 +28,17 @@ Desktop.ini
 dist/
 build/
 node_modules/
+
+# Next.js
+.next/
+out/
+next-env.d.ts
+
+# テスト成果物
+test-results/
+playwright-report/
+blob-report/
+.playwright/
+
+# TypeScript
+*.tsbuildinfo

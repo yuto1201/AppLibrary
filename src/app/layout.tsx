@@ -1,0 +1,59 @@
+import type { Metadata, Viewport } from "next";
+import { Inter, JetBrains_Mono } from "next/font/google";
+import { GlassFilter } from "@/components/GlassFilter";
+import "./globals.css";
+
+// 自己ホストする。外部 CDN への追加リクエストが無くなり、静的出力とも相性がよい。
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  // iOS 限定から全プラットフォームへスコープを広げたため、旧 "iOS Apps" を改めた。
+  title: "AppLibrary — uesugiyuuto のアプリ",
+  description: "個人開発しているアプリの紹介ライブラリ。iOS / macOS / Web など、作ったものをまとめています。",
+  openGraph: {
+    type: "website",
+    siteName: "AppLibrary",
+    title: "AppLibrary — uesugiyuuto のアプリ",
+    description: "個人開発しているアプリの紹介ライブラリ。",
+  },
+  twitter: { card: "summary_large_image" },
+  icons: { icon: "/favicon.svg" },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
+/**
+ * first paint 前に保存済みテーマを適用する。
+ * ここを React 側へ移すと hydration 前に一瞬デフォルト配色が出るため、
+ * 旧 index.html と同じくインラインスクリプトのまま維持する。
+ */
+const restoreTheme = `(function(){var h=document.documentElement;try{var s=JSON.parse(localStorage.getItem('applibrary_state')||'null');if(s){if(s.theme)h.setAttribute('data-theme',s.theme);if(s.layout)h.setAttribute('data-layout',s.layout);if(s.density)h.setAttribute('data-density',s.density);if(s.font)h.setAttribute('data-font',s.font);if(s.accent)h.style.setProperty('--accent',s.accent);}}catch(e){}try{var seen=sessionStorage.getItem('applibrary_hero_seen');var rm=window.matchMedia('(prefers-reduced-motion: reduce)').matches;if(seen||rm){h.setAttribute('data-hero-opening','off');}else{h.setAttribute('data-hero-opening','play');sessionStorage.setItem('applibrary_hero_seen','1');}}catch(e){h.setAttribute('data-hero-opening','off');}})();`;
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="ja" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: restoreTheme }} />
+      </head>
+      <body>
+        <GlassFilter />
+        {children}
+      </body>
+    </html>
+  );
+}
