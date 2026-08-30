@@ -29,6 +29,8 @@ const entries = [
     price: "無料",
     version: "1.0",
 
+    screenshots: ["1.png", "2.png", "3.png", "4.png"],
+
     appStoreUrl: "https://apps.apple.com/us/app/sublog/id6761677813",
     siteUrl: null,
   },
@@ -54,6 +56,8 @@ const entries = [
     features: ["カフェイン量記録", "残量計算", "日別サマリー", "通知"],
     price: "無料",
     version: "1.0",
+
+    screenshots: ["1.png", "2.png", "3.png", "4.png", "5.png"],
 
     appStoreUrl: "https://apps.apple.com/us/app/caflog/id6760961086",
     siteUrl: null,

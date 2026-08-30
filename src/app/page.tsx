@@ -1,16 +1,17 @@
-import { apps } from "@/data/registry";
+import { Nav } from "@/components/Nav";
+import { Hero } from "@/components/Hero";
+import { AppsSection } from "@/components/AppsSection";
+import { Posts, Contact, Footer } from "@/components/Sections";
 
 export default function HomePage() {
   return (
-    <main>
-      <h1>AppLibrary</h1>
-      <ul>
-        {apps.map((app) => (
-          <li key={app.slug}>
-            {app.name} — {app.tagline} ({app.platforms.join(" / ")})
-          </li>
-        ))}
-      </ul>
-    </main>
+    <>
+      <Nav />
+      <Hero />
+      <AppsSection />
+      <Posts />
+      <Contact />
+      <Footer />
+    </>
   );
 }

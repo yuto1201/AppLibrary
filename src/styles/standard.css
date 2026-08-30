@@ -1333,3 +1333,15 @@ body {
     transform: none !important;
   }
 }
+
+/* ------------------------------------------------------------
+   アニメーションを減らす設定では reveal を即時表示する。
+   旧実装は JS で判定していたが、React 移行にあたり CSS へ移した。
+   ------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

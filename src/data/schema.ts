@@ -45,6 +45,9 @@ export const appSchema = z.object({
   price: z.string().min(1),
   version: z.string().min(1),
 
+  /** public/apps/<slug>/screenshots/ 配下のファイル名。順序が表示順になる。 */
+  screenshots: z.array(z.string().min(1)).default([]),
+
   appStoreUrl: z.url().nullable(),
   /** 外部サイトで公開しているアプリ用。App Store 以外の導線。 */
   siteUrl: z.url().nullable().default(null),

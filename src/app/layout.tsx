@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { GlassFilter } from "@/components/GlassFilter";
+import { SiteStateProvider } from "@/lib/state";
 import "./globals.css";
 
 // 自己ホストする。外部 CDN への追加リクエストが無くなり、静的出力とも相性がよい。
@@ -52,7 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <GlassFilter />
-        {children}
+        <SiteStateProvider>{children}</SiteStateProvider>
       </body>
     </html>
   );
