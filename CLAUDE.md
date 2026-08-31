@@ -7,6 +7,7 @@
 1. [AGENTS.md](AGENTS.md) — 開発規約、ディレクトリ構成、アプリ追加手順
 2. [docs/TODO.md](docs/TODO.md) — 進行中タスク
 3. [docs/deploy/README.md](docs/deploy/README.md) — 公開とデプロイ
+4. [docs/workflow.md](docs/workflow.md) / [docs/verification.md](docs/verification.md) — Issue、レビュー、共通検証
 
 ## このリポジトリでの権限
 
@@ -25,7 +26,7 @@ Claude はローカル作業、Git 操作、ローカル検証、`gh` による 
 
 検証していない項目を検証済みとして報告しません。
 
-- `npm run check` と `npm run build` が通ることは、**ブラウザでの表示確認の代わりになりません**
+- `npm run check` が通ることは、**ブラウザでの表示確認の代わりになりません**。最終検証は `npm run verify` を使います
 - UI を変えたら自分でローカル配信して表示を確認します。ユーザーへ「確認してください」と依頼しません
 - ローカル検証とライブ公開状態は別の証拠として扱います
 
@@ -41,4 +42,4 @@ Next.js 移行時に実際に発生した不具合です。同じ轍を踏まな
 
 ## 反対モデルレビュー
 
-重要な判断や大きな変更では、`ask-codex` スキルで Codex に read-only レビューを依頼します。必要なら `ask-grok` も使います。Claude 自身の再読を反対モデルレビューとして報告しません。
+通常変更は `ask-codex` スキルで Codex に read-only レビューを依頼します。高リスク変更は独立した OpenAI / Anthropic 両系統のレビューを得ます。Claude 自身の再読やモデル不明の出力を独立レビューとして報告しません。共通 evaluator は生成物なので直接編集しません。

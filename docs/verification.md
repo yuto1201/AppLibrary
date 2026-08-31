@@ -1,0 +1,21 @@
+# 検証と証拠
+
+固定 Node/npm を用意して `npm ci` を実行する。`.npmrc` がバージョンの不一致を拒否する。
+
+| コマンド | 検証内容 |
+|---|---|
+| `npm run check:docs` | 方針、ローカル Markdown リンク、受け入れ条件対応、生成物の同期 |
+| `npm run check:fast` | ESLint、Next 型生成と TypeScript、Vitest |
+| `npm run check` | 上記すべてと静的ビルド |
+| `npm run test:e2e` | 既にビルドした `out/` の desktop/mobile Chromium テスト |
+| `npm run verify` | `check` → `test:e2e`（初回は `npm exec -- playwright install chromium`） |
+| `npm run start` | `out/` を 127.0.0.1:3210 で配信。ビルド前は失敗する |
+| `npm run generate` | 共通レビュー契約から Codex / Claude 用設定を再生成 |
+
+`next start` は静的 export では使わない。ローカル配信に実行時ダウンロードや SPA fallback を使わない。E2E は既存の別サーバーを再利用せず、ポート競合も失敗として報告する。
+
+CI は Linux の `Repository checks` と `Browser checks` を実行し、ブラウザ失敗時にレポート・trace を保存する。iPhone 15 相当の viewport を Chromium で確認するものであり、Safari / 実機検証を意味しない。
+
+リンク検証はローカル Markdown のファイル実在を確認する。外部 URL と見出し anchor の内容は検証しない。`docs/decisions/` と `docs/superpowers/completed/` は旧実装を説明する履歴のため対象外。現行文書の壊れた参照は対象外にせず修正する。
+
+結果には実際のコマンド・成否・対象コミットと未検証項目を残す。レビュー前のテストと、その後に変わった Head を混同しない。変更後は関係する検証を再実行する。ライブ公開状態とローカル結果は分ける。

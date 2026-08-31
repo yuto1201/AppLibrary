@@ -27,12 +27,14 @@
 
 ## 文書の追随
 
-- [ ] **旧構成を参照している文書の更新** — Next.js 移行で実体が変わったが未更新のもの。`docs/README.md`、`docs/operations.md`、`docs/design/top.md`、`docs/design/app-page.md`、`docs/design/components.md`、`docs/apps/README.md`、`docs/apps/sublog.md`、`docs/apps/caflog.md`。`docs/decisions/` と `docs/superpowers/completed/` は履歴なので更新しない
+- [x] **旧構成を参照している文書の更新** — 現行文書を Next.js 構成へ更新。古い `docs/operations.md` は deploy / workflow / verification に統合して削除。過去の ADR と完了済み計画は保存
 
 ## 運用
 
 - [ ] Cloudflare Pages プロジェクト `applibrary` の扱いを決める（カスタムドメインは切り離し済み、`applibrary-ag2.pages.dev` は残存）
-- [ ] specs / config / CI などの統治層を Web-Template から移植するか判断する
+- [x] specs / config / CI・検証ツールを Web-Template から静的サイト用に移植（ローカル実装。公開有効化は別）
+- [ ] 移植 PR の所有者レビューと、main の required checks 設定（ローカル変更だけでは有効にならない）
+- [ ] `/apps/*` の 1 年 immutable キャッシュ方針を見直す（HTML と固定名画像も対象で、再デプロイだけではブラウザキャッシュは失効しない）
 
 ---
 

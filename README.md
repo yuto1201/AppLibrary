@@ -18,7 +18,7 @@ Next.js の静的出力を Vercel で配信している。サーバー処理・D
 ## セットアップ
 
 ```bash
-npm install
+npm ci
 npm run dev
 # → http://localhost:3000
 ```
@@ -29,11 +29,15 @@ npm run dev
 |---|---|
 | `npm run dev` | 開発サーバー |
 | `npm run build` | 静的出力を `out/` へ生成 |
-| `npm run check` | typecheck + lint + テスト |
+| `npm run check` | 方針・文書・生成物・lint・型・テスト・静的 build |
+| `npm run check:fast` | 実装中の lint・型・テスト |
+| `npm run verify` | check + desktop/mobile E2E |
+| `npm run start` | out/ を localhost:3210 で静的配信 |
+| `npm run generate` | 共通レビュー契約からエージェント設定を生成 |
 | `npm run test` | Vitest |
 | `npm run test:e2e` | Playwright（`out/` を配信して実行） |
 
-Node のバージョンは `.node-version` に固定。
+Node/npm は `.node-version` と `package.json` に固定。初回 E2E 前に `npm exec -- playwright install chromium` を実行する。`test:e2e` 単独なら先に `npm run build`。
 
 ### Hero オープニング演出を再生する
 
@@ -83,4 +87,7 @@ sessionStorage.removeItem('applibrary_hero_seen'); location.reload();
 |---|---|
 | [AGENTS.md](AGENTS.md) | 開発規約（root 契約） |
 | [docs/deploy/README.md](docs/deploy/README.md) | 公開とデプロイ |
+| [specs/README.md](specs/README.md) | プロダクトと受け入れ条件 |
+| [docs/workflow.md](docs/workflow.md) | Web-Template 由来の Issue / PR / レビュー方式 |
+| [docs/verification.md](docs/verification.md) | ローカルと CI の検証 |
 | [docs/decisions/](docs/decisions/) | 設計判断の記録 |
