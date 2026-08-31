@@ -8,7 +8,7 @@
 個人開発したアプリを紹介する Web サイト。iOS に限らず、macOS / Web / CLI などプラットフォームを問わず掲載する。liquid-glass デザインを標準採用。
 
 - 制作: [@Yuto_Program](https://x.com/Yuto_Program)
-- リポジトリ: <https://github.com/yuto1201/AppLibrary>
+- リポジトリ: <https://github.com/yuto1201/Web-AppLibrary>
 - 公開先: <https://app.yutodev.com/>（Vercel + Cloudflare DNS、2026-08-31 移行）
 
 Next.js の静的出力を Vercel で配信している。サーバー処理・DB・認証は使わない。

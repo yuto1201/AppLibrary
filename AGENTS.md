@@ -9,7 +9,7 @@ Next.js の静的出力 (`output: "export"`) を Vercel で配信しています
 - 公開 URL: <https://app.yutodev.com/>
 - ホスティング: Vercel（`main` への push で自動デプロイ）
 - DNS: Cloudflare（`app` は CNAME・**DNS only**。プロキシは有効にしない）
-- リポジトリ: <https://github.com/yuto1201/AppLibrary>
+- リポジトリ: <https://github.com/yuto1201/Web-AppLibrary>
 
 2026-08-31 に Cloudflare Pages から Vercel へ移行し、同時に素の HTML/CSS/JS から Next.js へ移行しました。GitHub Pages での公開は終了しています。
 
