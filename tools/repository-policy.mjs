@@ -28,8 +28,8 @@ export async function checkRepository(root) {
     const pkg = await readJson(root, "package.json");
     const lock = await readJson(root, "package-lock.json");
     const version = (await readFile(path.join(root, ".node-version"), "utf8")).trim();
-    if (pkg.engines?.node !== version || pkg.packageManager !== `npm@${pkg.engines?.npm}`) errors.push("Node/npm pins disagree");
-    if (lock.packages?.[""]?.engines?.node !== version || lock.packages?.[""]?.engines?.npm !== pkg.engines?.npm) errors.push("Lockfile runtime pins disagree");
+    errors.push(...validateRuntime(pkg, version));
+    if (lock.packages?.[""]?.engines?.node !== pkg.engines?.node || lock.packages?.[""]?.engines?.npm !== pkg.engines?.npm) errors.push("Lockfile runtime ranges disagree");
     for (const [name, value] of Object.entries({ ...pkg.dependencies, ...pkg.devDependencies })) {
       if (!/^\d+\.\d+\.\d+(?:-[\w.-]+)?$/u.test(value)) errors.push(`Unpinned dependency: ${name}`);
       if (name.startsWith("@supabase/") || name === "supabase") errors.push(`Static site must not depend on ${name}`);
@@ -52,6 +52,17 @@ export async function checkRepository(root) {
 export function validateCheckNames(workflow, yaml) {
   const jobs = [...yaml.matchAll(/^    name: ([^\r\n]+)$/gmu)].map((match) => match[1].trim());
   return workflow.requiredChecks.filter((name) => !jobs.includes(name)).map((name) => `Required check has no CI job: ${name}`);
+}
+
+// Local verification is exact; Vercel's build uses the compatible engines ranges.
+export function validateRuntime(pkg, nodePin, actualNode = process.versions.node, npmAgent = process.env.npm_config_user_agent) {
+  const errors = [];
+  const npmPin = /^npm@(\d+\.\d+\.\d+)$/u.exec(pkg.packageManager ?? "")?.[1];
+  if (!/^\d+\.\d+\.\d+$/u.test(nodePin) || !npmPin) return ["Exact local Node/npm pins are required"];
+  if (pkg.engines?.node !== `${nodePin.split(".")[0]}.x` || pkg.engines?.npm !== `${npmPin.split(".")[0]}.x`) errors.push("Hosted runtime ranges disagree with local pins");
+  if (actualNode !== nodePin) errors.push(`Local checks require Node ${nodePin}; received ${actualNode}`);
+  if (npmAgent && /^npm\/([^\s]+)/u.exec(npmAgent)?.[1] !== npmPin) errors.push(`Local checks require npm ${npmPin}`);
+  return errors;
 }
 
 if (path.resolve(process.argv[1] ?? "") === fileURLToPath(import.meta.url)) {

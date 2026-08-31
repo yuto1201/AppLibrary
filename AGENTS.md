@@ -47,7 +47,7 @@ npm run verify     # check + E2E（初回は Playwright Chromium を install）
 npm run start      # out/ のローカル静的配信
 ```
 
-Node/npm は `.node-version` / `package.json` に固定し `.npmrc` で強制します。`npm run verify` と必要なレビュー・CI が通らない変更はマージしません。
+ローカル/CI の Node/npm は `.node-version` / `packageManager` に完全固定し `policy` で検査します。Vercel は patch 更新を許容する `engines` の major 範囲を使い、`.npmrc` は major 不一致を拒否します。`npm run verify` と必要なレビュー・CI が通らない変更はマージしません。
 
 ## ディレクトリ構成
 

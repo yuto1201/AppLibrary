@@ -6,13 +6,20 @@ import path from "node:path";
 import { findBrokenMarkdownLinks } from "../tools/verify-links.mjs";
 import { generateAgents } from "../tools/generate-agent-wrappers.mjs";
 import { verifyAcceptance } from "../tools/verify-acceptance-trace.mjs";
-import { checkRepository, validateCheckNames } from "../tools/repository-policy.mjs";
+import { checkRepository, validateCheckNames, validateRuntime } from "../tools/repository-policy.mjs";
 
 const roots = [];
 async function fixture() { const root = await mkdtemp(path.join(os.tmpdir(), "applibrary-policy-")); roots.push(root); return root; }
 afterEach(async () => { await Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true }))); });
 
 describe("development checks", () => {
+  it("pins local verification without pinning Vercel to an unavailable patch", () => {
+    const pkg = { packageManager: "npm@11.6.2", engines: { node: "24.x", npm: "11.x" } };
+    expect(validateRuntime(pkg, "24.13.0", "24.13.0", "npm/11.6.2 node/v24.13.0")).toEqual([]);
+    expect(validateRuntime(pkg, "24.13.0", "24.14.0", "npm/11.6.2")).toHaveLength(1);
+    expect(validateRuntime(pkg, "24.13.0", "24.13.0", "npm/11.12.1")).toHaveLength(1);
+    expect(validateRuntime({ ...pkg, engines: { node: "24.13.0", npm: "11.x" } }, "24.13.0", "24.13.0", "npm/11.6.2")).toContain("Hosted runtime ranges disagree with local pins");
+  });
   it("detects a renamed or missing required CI check", () => {
     expect(validateCheckNames({ requiredChecks: ["Browser checks"] }, "jobs:\n  browser:\n    name: Browser checks\n")).toEqual([]);
     expect(validateCheckNames({ requiredChecks: ["Browser checks"] }, "jobs:\n  browser:\n    name: Renamed\n")).toEqual(["Required check has no CI job: Browser checks"]);

@@ -1,6 +1,8 @@
 # 検証と証拠
 
-固定 Node/npm を用意して `npm ci` を実行する。`.npmrc` がバージョンの不一致を拒否する。
+ローカル/CI は Node 24.13.0 / npm 11.6.2 を用意して `npm ci` を実行する。`policy` が完全一致を検査する。fnm なら `fnm install` → `fnm use`、シェルの自動切替が働かない場合は `fnm exec --using=24.13.0 npm run verify` を使う。
+
+Vercel は Node/npm の patch を固定できないため、install/build は `engines` の Node 24.x / npm 11.x を許容する。`.npmrc` は範囲外の major を拒否するが、クラウドにローカルの完全一致バージョンを要求しない。詳細は [公開手順](deploy/README.md)。
 
 | コマンド | 検証内容 |
 |---|---|
@@ -14,7 +16,7 @@
 
 `next start` は静的 export では使わない。ローカル配信に実行時ダウンロードや SPA fallback を使わない。E2E は既存の別サーバーを再利用せず、ポート競合も失敗として報告する。
 
-CI は Linux の `Repository checks` と `Browser checks` を実行し、ブラウザ失敗時にレポート・trace を保存する。iPhone 15 相当の viewport を Chromium で確認するものであり、Safari / 実機検証を意味しない。
+CI は Linux の `Repository checks` と `Browser checks` を実行し、ブラウザ失敗時にレポート・trace を保存する。通常モーションを既定とし、reduced-motion は専用テストで確認する。iPhone 15 相当の viewport を Chromium で確認するものであり、Safari / 実機検証を意味しない。
 
 リンク検証はローカル Markdown のファイル実在を確認する。外部 URL と見出し anchor の内容は検証しない。`docs/decisions/` と `docs/superpowers/completed/` は旧実装を説明する履歴のため対象外。現行文書の壊れた参照は対象外にせず修正する。
 

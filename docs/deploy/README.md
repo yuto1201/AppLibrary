@@ -1,5 +1,5 @@
 ステータス：確定
-最終更新日：2026-08-31
+最終更新日：2026-09-01
 
 ---
 
@@ -21,6 +21,12 @@
 - 出力: `output: "export"` による静的ファイル（`out/`）
 
 PR を作るとプレビューデプロイが自動生成される。
+
+## Node/npm の互換範囲
+
+ローカル/CI は `.node-version` と `packageManager` で完全固定する。Vercel の install/build は `engines` の Node 24.x / npm 11.x を許容する。Vercel は minor/patch を自動更新し、major のみ選択可能なため、完全一致の engines と engine-strict を組み合わせない。[Vercel の仕様](https://vercel.com/docs/functions/runtimes/node-js/node-js-versions)
+
+クラウドは `npm run build` を実行する。完全固定環境での `npm run verify` は GitHub CI が担当する。
 
 ## DNS
 

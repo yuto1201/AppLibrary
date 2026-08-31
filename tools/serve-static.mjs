@@ -31,7 +31,10 @@ export async function createStaticServer(directory) {
       response.end(request.method === "HEAD" ? undefined : content);
     } catch (error) {
       if (error instanceof URIError) { response.writeHead(400).end(); return; }
-      const content = await readFile(path.join(root, "404.html")).catch(() => Buffer.from("Not Found"));
+      const notFoundFile = await realpath(path.join(root, "404.html")).catch(() => null);
+      const content = notFoundFile && inside(root, notFoundFile)
+        ? await readFile(notFoundFile).catch(() => Buffer.from("Not Found"))
+        : Buffer.from("Not Found");
       response.writeHead(404, { "Content-Type": "text/html; charset=utf-8" });
       response.end(request.method === "HEAD" ? undefined : content);
     }

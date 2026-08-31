@@ -6,8 +6,18 @@ updates:
       interval: weekly
     open-pull-requests-limit: 3
     groups:
+      next-react:
+        patterns:
+          - next
+          - eslint-config-next
+          - react
+          - react-dom
+          - "@types/react*"
       development-tooling:
         dependency-type: development
+        exclude-patterns:
+          - eslint-config-next
+          - "@types/react*"
   - package-ecosystem: github-actions
     directory: /
     schedule:

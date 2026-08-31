@@ -13,7 +13,7 @@ export default defineConfig({
     baseURL: `http://127.0.0.1:${PORT}`,
     trace: "on-first-retry",
     screenshot: "only-on-failure",
-    contextOptions: { reducedMotion: "reduce" },
+    contextOptions: { reducedMotion: "no-preference" },
   },
   projects: [
     { name: "chromium", use: { ...devices["Desktop Chrome"] } },

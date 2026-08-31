@@ -44,6 +44,21 @@ test("初回テーマと言語設定が再読み込み後も維持される", as
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
   await expect(page.getByRole("button", { name: "日本語に切替" })).toBeVisible();
+});
+
+test("通常モーションでは初回だけ Hero を再生し、履歴を消すと再生する", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("html")).toHaveAttribute("data-hero-opening", "play");
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-hero-opening", "off");
+  await page.evaluate(() => sessionStorage.removeItem("applibrary_hero_seen"));
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-hero-opening", "play");
+});
+
+test("reduced-motion では初回でも Hero を再生しない", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
   await expect(page.locator("html")).toHaveAttribute("data-hero-opening", "off");
 });
 
