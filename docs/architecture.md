@@ -1,107 +1,83 @@
-# アーキテクチャ概要
-
-ステータス: 確定
-最終更新日: 2026-05-16
-
-AppLibrary 全体の構造とサイトマップ。新規参加者および Claude Code が「どこに何があるか」を 1 ファイルで把握するための索引。
+ステータス：確定
+最終更新日：2026-08-31
 
 ---
+
+# アーキテクチャ概要
+
+AppLibrary は Next.js の静的出力を Vercel で配信する紹介サイト。サーバー処理・DB・認証を持たない。
 
 ## サイトマップ
 
-```
-/                                       (公開ルート)
-├── /                                   トップページ (index.html)
-├── /apps/<slug>/                       アプリ個別ページ (例: /apps/sublog/)
-│   ├── /apps/<slug>/index.html         紹介ページ
-│   └── /apps/<slug>/privacy.html       プライバシーポリシー
-└── /404.html                           404 ページ
-```
+| ルート | 内容 | 生成方法 |
+|---|---|---|
+| `/` | トップページ（Hero / App Library / Notes / Contact） | 静的 |
+| `/apps/<slug>/` | アプリ詳細 | registry から静的生成 |
+| `/apps/<slug>/privacy/` | プライバシーポリシー | registry + 個別本文から静的生成 |
 
-URL 設計:
-- `/` がトップ、`/apps/<slug>/` で各サブ画面にアクセス
-- 全リンクは相対パス。`/` 始まりの絶対パスは原則禁止(例外: `404.html` のトップへの戻りのみ)
-- ディレクトリ URL は使わず、`index.html` までフルパスで書く(`file://` 直開きでの破綻防止)
+`<slug>` は `src/data/registry.ts` の登録内容から決まる。ルートを手で増やす必要はない。
 
----
-
-## ファイルツリー(主要部分)
+## ファイルツリー（主要部分）
 
 ```
-AppLibrary/
-├── index.html                      共通トップページ
-├── 404.html                        404(スタイル自己完結)
-├── CLAUDE.md / AGENTS.md           プロジェクト規定
-├── README.md
-├── docs/                           本フォルダ(規定とドキュメント、TODO.md もここ)
-├── assets/
-│   ├── css/
-│   │   ├── tokens.css              デザイントークン(全ページ必読)
-│   │   ├── standard.css            トップページ用(liquid-glass)
-│   │   └── app-page.css            個別アプリページ用の共通骨格
-│   ├── js/
-│   │   ├── glass-filter.js         SVG filter 注入
-│   │   ├── main.js                 トップページのレンダラー
-│   │   └── site-data.js            プロフィール / お知らせ / SNS / i18n
-│   └── img/                        背景画像・OGP
-└── apps/
-    ├── registry.js                 アプリメタデータ(唯一の真実)
-    ├── _template/                  新規アプリ作成時の雛形
-    └── <slug>/                     アプリごとのフォルダ
-        ├── index.html
-        ├── style.css               色トークン上書き
-        ├── script.js
-        ├── privacy.html
-        ├── icon.png
-        └── screenshots/            1.png 2.png ...
+src/
+  app/
+    layout.tsx              html/head、フォント、テーマ復元スクリプト
+    page.tsx                トップページの組み立て
+    globals.css             デザインシステムの読み込み
+    apps/[slug]/page.tsx    アプリ詳細
+    apps/[slug]/privacy/    プライバシーポリシー
+  components/
+    Nav / Hero / AppsSection / AppCard / AppModal / Sections
+    GlassFilter.tsx         Liquid Glass の SVG フィルタ
+    icons.tsx               インライン SVG アイコン
+  data/
+    schema.ts               zod スキーマ
+    registry.ts             掲載アプリの唯一の真実
+    privacy/<slug>.ts       アプリ固有の法務文書
+  lib/
+    site-data.ts            プロフィール / お知らせ / SNS / i18n
+    state.tsx               設定の永続化
+    labels.ts               ステータス表示の変換
+    use-reveal.ts           スクロール表示
+  styles/                   tokens / standard / app-page
+public/apps/<slug>/         アイコンとスクリーンショット
 ```
-
----
 
 ## 主要モジュール
 
-| 役割 | ファイル | 備考 |
-|---|---|---|
-| トップページ DOM 構造 | `index.html` | レンダリングは main.js |
-| トップページのレンダラー | `assets/js/main.js` | registry.js + site-data.js を読みカードを動的生成 |
-| アプリメタデータ(SOT) | `apps/registry.js` | 必須/任意フィールドはファイル先頭コメント参照 |
-| プロフィール・お知らせ・SNS | `assets/js/site-data.js` | i18n ラベルも同居 |
-| デザイントークン | `assets/css/tokens.css` | 色・余白・角丸・glass・font の土台 |
-| トップ専用スタイル | `assets/css/standard.css` | liquid-glass コンポーネント |
-| 個別ページ共通スタイル | `assets/css/app-page.css` | hero / features / screenshots / pro / cta / footer の骨格 |
-| Liquid-glass SVG フィルター | `assets/js/glass-filter.js` | `#glass-distortion` を注入 |
+**registry** — `src/data/registry.ts` が掲載アプリの唯一の真実。`schema.ts` の zod スキーマでビルド時に検証され、違反はビルドを落とす。フィルタの選択肢（プラットフォーム軸・カテゴリ軸）も実データから導出される。
 
----
+**state** — `src/lib/state.tsx` が theme / accent / layout / density / font / lang を保持する。`localStorage` は React の外にある状態なので `useSyncExternalStore` で購読し、サーバーでは既定値を返す。
+
+**reveal** — `src/lib/use-reveal.ts` が IntersectionObserver で `.in` を付ける。className を DOM へ直接書き込むと React の再描画で失われるため、状態として保持する。
+
+**GlassFilter** — SVG フィルタをサーバー側で描画する。旧実装の注入スクリプトは廃止した。
 
 ## データフロー
 
 ```
-apps/registry.js  ─┐
-                   ├──► assets/js/main.js  ──► index.html の app-card / modal
-assets/js/site-data.js ─┘
-                                    │
-                                    └──► assets/css/standard.css + glass-filter.js で描画
+registry.ts (zod 検証)
+      │
+      ├─→ AppsSection ─→ AppCard ─→ AppModal
+      │        └ 検索 / プラットフォーム軸 / カテゴリ軸で絞り込み
+      │
+      ├─→ /apps/[slug]/        generateStaticParams で全件を事前生成
+      └─→ /apps/[slug]/privacy/ privacy/<slug>.ts の本文を描画
 ```
 
-- アプリの追加は `registry.js` への 1 件追加で完結。`main.js` 側は変更不要
-- DOM 構造を変える場合は `main.js` のレンダリング関数と整合させる
-- ステータス値(`alpha` / `beta` / `release`)とリンクの null 判定は `main.js` がハンドリング
+設定変更は `SiteStateProvider` → `<html>` の `data-*` 属性 → CSS の順に伝わる。CSS 側はトークンを属性セレクタで切り替える。
 
----
+## FOUC 対策の二重構造
+
+初回描画前のテーマ適用は `layout.tsx` のインラインスクリプトが担当する。保存値が無い場合は属性を付けないため、既定値の適用は `SiteStateProvider` の effect が行う。**どちらか一方だけを消さないこと。**
 
 ## デプロイと配信
 
-- 静的ファイル(HTML/CSS/JS のみ)。ビルドツール無し
-- GitHub Pages: `https://<user>.github.io/AppLibrary/` で公開
-- 詳細・将来移行は [operations.md](./operations.md) を参照
-
----
+`main` への push で Vercel が自動ビルド・デプロイする。詳細は [deploy/README.md](deploy/README.md)。
 
 ## 関連ドキュメント
 
-- ルート規定: [`CLAUDE.md`](../CLAUDE.md)(変更されない正規ルール集)
-- トップページ仕様: [design/top.md](./design/top.md)
-- 個別アプリページ仕様: [design/app-page.md](./design/app-page.md)
-- 共通コンポーネント: [design/components.md](./design/components.md)
-- アプリ別ノート: [apps/](./apps/)
-- 意思決定履歴: [decisions/](./decisions/)
+- [../AGENTS.md](../AGENTS.md) — 開発規約
+- [deploy/README.md](deploy/README.md) — 公開とデプロイ
+- [decisions/2026-08-31-nextjs-vercel-migration.md](decisions/2026-08-31-nextjs-vercel-migration.md) — 移行の経緯
