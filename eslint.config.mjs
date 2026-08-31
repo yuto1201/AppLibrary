@@ -31,8 +31,6 @@ export default defineConfig([
     "playwright-report/**",
     "test-results/**",
     "next-env.d.ts",
-    // 旧静的サイトの資産。Next.js 移行が完了するまで残すため lint 対象外にする。
-    "assets/**",
-    "apps/**",
+    ".artifacts/**",
   ]),
 ]);

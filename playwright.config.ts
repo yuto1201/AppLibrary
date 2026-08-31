@@ -7,19 +7,23 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 2 : 0,
-  reporter: process.env.CI ? "github" : "list",
+  workers: process.env.CI ? 2 : undefined,
+  reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "list",
   use: {
     baseURL: `http://127.0.0.1:${PORT}`,
     trace: "on-first-retry",
+    screenshot: "only-on-failure",
+    contextOptions: { reducedMotion: "no-preference" },
   },
   projects: [
     { name: "chromium", use: { ...devices["Desktop Chrome"] } },
-    { name: "mobile", use: { ...devices["iPhone 15"] } },
+    { name: "mobile", use: { ...devices["iPhone 15"], defaultBrowserType: "chromium" } },
   ],
   webServer: {
-    command: `npx serve out -l ${PORT}`,
+    command: "npm run start",
+    env: { PORT: String(PORT) },
     url: `http://127.0.0.1:${PORT}`,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
     timeout: 120_000,
   },
 });

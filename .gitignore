@@ -23,11 +23,17 @@ Desktop.ini
 .env
 .env.local
 .env.*.local
+.env.*
+!.env.example
+.vercel/
+.artifacts/
+.worktrees/
 
-# Build artifacts（現状ビルド工程は無いが将来用）
+# Build artifacts
 dist/
 build/
 node_modules/
+coverage/
 
 # Next.js
 .next/

@@ -40,6 +40,8 @@
 
 | 日付 | タイトル | ステータス |
 |---|---|---|
+| 2026-08-31 | [Web-Template の開発機構を移植](./2026-08-31-template-development-workflow.md) | 採択 |
+| 2026-08-31 | [Next.js / Vercel への移行](./2026-08-31-nextjs-vercel-migration.md) | 採択 |
 | 2026-05-16 | [docs/ 構造の再編](./2026-05-16-docs-restructure.md) | 採択 |
 
 ---

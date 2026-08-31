@@ -1,0 +1,36 @@
+name: Change request
+description: 仕様・受け入れ条件・検証を明記して変更を開始する
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: 目的と背景
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: 対象と対象外
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 受け入れ条件
+      description: 観察・検証できる条件を箇条書きで記載
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: 検証方法
+      value: npm run verify
+    validations:
+      required: true
+  - type: textarea
+    id: external
+    attributes:
+      label: 外部変更・承認・残る制約
+      description: デプロイ・DNS・削除など。なければ「なし」。この記入自体は操作の承認ではありません。
+    validations:
+      required: true
