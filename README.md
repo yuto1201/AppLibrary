@@ -1,99 +1,86 @@
 ステータス：運用中
-最終更新日：2026-05-20
+最終更新日：2026-08-31
 
 ---
 
 # AppLibrary
 
-Xcode で作った iOS / macOS アプリを紹介する静的 Web サイト。liquid-glass デザインを標準採用。
+個人開発したアプリを紹介する Web サイト。iOS に限らず、macOS / Web / CLI などプラットフォームを問わず掲載する。liquid-glass デザインを標準採用。
 
 - 制作: [@Yuto_Program](https://x.com/Yuto_Program)
 - リポジトリ: <https://github.com/yuto1201/AppLibrary>
-- 公開先: <https://app.yutodev.com/>（Cloudflare Pages + 独自ドメイン、2026-05-20 公開）
-- Pages サブドメイン: <https://applibrary-ag2.pages.dev/>（内部 / プレビュー用）
+- 公開先: <https://app.yutodev.com/>（Vercel + Cloudflare DNS、2026-08-31 移行）
+
+Next.js の静的出力を Vercel で配信している。サーバー処理・DB・認証は使わない。
 
 ---
 
 ## セットアップ
 
 ```bash
-# ブラウザで直接開く（最も簡単）
-open index.html
-
-# ローカルサーバーで確認する場合
-python3 -m http.server 8000
-# → http://localhost:8000
+npm install
+npm run dev
+# → http://localhost:3000
 ```
 
-ビルドツールは不使用。HTML / CSS / JavaScript（バニラ）のみで完結。
+## コマンド
 
-### アプリページ単体で確認
-```bash
-open apps/sublog/index.html
-open apps/caflog/index.html
-```
+| コマンド | 用途 |
+|---|---|
+| `npm run dev` | 開発サーバー |
+| `npm run build` | 静的出力を `out/` へ生成 |
+| `npm run check` | typecheck + lint + テスト |
+| `npm run test` | Vitest |
+| `npm run test:e2e` | Playwright（`out/` を配信して実行） |
 
-### 開発 Tweaks パネルを出す
-`?dev=1` を URL に付ける（例: `http://localhost:8000/?dev=1`）。テーマ・アクセント・レイアウト・余白・フォントを切替可能。
+Node のバージョンは `.node-version` に固定。
 
 ### Hero オープニング演出を再生する
+
 DevTools コンソールで:
+
 ```js
 sessionStorage.removeItem('applibrary_hero_seen'); location.reload();
 ```
 
 ---
 
-## フォルダ構成（要点）
-
-```
-AppLibrary/
-├── index.html              # 共通トップページ
-├── 404.html
-├── assets/
-│   ├── css/                # tokens / standard / app-page
-│   ├── js/                 # main / site-data / glass-filter
-│   └── img/                # 背景・OGP 画像
-├── apps/
-│   ├── registry.js         # アプリメタデータ（唯一の真実）
-│   ├── _template/          # 新規アプリの雛形
-│   ├── sublog/             # SubLog 紹介ページ
-│   └── caflog/             # CafLog 紹介ページ
-└── docs/                   # ドキュメント
-```
-
-詳細・絶対ルールは [CLAUDE.md](CLAUDE.md) を参照。
-
----
-
-## ドキュメント
-
-| 資料 | 場所 | 用途 |
-|---|---|---|
-| プロジェクト規定 | [CLAUDE.md](CLAUDE.md) | 絶対ルール・フォルダ構成・デザイン方針 |
-| タスク管理 | [docs/TODO.md](docs/TODO.md) | 進行中タスク・完了履歴 |
-| アーキテクチャ | [docs/architecture.md](docs/architecture.md) | 技術的な構造 |
-| 運用 | [docs/operations.md](docs/operations.md) | 日々の運用手順 |
-| デザイン仕様 | [docs/design/](docs/design/) | トップ・アプリページ・コンポーネント |
-| アプリカタログ | [docs/apps/](docs/apps/) | 各アプリの仕様メモ |
-| 公開設定 | [docs/deploy/](docs/deploy/) | Cloudflare Pages・ドメイン設定 |
-| 設計判断 | [docs/decisions/](docs/decisions/) | ADR（Architecture Decision Record） |
-
----
-
 ## アプリを追加する
 
-1. `cp -R apps/_template apps/<slug>`（slug = 英小文字+ハイフン）
-2. `apps/<slug>/` 内の placeholder を実情に置換
-3. `apps/<slug>/style.css` の `--app-*` トークンを差し替え
-4. `apps/<slug>/icon.png` と `apps/<slug>/screenshots/1.png` 〜 を配置
-5. `apps/<slug>/privacy.html` の内容を実態に合わせる
-6. `apps/registry.js` にエントリを 1 件追加
+`src/data/registry.ts` へ 1 件追加し、`public/apps/<slug>/` に画像を置くだけ。詳細ページとプライバシーページは registry から自動生成される。
 
-詳細は [CLAUDE.md](CLAUDE.md) の「アプリを新しく追加する手順」を参照。
+手順の詳細は [AGENTS.md](AGENTS.md) を参照。
 
 ---
 
-## ライセンス
+## 構成
 
-未設定。
+| パス | 内容 |
+|---|---|
+| `src/app/` | ルーティング（App Router） |
+| `src/components/` | UI コンポーネント |
+| `src/data/registry.ts` | 掲載アプリの唯一の真実（zod で検証） |
+| `src/lib/site-data.ts` | プロフィール / お知らせ / SNS / i18n |
+| `src/styles/` | デザインシステム |
+| `public/apps/<slug>/` | アイコンとスクリーンショット |
+
+---
+
+## 現状と未着手
+
+- 掲載アプリは 2 本。`~/Documents/Xcode` には他にも複数あり、追加が主な残作業
+- OGP 画像は未作成
+- サイト全体の `/terms` と `/privacy` は未整備
+- 旧サイトの個別ページにあった手書きの機能カードは未移植
+
+進行中タスクは [docs/TODO.md](docs/TODO.md) を参照。
+
+---
+
+## 関連ドキュメント
+
+| ドキュメント | 内容 |
+|---|---|
+| [AGENTS.md](AGENTS.md) | 開発規約（root 契約） |
+| [docs/deploy/README.md](docs/deploy/README.md) | 公開とデプロイ |
+| [docs/decisions/](docs/decisions/) | 設計判断の記録 |
