@@ -48,9 +48,9 @@ describe("development checks", () => {
     expect(validatePythonSetup(setup.replace(".venv-ogp/bin/python -m pip install", "python -m pip install"), "3.13.3")).toContain("CI must install OGP dependencies in an isolated virtual environment");
     expect(validatePythonSetup(setup, "3.13")).toContain("Exact local Python pin is required");
   });
-  it("prefers the isolated OGP Python and has an explicit system fallback", async () => {
+  it("requires the isolated OGP Python and fails closed when it is absent", async () => {
     const root = await fixture();
-    expect(resolveOgpPython(root)).toBe("python3");
+    expect(() => resolveOgpPython(root)).toThrow(/Missing \.venv-ogp\/bin\/python/u);
     const isolated = path.join(root, ".venv-ogp/bin/python");
     await mkdir(path.dirname(isolated), { recursive: true });
     await writeFile(isolated, "");

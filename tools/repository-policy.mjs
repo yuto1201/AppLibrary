@@ -58,7 +58,7 @@ export async function checkRepository(root) {
     const version = (await readFile(path.join(root, ".node-version"), "utf8")).trim();
     errors.push(...validateRuntime(pkg, version));
     if (pkg.scripts?.["generate:ogp"] !== "node tools/run-ogp.mjs" || pkg.scripts?.["check:ogp"] !== "node tools/run-ogp.mjs --check") {
-      errors.push("OGP scripts must prefer the isolated Python environment");
+      errors.push("OGP scripts must require the isolated Python environment");
     }
     const ogpRequirements = await readFile(path.join(root, "tools/requirements-ogp.txt"), "utf8");
     if (!/^--require-hashes$/mu.test(ogpRequirements) || [...ogpRequirements.matchAll(/--hash=sha256:[0-9a-f]{64}/gu)].length < 2) {

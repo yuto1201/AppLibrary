@@ -11,4 +11,4 @@
 - `public/apps/caflog/icon.png`
 - `public/apps/dev-tools/icon.png`
 
-初回は `.python-version` と同じ Python 3.13.3 で `python3 -m venv .venv-ogp` を実行し、`.venv-ogp/bin/python -m pip install --disable-pip-version-check --no-deps --require-hashes -r tools/requirements-ogp.txt` で固定依存を導入する。`tools/run-ogp.mjs` はこの環境があれば自動で使い、無い場合だけ PATH 上の `python3` を使う。Pillow がない場合、生成スクリプトは導入方法を案内して終了する。掲載アプリを追加・削除した場合は、生成スクリプトの `APPS` も更新して `npm run generate:ogp` を実行する。右側のアプリアイコンは 6 件までを境界検査付きのグリッドへ配置し、上限を超えた場合は生成を失敗させる。`npm run check:ogp` は生成結果の全ピクセルと commit 済み画像を比較し、`npm run check:docs` と CI で同期を強制する。Vitest は出力形式と 1200 × 630 の寸法も検査する。
+初回は `.python-version` と同じ Python 3.13.3 で `python3 -m venv .venv-ogp` を実行し、`.venv-ogp/bin/python -m pip install --disable-pip-version-check --no-deps --require-hashes -r tools/requirements-ogp.txt` で固定依存を導入する。`tools/run-ogp.mjs` はこの専用環境だけを使い、存在しない場合はセットアップ案内を表示して終了する。掲載アプリを追加・削除した場合は、生成スクリプトの `APPS` も更新して `npm run generate:ogp` を実行する。右側のアプリアイコンは 6 件までを境界検査付きのグリッドへ配置し、上限を超えた場合は生成を失敗させる。`npm run check:ogp` は生成結果の全ピクセルと commit 済み画像を比較し、`npm run check:docs` と CI で同期を強制する。Vitest は出力形式と 1200 × 630 の寸法も検査する。
