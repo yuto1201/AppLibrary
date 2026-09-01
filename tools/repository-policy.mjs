@@ -12,6 +12,22 @@ const requiredFiles = [
   "tests/e2e/site.spec.ts",
 ];
 
+const GITHUB_ACTIONS_APP_ID = 15368;
+const EXPECTED_RULE_TYPES = ["deletion", "non_fast_forward", "pull_request", "required_status_checks"];
+
+function sameStringSet(actual, expected) {
+  return Array.isArray(actual) && actual.length === expected.length &&
+    JSON.stringify([...actual].sort()) === JSON.stringify([...expected].sort());
+}
+
+function sameRequiredChecks(actual, expected) {
+  if (!Array.isArray(actual) || actual.length !== expected.length) return false;
+  const normalize = (checks) => checks
+    .map((check) => `${check?.context ?? ""}@${check?.integration_id ?? ""}`)
+    .sort();
+  return JSON.stringify(normalize(actual)) === JSON.stringify(normalize(expected));
+}
+
 export async function checkRepository(root) {
   const errors = [];
   for (const file of requiredFiles) {
@@ -57,21 +73,27 @@ export function validateCheckNames(workflow, yaml) {
 
 export function validateRuleset(workflow, ruleset) {
   const errors = [];
-  const pullRequest = ruleset.rules?.find((rule) => rule.type === "pull_request");
-  const statusChecks = ruleset.rules?.find((rule) => rule.type === "required_status_checks");
-  const expectedChecks = workflow.requiredChecks.map((context) => ({ context, integration_id: 15368 }));
-  const ruleTypes = new Set(ruleset.rules?.map((rule) => rule.type));
+  const rules = Array.isArray(ruleset.rules) ? ruleset.rules : [];
+  const pullRequest = rules.find((rule) => rule.type === "pull_request");
+  const statusChecks = rules.find((rule) => rule.type === "required_status_checks");
+  const expectedChecks = workflow.requiredChecks.map((context) => ({ context, integration_id: GITHUB_ACTIONS_APP_ID }));
+  const ruleTypes = rules.map((rule) => rule.type).sort();
+
+  if (JSON.stringify(ruleTypes) !== JSON.stringify(EXPECTED_RULE_TYPES)) {
+    errors.push("GitHub ruleset must contain each expected rule exactly once and no unexpected rules");
+  }
 
   if (
     ruleset.name !== "main required checks" ||
     ruleset.target !== "branch" ||
     ruleset.enforcement !== "active" ||
-    JSON.stringify(ruleset.bypass_actors) !== "[]" ||
-    JSON.stringify(ruleset.conditions?.ref_name) !== JSON.stringify({ include: ["~DEFAULT_BRANCH"], exclude: [] })
+    !Array.isArray(ruleset.bypass_actors) || ruleset.bypass_actors.length !== 0 ||
+    !sameStringSet(ruleset.conditions?.ref_name?.include, ["~DEFAULT_BRANCH"]) ||
+    !sameStringSet(ruleset.conditions?.ref_name?.exclude, [])
   ) errors.push("GitHub ruleset must actively protect only the default branch without bypass actors");
 
   if (
-    JSON.stringify(pullRequest?.parameters?.allowed_merge_methods) !== JSON.stringify(["squash"]) ||
+    !sameStringSet(pullRequest?.parameters?.allowed_merge_methods, ["squash"]) ||
     pullRequest?.parameters?.required_approving_review_count !== 0 ||
     pullRequest?.parameters?.dismiss_stale_reviews_on_push !== true ||
     pullRequest?.parameters?.require_code_owner_review !== false ||
@@ -82,10 +104,8 @@ export function validateRuleset(workflow, ruleset) {
   if (
     statusChecks?.parameters?.strict_required_status_checks_policy !== true ||
     statusChecks?.parameters?.do_not_enforce_on_create !== false ||
-    JSON.stringify(statusChecks?.parameters?.required_status_checks) !== JSON.stringify(expectedChecks)
+    !sameRequiredChecks(statusChecks?.parameters?.required_status_checks, expectedChecks)
   ) errors.push("GitHub ruleset required checks disagree with workflow configuration");
-
-  if (!ruleTypes.has("deletion") || !ruleTypes.has("non_fast_forward")) errors.push("GitHub ruleset must prevent default branch deletion and force pushes");
   return errors;
 }
 

@@ -32,7 +32,7 @@ Dependabot は依存と GitHub Actions の更新案を出す。自動マージ�
 
 ## main の保護
 
-Ruleset は default branch だけを対象にし、bypass actor を持たない。変更は PR 経由、merge は squash のみとし、review thread の解決を必須にする。承認数は 0 のため、個人リポジトリで別アカウントの形式承認は要求しない。
+Ruleset は default branch だけを対象にし、bypass actor を持たない。変更は PR 経由、merge は squash のみとし、review thread の解決を必須にする。承認数は 0 のため GitHub 上は所有者の自己マージを許容するが、独立レビューの実出力を所有者が確認するリポジトリ規約は維持する。
 
 `Repository checks` と `Browser checks` は strict required status checks とし、GitHub Actions App の integration ID `15368` に固定する。main の更新後は他の PR を最新 main へ追随させて再検証する。default branch の削除と force push も禁止する。
 
