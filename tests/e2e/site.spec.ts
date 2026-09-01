@@ -369,6 +369,9 @@ for (const app of apps) {
       "content",
       `プライバシーポリシー — ${app.name}`,
     );
+    await expect
+      .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth))
+      .toBe(true);
     await expectResolvedColorContrast(page, ".app-shell{background:#f8fafc!important}");
     await page.getByRole("link", { name: `← ${app.name}`, exact: true }).click();
     await expect(page).toHaveURL(new RegExp(`/apps/${app.slug}/$`, "u"));

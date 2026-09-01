@@ -215,7 +215,10 @@ body:has(.app-shell) {
 .app-shell .privacy-page ul { margin-top: var(--space-3); }
 .app-shell .privacy-page ul { padding-left: 1.4em; }
 .app-shell .privacy-page p,
-.app-shell .privacy-page li { color: var(--app-ink-2); }
+.app-shell .privacy-page li {
+  color: var(--app-ink-2);
+  overflow-wrap: anywhere;
+}
 
 @media (max-width: 479px) {
   .app-shell .hero { padding: var(--space-4); }

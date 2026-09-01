@@ -22,8 +22,8 @@ export const html = `
     本サービスは次のスコープを要求します。
   </p>
   <ul>
-    <li><code>https://www.googleapis.com/auth/drive.appdata</code> — 本サービスが作成したデータを、利用者自身の Google Drive にある非表示の appDataFolder へ保存・読み込み・削除するため</li>
-    <li><code>https://www.googleapis.com/auth/userinfo.email</code> — サインイン中のメールアドレスを画面に表示するため</li>
+    <li>https://www.googleapis.com/auth/drive.appdata — 本サービスが作成したデータを、利用者自身の Google Drive にある非表示の appDataFolder へ保存・読み込み・削除するため</li>
+    <li>https://www.googleapis.com/auth/userinfo.email — サインイン中のメールアドレスを画面に表示するため</li>
   </ul>
   <p>
     Drive の通常のファイルやフォルダへアクセスする権限は要求しません。同期中は Google Drive 側を一次保存先とし、
