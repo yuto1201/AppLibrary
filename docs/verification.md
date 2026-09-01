@@ -1,8 +1,8 @@
 # 検証と証拠
 
-ローカル/CI は Node 24.13.0 / npm 11.6.2 を用意して `npm ci` を実行する。`policy` が完全一致を検査する。fnm なら `fnm install` → `fnm use`、シェルの自動切替が働かない場合は `fnm exec --using=24.13.0 npm run verify` を使う。
+ローカル/CI は Node 24.20.0 / npm 11.6.2 を用意して `npm ci` を実行する。`policy` が完全一致を検査する。fnm なら `fnm install` → `fnm use`、シェルの自動切替が働かない場合は `fnm exec --using=24.20.0 npm run verify` を使う。
 
-Vercel は Node/npm の patch を固定できないため、install/build は `engines` の Node 24.x / npm 11.x を許容する。`.npmrc` は範囲外の major を拒否するが、クラウドにローカルの完全一致バージョンを要求しない。詳細は [公開手順](deploy/README.md)。
+Vercel は Node/npm の minor/patch を固定できないため、install/build は `engines` の Node 24.x / npm 11.x を許容する。`.npmrc` は範囲外の major を拒否するが、クラウドにローカルの完全一致バージョンを要求しない。詳細は [公開手順](deploy/README.md)。
 
 | コマンド | 検証内容 |
 |---|---|
