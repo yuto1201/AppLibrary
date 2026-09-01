@@ -191,8 +191,10 @@ test("初回テーマと言語設定が再読み込み後も維持される", as
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.getByRole("button", { name: "Switch to light mode" }).click();
   await page.getByRole("button", { name: "Switch to English" }).click();
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await expect(page.getByRole("button", { name: "日本語に切替" })).toBeVisible();
   await expect(page.locator(".cta-btn")).toHaveCSS(
     "background-image",
@@ -291,6 +293,7 @@ for (const app of apps) {
     await page.getByRole("link", { name: "プライバシーポリシー", exact: true }).click();
     await expect(page).toHaveURL(new RegExp(`/apps/${app.slug}/privacy/$`, "u"));
     await expect(page.getByRole("heading", { level: 1 })).toContainText("プライバシー");
+    await expect(page.locator(".legal-language [lang='en']")).toHaveText("This page is available in Japanese only.");
     const contact = page.getByRole("link", { name: `${app.name} お問い合わせフォーム`, exact: true });
     await expect(contact).toBeVisible();
     await expect(contact).toHaveAttribute("href", privacyContactUrls[app.slug]!);

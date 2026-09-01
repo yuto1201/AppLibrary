@@ -2,6 +2,7 @@
 export const html = `
   <h1>CafLog プライバシーポリシー</h1>
   <p class="meta">最終更新日: 2026年9月1日</p>
+  <p class="legal-language">本ページは日本語で提供しています。 <span lang="en">This page is available in Japanese only.</span></p>
 
   <p>
     CafLog（以下「本アプリ」）は、カフェイン摂取の記録と分析に必要なデータを利用者の端末内で処理します。

@@ -2,6 +2,7 @@
 export const html = `
   <h1>SubLog プライバシーポリシー</h1>
   <p class="meta">最終更新日: 2026年9月1日</p>
+  <p class="legal-language">本ページは日本語で提供しています。 <span lang="en">This page is available in Japanese only.</span></p>
 
   <p>
     SubLog（以下「本アプリ」）は、サブスクリプションの管理に必要なデータを利用者の端末内で処理します。

@@ -30,6 +30,7 @@ export default defineConfig([
     "out/**",
     "playwright-report/**",
     "test-results/**",
+    ".venv-ogp/**",
     "next-env.d.ts",
     ".artifacts/**",
   ]),

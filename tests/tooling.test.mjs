@@ -97,8 +97,10 @@ describe("development checks", () => {
   it("detects missing and escaping links but retains historical documents", async () => {
     const root = await fixture();
     await mkdir(path.join(root, "docs/decisions"), { recursive: true });
+    await mkdir(path.join(root, ".venv-ogp/package"), { recursive: true });
     await writeFile(path.join(root, "README.md"), "[missing](missing.md)\n[escape](../outside.md)\n[web](https://example.com)\n[bad](%ZZ)\n");
     await writeFile(path.join(root, "docs/decisions/old.md"), "[old](gone.md)");
+    await writeFile(path.join(root, ".venv-ogp/package/README.md"), "[third party](missing.md)");
     const errors = await findBrokenMarkdownLinks(root);
     expect(errors).toHaveLength(3);
     expect(errors.join("\n")).toContain("escapes");

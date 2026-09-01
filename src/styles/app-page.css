@@ -208,7 +208,8 @@ body:has(.app-shell) {
   font-size: clamp(30px, 5vw, 44px);
   line-height: 1.25;
 }
-.app-shell .privacy-page .meta { margin-bottom: var(--space-8); color: var(--app-ink-2); }
+.app-shell .privacy-page .meta { margin-bottom: 0; color: var(--app-ink-2); }
+.app-shell .privacy-page .legal-language { margin-top: var(--space-2); margin-bottom: var(--space-8); font-size: 14px; }
 .app-shell .privacy-page h2 { margin: var(--space-8) 0 var(--space-3); font-size: 20px; }
 .app-shell .privacy-page p,
 .app-shell .privacy-page ul { margin-top: var(--space-3); }
