@@ -95,7 +95,8 @@ export function validateRuleset(workflow, ruleset) {
       if (!hasExactKeys(rule, ["type", "parameters"])) return false;
       if (rule.type === "pull_request") return hasExactKeys(rule.parameters, [
         "allowed_merge_methods", "dismiss_stale_reviews_on_push", "require_code_owner_review",
-        "require_last_push_approval", "required_approving_review_count", "required_review_thread_resolution",
+        "require_extra_approval_for_unattributed_changes", "require_last_push_approval",
+        "required_approving_review_count", "required_reviewers", "required_review_thread_resolution",
       ]);
       if (rule.type === "required_status_checks") return hasExactKeys(rule.parameters, [
         "do_not_enforce_on_create", "required_status_checks", "strict_required_status_checks_policy",
@@ -122,7 +123,10 @@ export function validateRuleset(workflow, ruleset) {
     pullRequest?.parameters?.required_approving_review_count !== 0 ||
     pullRequest?.parameters?.dismiss_stale_reviews_on_push !== true ||
     pullRequest?.parameters?.require_code_owner_review !== false ||
+    pullRequest?.parameters?.require_extra_approval_for_unattributed_changes !== true ||
     pullRequest?.parameters?.require_last_push_approval !== false ||
+    !Array.isArray(pullRequest?.parameters?.required_reviewers) ||
+    pullRequest.parameters.required_reviewers.length !== 0 ||
     pullRequest?.parameters?.required_review_thread_resolution !== true
   ) errors.push("GitHub ruleset must require squash pull requests and resolved review threads");
 

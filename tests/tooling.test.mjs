@@ -47,6 +47,8 @@ describe("development checks", () => {
     ["non-strict checks", (ruleset) => { ruleset.rules.find((rule) => rule.type === "required_status_checks").parameters.strict_required_status_checks_policy = false; }, statusMessage],
     ["checks ignored on create", (ruleset) => { ruleset.rules.find((rule) => rule.type === "required_status_checks").parameters.do_not_enforce_on_create = true; }, statusMessage],
     ["merge commits allowed", (ruleset) => { ruleset.rules.find((rule) => rule.type === "pull_request").parameters.allowed_merge_methods.push("merge"); }, rulesetMessage],
+    ["unattributed changes without extra approval", (ruleset) => { ruleset.rules.find((rule) => rule.type === "pull_request").parameters.require_extra_approval_for_unattributed_changes = false; }, rulesetMessage],
+    ["an unexpected required reviewer", (ruleset) => { ruleset.rules.find((rule) => rule.type === "pull_request").parameters.required_reviewers.push({ file_patterns: ["**/*"] }); }, rulesetMessage],
     ["unresolved review threads", (ruleset) => { ruleset.rules.find((rule) => rule.type === "pull_request").parameters.required_review_thread_resolution = false; }, rulesetMessage],
     ["a missing deletion rule", (ruleset) => { ruleset.rules = ruleset.rules.filter((rule) => rule.type !== "deletion"); }, "GitHub ruleset must contain each expected rule exactly once and no unexpected rules"],
     ["an unexpected rule", (ruleset) => { ruleset.rules.push({ type: "required_signatures" }); }, "GitHub ruleset must contain each expected rule exactly once and no unexpected rules"],
