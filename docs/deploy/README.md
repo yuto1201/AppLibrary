@@ -56,4 +56,4 @@ PR の `Repository checks` / `Browser checks` と独立レビューの実際の�
 
 2026-08-31 に Cloudflare Pages から Vercel へ移行した。GitHub Pages の公開も同時に終了している。経緯は [decisions/2026-08-31-nextjs-vercel-migration.md](../decisions/2026-08-31-nextjs-vercel-migration.md) を参照。
 
-Cloudflare Pages プロジェクト `applibrary` は残っているが、カスタムドメインは切り離し済みで本番配信には使っていない。
+2026-09-01 に旧 Cloudflare Pages プロジェクト `applibrary` を削除した。関連するデプロイ、静的アセット、プロジェクト固有の Git 連携も削除され、`applibrary-ag2.pages.dev` は名前解決しない。Cloudflare は `yutodev.com` の DNS 管理だけを継続し、`app` の Vercel CNAME と DNS only 設定は変更していない。Cloudflare のアカウント単位の GitHub App installation は別の権限設定であり、このプロジェクト削除の完了証拠には含めない。

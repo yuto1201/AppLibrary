@@ -1,6 +1,6 @@
 # TODO — AppLibrary
 
-最終更新日: 2026-08-31
+最終更新日: 2026-09-01
 
 進行中の改善タスクと持ち越し事項。完了したものはチェックを入れる、もしくは「完了済み」に移動する。
 
@@ -31,7 +31,7 @@
 
 ## 運用
 
-- [ ] Cloudflare Pages プロジェクト `applibrary` の扱いを決める（カスタムドメインは切り離し済み、`applibrary-ag2.pages.dev` は残存）
+- [x] Cloudflare Pages プロジェクト `applibrary` を削除し、旧 Git 連携と `applibrary-ag2.pages.dev` の二重配信を終了
 - [x] specs / config / CI・検証ツールを Web-Template から静的サイト用に移植（ローカル実装。公開有効化は別）
 - [x] 移植 PR の所有者確認と main 反映、`Repository checks` / `Browser checks` の Ruleset 必須化
 - [ ] `/apps/*` の 1 年 immutable キャッシュ方針を見直す（HTML と固定名画像も対象で、再デプロイだけではブラウザキャッシュは失効しない）
