@@ -38,7 +38,7 @@ jobs:
       - name: Install OGP image dependencies
         run: |
           python -m venv .venv-ogp
-          .venv-ogp/bin/python -m pip install --disable-pip-version-check --no-deps -r tools/requirements-ogp.txt
+          .venv-ogp/bin/python -m pip install --disable-pip-version-check --no-deps --require-hashes -r tools/requirements-ogp.txt
           echo "$GITHUB_WORKSPACE/.venv-ogp/bin" >> "$GITHUB_PATH"
       - run: npm run check
       - name: Check whitespace

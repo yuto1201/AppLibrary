@@ -60,8 +60,13 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
               </a>
             )}
             {app.siteUrl && (
-              <a className="btn btn-ghost" href={app.siteUrl} target="_blank" rel="noopener noreferrer">
-                公式サイト
+              <a
+                className={`btn ${app.appStoreUrl ? "btn-ghost" : "btn-primary"}`}
+                href={app.siteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {app.platforms.includes("Web") ? "Web アプリを開く" : "公式サイト"}
               </a>
             )}
             <a className="btn btn-ghost" href="#features">機能を見る</a>

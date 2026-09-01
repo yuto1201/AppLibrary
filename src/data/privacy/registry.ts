@@ -1,4 +1,5 @@
 import { html as caflogPrivacy } from "./caflog";
+import { html as devToolsPrivacy } from "./dev-tools";
 import { html as sublogPrivacy } from "./sublog";
 
 /**
@@ -8,4 +9,5 @@ import { html as sublogPrivacy } from "./sublog";
 export const privacyDocuments: Readonly<Record<string, string>> = {
   sublog: sublogPrivacy,
   caflog: caflogPrivacy,
+  "dev-tools": devToolsPrivacy,
 };

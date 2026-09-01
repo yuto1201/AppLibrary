@@ -1,4 +1,4 @@
-import { registrySchema, type App } from "./schema";
+import { PLATFORMS, registrySchema, type App } from "./schema";
 
 /**
  * 掲載アプリの唯一の真実。
@@ -124,6 +124,65 @@ const entries = [
     appStoreUrl: "https://apps.apple.com/us/app/caflog/id6760961086",
     siteUrl: null,
   },
+  {
+    slug: "dev-tools",
+    name: "Dev-Tools",
+    tagline: "開発に使う小さな道具を、ひとつに。",
+
+    platforms: ["Web"],
+    status: "beta",
+    releaseDate: "2026-03-30",
+    year: 2026,
+
+    icon: "icon.png",
+    iconGlyph: "🧰",
+    color: "#E8EEF2",
+    accent: "#357D9A",
+    featured: false,
+
+    category: "開発ツール",
+    description:
+      "ER 図、App Store スクリーンショット、デザインメモ、文字数、アイコンをブラウザで扱える開発者向けツール集です。インストールせず、必要な道具をすぐに開けます。",
+    features: [
+      {
+        icon: "🗂️",
+        title: "ER Diagram",
+        description: "テーブル、カラム、リレーションを視覚的に整理し、データベース構造を設計できます。",
+      },
+      {
+        icon: "📱",
+        title: "App Store Preview",
+        description: "App Store 向けスクリーンショットのレイアウトと書き出しをブラウザで進められます。",
+      },
+      {
+        icon: "🎨",
+        title: "Design Pocket",
+        description: "アプリの配色、画面案、デザインメモをプロジェクト単位でまとめられます。",
+      },
+      {
+        icon: "🔢",
+        title: "Text Counter",
+        description: "入力した文章の文字数、単語数、行数をリアルタイムに確認できます。",
+      },
+      {
+        icon: "🧩",
+        title: "Icon Gallery",
+        description: "321 個のアイコンを検索し、用途や見た目を比較しながら選べます。",
+      },
+      {
+        icon: "☁️",
+        title: "端末内保存と任意の同期",
+        description: "データをブラウザ内に保存し、対応ツールでは任意で Google Drive のアプリ専用領域へ同期できます。",
+      },
+    ],
+    price: "無料",
+    version: "0.8",
+
+    screenshots: ["1.png", "2.png", "3.png"],
+
+    appStoreUrl: null,
+    siteUrl: "https://yuto1201.github.io/Dev-Tools/",
+  },
 ] satisfies unknown[];
 
 /** ビルド時に検証する。スキーマ違反があれば build が失敗する。 */
@@ -136,7 +195,7 @@ export function getApp(slug: string): App | undefined {
 /** 掲載中のアプリが持つプラットフォームを、PLATFORMS の定義順で返す。 */
 export function usedPlatforms(): string[] {
   const seen = new Set(apps.flatMap((app) => app.platforms));
-  return [...seen];
+  return PLATFORMS.filter((platform) => seen.has(platform));
 }
 
 export function usedCategories(): string[] {

@@ -37,6 +37,8 @@ Next.js の静的出力 (`output: "export"`) を Vercel で配信しています
 
 ```bash
 npm ci             # 固定依存の取得
+python3 -m venv .venv-ogp
+.venv-ogp/bin/python -m pip install --disable-pip-version-check --no-deps --require-hashes -r tools/requirements-ogp.txt
 npm run dev        # 開発サーバー
 npm run build      # 静的出力を out/ へ生成
 npm run check      # 方針・文書・生成物・typecheck・lint・テスト・build
@@ -92,7 +94,7 @@ tests/                    Vitest / Playwright
 2. `public/apps/<slug>/screenshots/1.png` 以降を置く（縦長、3〜5 枚推奨）
 3. `src/data/registry.ts` の配列へ 1 件追加する。`features` にアイコン・見出し・説明を 1 件以上設定し、`screenshots` に実ファイル名を並べる
 4. `src/data/privacy/<slug>.ts` を作り、`src/data/privacy/registry.ts` へ同じ slug で登録する
-5. `tools/requirements-ogp.txt` の固定依存を導入し、`tools/generate-ogp.py` の `APPS` を更新して `npm run generate:ogp` で共通 OGP 画像を再生成する
+5. `tools/requirements-ogp.txt` の hash 検証済み固定依存を `.venv-ogp` へ導入し、`tools/generate-ogp.py` の `APPS` を更新して `npm run generate:ogp` で共通 OGP 画像を再生成する
 6. `npm run verify` を通す（詳細ページが持つ privacy リンクの実在も確認）
 7. ブラウザでトップページと個別ページを確認する
 
@@ -127,8 +129,3 @@ DNS を触る場合、`app` レコードは **DNS only** を維持します。Cl
 ## 完了報告の原則
 
 検証していない項目を検証済みとして報告しません。ローカル検証とライブ公開状態は別の証拠として扱います。ビルドが通ることは、ブラウザでの表示確認の代わりになりません。
-
-## 注意する既知事項
-
-- `src/lib/site-data.ts` のプロフィールや SNS に未確定値が残る可能性がある。`docs/TODO.md` を参照
-- 掲載アプリは 2 本で、iOS 以外の掲載例はまだない

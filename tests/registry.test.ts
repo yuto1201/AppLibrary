@@ -38,7 +38,7 @@ describe("apps registry", () => {
   it("公開するプライバシー本文に仮文言や架空の連絡先がない", () => {
     for (const app of apps) {
       const document = privacyDocuments[app.slug]!;
-      expect(document).toContain("お問い合わせフォーム");
+      expect(document).toContain("お問い合わせ");
       expect(document).not.toMatch(/example\.(?:com|org)|TODO|FIXME|雛形|⚠️|記入してください/u);
     }
   });
@@ -70,6 +70,7 @@ describe("apps registry", () => {
   it("公開済みアプリの初回公開日を保持する", () => {
     expect(getApp("sublog")?.releaseDate).toBe("2026-04-14");
     expect(getApp("caflog")?.releaseDate).toBe("2026-04-10");
+    expect(getApp("dev-tools")?.releaseDate).toBe("2026-03-30");
   });
 
   it("実在しない公開日を拒否する", () => {
@@ -109,6 +110,36 @@ describe("apps registry", () => {
     expect(sublog.features.find(({ title }) => title === "かんたん登録")?.description).toContain("85 以上");
   });
 
+  it("Dev-Tools を公開中の Web アプリとして保持する", () => {
+    const devTools = getApp("dev-tools")!;
+    expect(devTools.platforms).toEqual(["Web"]);
+    expect(devTools.status).toBe("beta");
+    expect(devTools.version).toBe("0.8");
+    expect(devTools.appStoreUrl).toBeNull();
+    expect(devTools.siteUrl).toBe("https://yuto1201.github.io/Dev-Tools/");
+    expect(devTools.screenshots).toHaveLength(3);
+    expect(devTools.features.map(({ title }) => title)).toEqual([
+      "ER Diagram",
+      "App Store Preview",
+      "Design Pocket",
+      "Text Counter",
+      "Icon Gallery",
+      "端末内保存と任意の同期",
+    ]);
+  });
+
+  it("Dev-Tools の公開ポリシーが保存・同期・配信主体と削除導線を明示する", () => {
+    const document = privacyDocuments["dev-tools"]!;
+    expect(document).toContain("localStorage");
+    expect(document).toContain("drive.appdata");
+    expect(document).toContain("userinfo.email");
+    expect(document).toContain("appDataFolder");
+    expect(document).toContain("アクセストークン");
+    expect(document).toContain("GitHub Pages");
+    expect(document).toContain("非表示のアプリデータ");
+    expect(document).toContain("https://github.com/yuto1201/Dev-Tools/issues");
+  });
+
   it("OGP 画像は 1200 x 630 の PNG", () => {
     const image = readFileSync("public/ogp.png");
     expect([...image.subarray(0, 8)]).toEqual([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
@@ -122,7 +153,7 @@ describe("apps registry", () => {
   });
 
   it("フィルタ候補が実データから導出される", () => {
-    expect(usedPlatforms()).toContain("iOS");
-    expect(usedCategories()).toEqual(expect.arrayContaining(["ファイナンス", "ヘルスケア"]));
+    expect(usedPlatforms()).toEqual(["iOS", "Web"]);
+    expect(usedCategories()).toEqual(expect.arrayContaining(["ファイナンス", "ヘルスケア", "開発ツール"]));
   });
 });

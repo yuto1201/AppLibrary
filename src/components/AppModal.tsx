@@ -117,6 +117,14 @@ export function AppModal({ app, onClose }: { app: App; onClose: () => void }) {
                 <span className="badge-btn-large">{t.modal_dl_large}</span>
               </span>
             </a>
+          ) : app.siteUrl ? (
+            <a className="badge-btn" href={app.siteUrl} target="_blank" rel="noopener noreferrer">
+              <IconArrowNE />
+              <span className="badge-btn-stack">
+                <span className="badge-btn-small">{t.modal_web_small}</span>
+                <span className="badge-btn-large">{t.modal_web_large}</span>
+              </span>
+            </a>
           ) : (
             <span className="badge-btn" aria-disabled="true">
               <IconApple />

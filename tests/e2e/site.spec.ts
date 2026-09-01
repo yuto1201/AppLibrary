@@ -4,11 +4,16 @@ import { readdir } from "node:fs/promises";
 import path from "node:path";
 import { apps } from "../../src/data/registry";
 
-const privacyContactUrls: Record<string, string> = {
-  sublog:
-    "https://docs.google.com/forms/d/e/1FAIpQLSfm2fsJLBAy4CVIBscx2ueab2znR5pYTzxZo7ntUULdtaoODg/viewform",
-  caflog:
-    "https://docs.google.com/forms/d/e/1FAIpQLSfwkDqyQ_NutiUPmFnTw01q9hIgVFbHFzGJp95h6qgYd5awQQ/viewform",
+const privacyContacts: Record<string, { label: string; url: string }> = {
+  sublog: {
+    label: "SubLog お問い合わせフォーム",
+    url: "https://docs.google.com/forms/d/e/1FAIpQLSfm2fsJLBAy4CVIBscx2ueab2znR5pYTzxZo7ntUULdtaoODg/viewform",
+  },
+  caflog: {
+    label: "CafLog お問い合わせフォーム",
+    url: "https://docs.google.com/forms/d/e/1FAIpQLSfwkDqyQ_NutiUPmFnTw01q9hIgVFbHFzGJp95h6qgYd5awQQ/viewform",
+  },
+  "dev-tools": { label: "Dev-Tools お問い合わせ", url: "https://github.com/yuto1201/Dev-Tools/issues" },
 };
 
 async function expectResolvedColorContrast(page: Page, backgroundCss: string) {
@@ -85,6 +90,7 @@ test("一覧検索・カテゴリ・空状態と解除", async ({ page }) => {
   const platformGroup = page.getByRole("group", { name: "プラットフォーム", exact: true });
   const platformAll = platformGroup.getByRole("button", { name: "すべて", exact: true });
   const platformIOS = platformGroup.getByRole("button", { name: "iOS", exact: true });
+  const platformWeb = platformGroup.getByRole("button", { name: "Web", exact: true });
   const categoryGroup = page.getByRole("group", { name: "カテゴリ", exact: true });
   const categoryAll = categoryGroup.getByRole("button", { name: "すべて", exact: true });
   const categoryHealth = categoryGroup.getByRole("button", { name: "ヘルスケア", exact: true });
@@ -109,6 +115,19 @@ test("一覧検索・カテゴリ・空状態と解除", async ({ page }) => {
   await expect(platformIOS).toHaveAttribute("aria-pressed", "true");
   await expect(platformAll).toHaveAttribute("aria-pressed", "false");
   await expect(cards).toHaveCount(apps.filter((app) => app.platforms.includes("iOS")).length);
+  await page.getByRole("button", { name: "条件をクリア" }).click();
+  await platformWeb.click();
+  await expect(platformWeb).toHaveAttribute("aria-pressed", "true");
+  await expect(cards).toHaveCount(1);
+  await expect(cards.first()).toContainText("Dev-Tools");
+  await cards.first().click();
+  const webDialog = page.getByRole("dialog", { name: "Dev-Tools", exact: true });
+  const webBadge = webDialog.locator('a.badge-btn[href="https://yuto1201.github.io/Dev-Tools/"]');
+  await expect(webBadge).toBeVisible();
+  await expect(webBadge).toContainText("ブラウザで開く");
+  await expect(webBadge).toContainText("Web アプリ");
+  await expect(webBadge).toHaveAttribute("target", "_blank");
+  await webDialog.getByRole("button", { name: "閉じる", exact: true }).click();
 });
 
 test("OGP metadata とサイト共通の法務ページ", async ({ page, request }) => {
@@ -296,6 +315,14 @@ for (const app of apps) {
     );
     await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", `${app.name} — AppLibrary`);
     await expect(page.locator('meta[name="twitter:title"]')).toHaveAttribute("content", `${app.name} — AppLibrary`);
+    if (app.siteUrl) {
+      const siteLink = page.getByRole("link", {
+        name: app.platforms.includes("Web") ? "Web アプリを開く" : "公式サイト",
+        exact: true,
+      });
+      await expect(siteLink).toHaveAttribute("href", app.siteUrl);
+      await expect(siteLink).toHaveAttribute("target", "_blank");
+    }
     await expectResolvedColorContrast(
       page,
       ".app-shell{background:#f8fafc!important}.hero-badge{background:#fff!important}.hero-tagline{background:none!important;color:var(--app-accent)!important}.btn-primary{background:var(--app-accent)!important}",
@@ -325,9 +352,10 @@ for (const app of apps) {
     await expect(page).toHaveURL(new RegExp(`/apps/${app.slug}/privacy/$`, "u"));
     await expect(page.getByRole("heading", { level: 1 })).toContainText("プライバシー");
     await expect(page.locator(".legal-language [lang='en']")).toHaveText("This page is available in Japanese only.");
-    const contact = page.getByRole("link", { name: `${app.name} お問い合わせフォーム`, exact: true });
+    const expectedContact = privacyContacts[app.slug]!;
+    const contact = page.getByRole("link", { name: expectedContact.label, exact: true });
     await expect(contact).toBeVisible();
-    await expect(contact).toHaveAttribute("href", privacyContactUrls[app.slug]!);
+    await expect(contact).toHaveAttribute("href", expectedContact.url);
     await expect(page.locator("footer.page-footer")).toBeVisible();
     await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
       "content",
@@ -341,6 +369,9 @@ for (const app of apps) {
       "content",
       `プライバシーポリシー — ${app.name}`,
     );
+    await expect
+      .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth))
+      .toBe(true);
     await expectResolvedColorContrast(page, ".app-shell{background:#f8fafc!important}");
     await page.getByRole("link", { name: `← ${app.name}`, exact: true }).click();
     await expect(page).toHaveURL(new RegExp(`/apps/${app.slug}/$`, "u"));
