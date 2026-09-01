@@ -50,10 +50,10 @@ Cloudflare がゾーン `yutodev.com` を管理している。
 
 CSP を緩める変更は理由を PR に書く。
 
-PR の `Repository checks` / `Browser checks` と独立レビューの実際の出力を確認してから、承認された対象をマージする。CI 定義と GitHub Ruleset の有効化は別の作業。[../workflow.md](../workflow.md) を参照。
+PR の `Repository checks` / `Browser checks` と独立レビューの実際の出力を確認してから、承認された対象をマージする。両 check は active な GitHub Ruleset で必須化されており、正規化した設定は `config/github-ruleset.json` に保存する。この export は取得時点の記録であり、実効状態は GitHub API で別途確認する。[../workflow.md](../workflow.md) を参照。
 
 ## 移行の履歴
 
 2026-08-31 に Cloudflare Pages から Vercel へ移行した。GitHub Pages の公開も同時に終了している。経緯は [decisions/2026-08-31-nextjs-vercel-migration.md](../decisions/2026-08-31-nextjs-vercel-migration.md) を参照。
 
-Cloudflare Pages プロジェクト `applibrary` は残っているが、カスタムドメインは切り離し済みで本番配信には使っていない。
+2026-09-01 に旧 Cloudflare Pages プロジェクト `applibrary` を削除した。プロジェクト一覧は空で、同名プロジェクトの取得は not found、`applibrary-ag2.pages.dev` は名前解決しないことを確認した。削除後はプロジェクト固有の Git 設定も参照できない。Cloudflare は `yutodev.com` の DNS 管理だけを継続し、`app` の Vercel CNAME と DNS only 設定は変更していない。Cloudflare のアカウント単位の GitHub App installation は別の権限設定であり、このプロジェクト削除の完了証拠には含めない。

@@ -30,7 +30,8 @@ export const workflowSchema = z.strictObject({
     bindToHead: z.literal(true),
     enforcement: z.literal("owner-reviewed"),
   }),
-  requiredChecks: z.array(z.string().min(1)).min(1),
+  requiredChecks: z.array(z.string().min(1)).min(1)
+    .refine((items) => new Set(items).size === items.length, "Duplicate required check"),
 });
 
 export const acceptanceSchema = z.strictObject({
