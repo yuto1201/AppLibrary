@@ -48,8 +48,13 @@ export function AppModal({ app, onClose }: { app: App; onClose: () => void }) {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [onClose]);
 
-  const { t } = useSiteState();
-  const releaseLabel = app.releaseDate ?? String(app.year);
+  const { prefs, t } = useSiteState();
+  const releaseLabel = app.releaseDate
+    ? new Intl.DateTimeFormat(prefs.lang === "ja" ? "ja-JP" : "en-US", {
+        dateStyle: "long",
+        timeZone: "UTC",
+      }).format(new Date(`${app.releaseDate}T00:00:00Z`))
+    : String(app.year);
   const styleVars = { "--card-color": app.color, "--card-accent": app.accent } as React.CSSProperties;
 
   return (
@@ -98,7 +103,7 @@ export function AppModal({ app, onClose }: { app: App; onClose: () => void }) {
         {app.features.length > 0 && (
           <div className="feature-list">
             {app.features.map((feature) => (
-              <span className="feature-tag" key={feature}>{feature}</span>
+              <span className="feature-tag" key={feature.title}>{feature.title}</span>
             ))}
           </div>
         )}

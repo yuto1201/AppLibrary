@@ -4,12 +4,12 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { projectSchema, workflowSchema, readJson } from "./project-config.mjs";
 
 const requiredFiles = [
-  "README.md", "AGENTS.md", "CLAUDE.md", ".npmrc", ".gitattributes",
+  "README.md", "AGENTS.md", "CLAUDE.md", ".npmrc", ".gitattributes", ".python-version",
   "specs/README.md", "specs/product.md", "specs/acceptance.md",
   "docs/workflow.md", "docs/verification.md", "docs/deploy/README.md",
   "config/acceptance.json", "config/github-ruleset.json", ".github/ISSUE_TEMPLATE/change.yml",
   ".github/pull_request_template.md", ".github/workflows/ci.yml",
-  "tests/e2e/site.spec.ts",
+  "tests/e2e/site.spec.ts", "tools/requirements-ogp.txt",
 ];
 
 const GITHUB_ACTIONS_APP_ID = 15368;
@@ -48,7 +48,10 @@ export async function checkRepository(root) {
   try {
     projectSchema.parse(await readJson(root, "config/project.json"));
     const workflow = workflowSchema.parse(await readJson(root, "config/workflow.json"));
-    errors.push(...validateCheckNames(workflow, await readFile(path.join(root, ".github/workflows/ci.yml"), "utf8")));
+    const ci = await readFile(path.join(root, ".github/workflows/ci.yml"), "utf8");
+    errors.push(...validateCheckNames(workflow, ci));
+    const pythonPin = (await readFile(path.join(root, ".python-version"), "utf8")).trim();
+    errors.push(...validatePythonSetup(ci, pythonPin));
     errors.push(...validateRuleset(workflow, await readJson(root, "config/github-ruleset.json")));
     const pkg = await readJson(root, "package.json");
     const lock = await readJson(root, "package-lock.json");
@@ -77,6 +80,21 @@ export async function checkRepository(root) {
 export function validateCheckNames(workflow, yaml) {
   const jobs = [...yaml.matchAll(/^    name: ([^\r\n]+)$/gmu)].map((match) => match[1].trim());
   return workflow.requiredChecks.filter((name) => !jobs.includes(name)).map((name) => `Required check has no CI job: ${name}`);
+}
+
+export function validatePythonSetup(yaml, pythonPin) {
+  const errors = [];
+  if (!/^\d+\.\d+\.\d+$/u.test(pythonPin)) errors.push("Exact local Python pin is required");
+  if (!/uses: actions\/setup-python@[0-9a-f]{40} # v\d+$/mu.test(yaml)) errors.push("CI setup-python action must use an immutable commit");
+  if (!/^          python-version-file: \.python-version$/mu.test(yaml)) errors.push("CI must use the repository Python pin");
+  if (
+    !/^          python -m venv \.venv-ogp$/mu.test(yaml) ||
+    !/^          \.venv-ogp\/bin\/python -m pip install --disable-pip-version-check --no-deps -r tools\/requirements-ogp\.txt$/mu.test(yaml) ||
+    !/^          echo "\$GITHUB_WORKSPACE\/\.venv-ogp\/bin" >> "\$GITHUB_PATH"$/mu.test(yaml)
+  ) {
+    errors.push("CI must install OGP dependencies in an isolated virtual environment");
+  }
+  return errors;
 }
 
 export function validateRuleset(workflow, ruleset) {

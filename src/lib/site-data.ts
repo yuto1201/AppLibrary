@@ -53,6 +53,7 @@ type Dict = {
   contact_p: string;
   footer_copyright: string;
   privacy: string;
+  terms: string;
   modal_dl_small: string;
   modal_dl_large: string;
   modal_dl_unavailable: string;
@@ -92,6 +93,7 @@ export const i18n: Record<Lang, Dict> = {
     contact_p: "お気軽にご連絡ください。SNS・メール、どちらでも。",
     footer_copyright: "© 2026 · 東京から、愛を込めて",
     privacy: "プライバシー",
+    terms: "利用規約",
     modal_dl_small: "Download on the",
     modal_dl_large: "App Store",
     modal_dl_unavailable: "審査中",
@@ -129,6 +131,7 @@ export const i18n: Record<Lang, Dict> = {
     contact_p: "Always happy to hear from you — email or social, either works.",
     footer_copyright: "© 2026 · Made in Tokyo, with care",
     privacy: "Privacy",
+    terms: "Terms",
     modal_dl_small: "Download on the",
     modal_dl_large: "App Store",
     modal_dl_unavailable: "In Review",

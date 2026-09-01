@@ -33,6 +33,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
    ============================================================ */
 body {
   background:
+    linear-gradient(rgba(5, 7, 28, 0.72), rgba(5, 7, 28, 0.72)),
     radial-gradient(at 15% 10%, #ff6ab1 0%, transparent 42%),
     radial-gradient(at 85% 5%,  #ffb86b 0%, transparent 40%),
     radial-gradient(at 90% 85%, #5ac8fa 0%, transparent 45%),
@@ -210,7 +211,7 @@ body {
   color: transparent;
 }
 [data-theme="light"] .hero-h1 .hero-line.accent {
-  background: linear-gradient(120deg, #e85b8a 0%, #af52de 50%, #0a84ff 100%);
+  background: linear-gradient(120deg, #b32968 0%, #75349a 50%, #0062cc 100%);
   background-size: 200% 200%;
   background-position: 0% 50%;
   -webkit-background-clip: text;
@@ -234,7 +235,7 @@ body {
   color: transparent;
 }
 [data-theme="light"] .hero-h1 .hero-line.accent .hero-letter {
-  background: linear-gradient(120deg, #e85b8a 0%, #af52de 50%, #0a84ff 100%);
+  background: linear-gradient(120deg, #b32968 0%, #75349a 50%, #0062cc 100%);
   background-size: 200% 200%;
   background-position: 0% 50%;
   -webkit-background-clip: text;
@@ -347,7 +348,7 @@ body {
   font-weight: 600;
   letter-spacing: -0.01em;
   color: #fff;
-  background: linear-gradient(135deg, rgba(0, 122, 255, 0.85), rgba(90, 200, 250, 0.7));
+  background: linear-gradient(135deg, #0062cc, #006d91);
   border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow:
     0 6px 24px rgba(0, 122, 255, 0.35),
@@ -364,7 +365,6 @@ body {
 }
 .cta-btn:hover svg { transform: translateY(2px); }
 .cta-btn svg { transition: transform 0.2s; }
-
 .hero-note-link {
   display: inline-flex;
   align-items: center;
@@ -472,6 +472,28 @@ body {
 }
 
 .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.filter-label {
+  padding: 6px 10px;
+  border: 1px solid var(--filter-label-border);
+  border-radius: var(--radius-full);
+  background: var(--filter-label-bg);
+  color: var(--filter-label-ink);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-shadow: var(--glass-text-shadow);
+}
+[data-theme="light"] .filter-label {
+  text-shadow: none;
+}
 .chip {
   padding: 8px 16px;
   border-radius: var(--radius-full);

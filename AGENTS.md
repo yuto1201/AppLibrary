@@ -57,16 +57,19 @@ src/
     page.tsx              トップページ
     apps/[slug]/          アプリ詳細（registry から静的生成）
     apps/[slug]/privacy/  プライバシーポリシー
+    privacy/              サイト全体のプライバシーポリシー
+    terms/                サイト全体の利用規約
   components/             UI コンポーネント
   data/
     schema.ts             registry の zod スキーマ
     registry.ts           掲載アプリの唯一の真実
     privacy/<slug>.ts     アプリ固有の法務文書
+    privacy/registry.ts   掲載 slug と法務本文の対応
   lib/
     site-data.ts          プロフィール / お知らせ / SNS / i18n
     state.tsx             テーマ等の設定（localStorage 永続化）
     use-reveal.ts         スクロール表示アニメーション
-  styles/                 デザインシステム（tokens / standard / app-page）
+  styles/                 デザインシステム（tokens / standard / app-page / legal）
 public/
   apps/<slug>/            アイコンとスクリーンショット
 tests/                    Vitest / Playwright
@@ -79,6 +82,7 @@ tests/                    Vitest / Playwright
 - `slug` は lowercase kebab-case。`public/apps/<slug>/` と一致させる
 - `platforms` は**配列**。`iOS` / `iPadOS` / `macOS` / `watchOS` / `visionOS` / `Web` / `CLI` から 1 つ以上
 - `status` は `alpha` / `beta` / `release` / `archived`
+- `features` は `{ icon, title, description }` を 1 件以上持ち、同じアプリ内で `title` を重複させない
 - App Store 未公開なら `appStoreUrl` を `null` にする
 - フィルタのプラットフォーム軸とカテゴリ軸は registry の実データから自動生成される
 
@@ -86,16 +90,17 @@ tests/                    Vitest / Playwright
 
 1. `public/apps/<slug>/icon.png` を置く（正方形、128x128 以上）
 2. `public/apps/<slug>/screenshots/1.png` 以降を置く（縦長、3〜5 枚推奨）
-3. `src/data/registry.ts` の配列へ 1 件追加する。`screenshots` に実ファイル名を並べる
-4. プライバシーポリシーが必要なら `src/data/privacy/<slug>.ts` を作り、`src/app/apps/[slug]/privacy/page.tsx` の `PRIVACY` へ登録する
-5. `npm run verify` を通す（詳細ページが持つ privacy リンクの実在も確認）
-6. ブラウザでトップページと個別ページを確認する
+3. `src/data/registry.ts` の配列へ 1 件追加する。`features` にアイコン・見出し・説明を 1 件以上設定し、`screenshots` に実ファイル名を並べる
+4. `src/data/privacy/<slug>.ts` を作り、`src/data/privacy/registry.ts` へ同じ slug で登録する
+5. `tools/requirements-ogp.txt` の固定依存を導入し、`tools/generate-ogp.py` の `APPS` を更新して `npm run generate:ogp` で共通 OGP 画像を再生成する
+6. `npm run verify` を通す（詳細ページが持つ privacy リンクの実在も確認）
+7. ブラウザでトップページと個別ページを確認する
 
-詳細ページとプライバシーページは registry から自動生成されます。**HTML を手でコピーする運用は廃止しました。**
+詳細ページはアプリ registry、プライバシーページはアプリ registry と privacy registry から静的生成されます。両 registry の slug はテストで完全一致を要求します。**HTML を手でコピーする運用は廃止しました。**
 
 ## デザインと CSS
 
-`src/styles/` は旧サイトから無改変で移植したデザインシステムです。
+`src/styles/` は旧サイトから移植したデザインシステムを基礎に、現行 UI に必要なスタイルを追加しています。
 
 - `tokens.css` の `--glass-*` などトークン名は変更しない。色味を変える場合は値だけ調整する
 - `standard.css` はトップページ、`app-page.css` は個別ページが使う
@@ -126,6 +131,4 @@ DNS を触る場合、`app` レコードは **DNS only** を維持します。Cl
 ## 注意する既知事項
 
 - `src/lib/site-data.ts` のプロフィールや SNS に未確定値が残る可能性がある。`docs/TODO.md` を参照
-- OGP 画像は未作成。`src/app/layout.tsx` の `openGraph` に画像を足す前に実ファイルを用意する
-- 旧サイトの個別ページにあった手書きの機能カード（絵文字＋説明文）は未移植。現在は registry の `features` タグのみ表示される
-- サイト全体の `/terms` と `/privacy` は未整備
+- 掲載アプリは 2 本で、iOS 以外の掲載例はまだない

@@ -16,6 +16,32 @@ const hexColor = z
   .string()
   .regex(/^#[0-9a-fA-F]{6}$/u, "16 進 6 桁の色コードで指定する");
 
+const releaseDateSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/u, "YYYY-MM-DD 形式で指定する")
+  .refine((value) => {
+    const [year, month, day] = value.split("-").map(Number);
+    if (year === undefined || month === undefined || day === undefined) return false;
+    const date = new Date(Date.UTC(year, month - 1, day));
+    return date.getUTCFullYear() === year
+      && date.getUTCMonth() === month - 1
+      && date.getUTCDate() === day;
+  }, "実在する日付を指定する");
+
+export const featureSchema = z.object({
+  icon: z.string().min(1).max(16),
+  title: z.string().min(1),
+  description: z.string().min(1),
+});
+
+const featuresSchema = z
+  .array(featureSchema)
+  .min(1)
+  .refine(
+    (features) => new Set(features.map((feature) => feature.title)).size === features.length,
+    { message: "同じアプリ内で feature の title が重複している" },
+  );
+
 export const appSchema = z.object({
   /** URL に使う識別子。public/apps/<slug>/ と対応する。 */
   slug: z
@@ -29,7 +55,7 @@ export const appSchema = z.object({
   platforms: z.array(platformSchema).min(1),
   status: statusSchema,
   /** 'YYYY-MM-DD'。未確定なら null にして year を使う。 */
-  releaseDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/u).nullable(),
+  releaseDate: releaseDateSchema.nullable(),
   year: z.number().int().min(2000).max(2100),
 
   /** public/apps/<slug>/ からの相対ファイル名。無い場合は iconGlyph を表示する。 */
@@ -41,7 +67,7 @@ export const appSchema = z.object({
 
   category: z.string().min(1),
   description: z.string().min(1),
-  features: z.array(z.string().min(1)),
+  features: featuresSchema,
   price: z.string().min(1),
   version: z.string().min(1),
 

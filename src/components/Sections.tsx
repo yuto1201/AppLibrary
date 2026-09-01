@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useSiteState } from "@/lib/state";
 import { posts, profile, social } from "@/lib/site-data";
-import { apps } from "@/data/registry";
 import { useReveal } from "@/lib/use-reveal";
 import type { Post } from "@/lib/site-data";
 
@@ -73,13 +72,14 @@ export function Contact() {
 
 export function Footer() {
   const { t } = useSiteState();
-  const firstApp = apps[0];
 
   return (
     <footer className="footer">
       <div>{t.footer_copyright}</div>
       <div>
-        {firstApp && <Link href={`/apps/${firstApp.slug}/privacy/`}>{t.privacy}</Link>}
+        <Link href="/privacy/">{t.privacy}</Link>
+        &nbsp;·&nbsp;
+        <Link href="/terms/">{t.terms}</Link>
         &nbsp;·&nbsp;
         {profile.name}
       </div>

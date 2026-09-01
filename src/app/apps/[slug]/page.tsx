@@ -12,10 +12,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const app = getApp(slug);
   if (!app) return {};
+  const title = `${app.name} — AppLibrary`;
   return {
-    title: `${app.name} — AppLibrary`,
+    title,
     description: app.tagline,
-    openGraph: { title: app.name, description: app.tagline },
+    openGraph: {
+      type: "website",
+      url: `/apps/${app.slug}/`,
+      siteName: "AppLibrary",
+      title,
+      description: app.tagline,
+      images: [{ url: "/ogp.png", width: 1200, height: 630, alt: "AppLibrary" }],
+    },
+    twitter: { card: "summary_large_image", title, description: app.tagline, images: ["/ogp.png"] },
   };
 }
 
@@ -25,7 +34,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
   if (!app) notFound();
 
   return (
-    <>
+    <div className="app-shell">
       <header className="hero">
         <nav className="hero-nav">
           <Link href="/" className="nav-back">← AppLibrary</Link>
@@ -65,8 +74,10 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
           <h2 className="section-title">Features</h2>
           <div className="feature-grid">
             {app.features.map((feature) => (
-              <article className="feature-card" key={feature}>
-                <h3>{feature}</h3>
+              <article className="feature-card" key={feature.title}>
+                <div className="feature-icon" aria-hidden="true">{feature.icon}</div>
+                <h3>{feature.title}</h3>
+                <p>{feature.description}</p>
               </article>
             ))}
           </div>
@@ -90,11 +101,11 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
         )}
       </main>
 
-      <footer className="app-footer">
+      <footer className="page-footer">
         <Link href={`/apps/${app.slug}/privacy/`}>プライバシーポリシー</Link>
         <span> · </span>
         <Link href="/">AppLibrary</Link>
       </footer>
-    </>
+    </div>
   );
 }

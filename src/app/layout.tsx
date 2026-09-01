@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { GlassFilter } from "@/components/GlassFilter";
 import { SiteStateProvider } from "@/lib/state";
+import project from "../../config/project.json";
 import "./globals.css";
 
 // 自己ホストする。外部 CDN への追加リクエストが無くなり、静的出力とも相性がよい。
@@ -20,16 +21,19 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(project.productionUrl),
   // iOS 限定から全プラットフォームへスコープを広げたため、旧 "iOS Apps" を改めた。
   title: "AppLibrary — uesugiyuuto のアプリ",
   description: "個人開発しているアプリの紹介ライブラリ。iOS / macOS / Web など、作ったものをまとめています。",
   openGraph: {
     type: "website",
+    url: "/",
     siteName: "AppLibrary",
     title: "AppLibrary — uesugiyuuto のアプリ",
     description: "個人開発しているアプリの紹介ライブラリ。",
+    images: [{ url: "/ogp.png", width: 1200, height: 630, alt: "AppLibrary — つくったアプリたち" }],
   },
-  twitter: { card: "summary_large_image" },
+  twitter: { card: "summary_large_image", images: ["/ogp.png"] },
   icons: { icon: "/favicon.svg" },
 };
 
