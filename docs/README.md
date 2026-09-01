@@ -15,7 +15,7 @@
 | [design/components.md](design/components.md) | 共通コンポーネント |
 | [apps/README.md](apps/README.md) | アプリ固有の記録 |
 | [decisions/README.md](decisions/README.md) | 設計判断の履歴 |
-| [TODO.md](TODO.md) | 未着手・持ち越し事項 |
+| [TODO.md](TODO.md) | 未完了タスクと直近の完了状況 |
 | [superpowers/completed/](superpowers/completed/) | 旧サイトの完了済み仕様・計画（履歴のみ） |
 
 アプリ追加は registry と画像、必要な法務本文を更新する。人が残す経緯がある場合にだけ `docs/apps/` に追記し、空のテンプレートを機械的に増やさない。

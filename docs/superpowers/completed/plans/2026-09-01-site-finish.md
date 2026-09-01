@@ -68,5 +68,5 @@
 
 - [x] Add regression checks for feature structure, dates, legal routes, OGP dimensions/metadata, visible filter labels, and cache configuration.
 - [x] Run `fnm exec --using=24.20.0 npm run verify`.
-- [ ] Obtain OpenAI and Anthropic exact-head read-only reviews and resolve blockers.
-- [ ] Open, verify, and squash-merge the PR with exact-head protection.
+- [x] Obtain OpenAI and Anthropic exact-head read-only reviews and resolve blockers.
+- [x] Open, verify, and squash-merge the PR with exact-head protection.

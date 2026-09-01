@@ -12,7 +12,9 @@ except ModuleNotFoundError as error:
     raise SystemExit(
         "Pillow is required to generate the OGP image. "
         "Install it in a virtual environment with: "
-        "python3 -m pip install --no-deps -r tools/requirements-ogp.txt"
+        "python3 -m venv .venv-ogp && "
+        ".venv-ogp/bin/python -m pip install --disable-pip-version-check "
+        "--no-deps --require-hashes -r tools/requirements-ogp.txt"
     ) from error
 
 
@@ -21,6 +23,7 @@ OUTPUT = ROOT / "public" / "ogp.png"
 APPS = [
     ("SubLog", ROOT / "public" / "apps" / "sublog" / "icon.png"),
     ("CafLog", ROOT / "public" / "apps" / "caflog" / "icon.png"),
+    ("Dev-Tools", ROOT / "public" / "apps" / "dev-tools" / "icon.png"),
 ]
 MAX_OGP_APPS = 6
 
@@ -42,18 +45,18 @@ def icon_layout(count: int) -> list[tuple[int, int, int]]:
     """Place up to six app icons inside the right side of the glass panel."""
     if count < 1 or count > MAX_OGP_APPS:
         raise ValueError(f"OGP supports 1-{MAX_OGP_APPS} app icons; received {count}")
-    if count <= 2:
-        return [(718 + index * 174, 188, 142) for index in range(count)]
-
     panel_left, panel_width = 680, 420
-    icon_size, gap_x, row_step = 100, 24, 174
-    positions: list[tuple[int, int, int]] = []
-    for row, start_index in enumerate(range(0, count, 3)):
-        row_count = min(3, count - start_index)
-        row_width = row_count * icon_size + (row_count - 1) * gap_x
-        start_x = panel_left + (panel_width - row_width) // 2
-        for column in range(row_count):
-            positions.append((start_x + column * (icon_size + gap_x), 154 + row * row_step, icon_size))
+    if count <= 2:
+        positions = [(718 + index * 174, 188, 142) for index in range(count)]
+    else:
+        icon_size, gap_x, row_step = 100, 24, 174
+        positions = []
+        for row, start_index in enumerate(range(0, count, 3)):
+            row_count = min(3, count - start_index)
+            row_width = row_count * icon_size + (row_count - 1) * gap_x
+            start_x = panel_left + (panel_width - row_width) // 2
+            for column in range(row_count):
+                positions.append((start_x + column * (icon_size + gap_x), 154 + row * row_step, icon_size))
 
     if any(x < panel_left or x + size > panel_left + panel_width or y < 140 or y + size + 38 > 485 for x, y, size in positions):
         raise ValueError("OGP icon layout escaped its reserved panel")

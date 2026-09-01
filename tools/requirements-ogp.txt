@@ -1,1 +1,4 @@
-Pillow==11.3.0
+--require-hashes
+Pillow==11.3.0 \
+    --hash=sha256:7db51d222548ccfd274e4572fdbf3e810a5e66b00608862f947b163e613b67dd \
+    --hash=sha256:13f87d581e71d9189ab21fe0efb5a23e9f28552d5be6979e84001d3b8505abe8

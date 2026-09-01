@@ -8,6 +8,7 @@ import { generateAgents } from "../tools/generate-agent-wrappers.mjs";
 import { verifyAcceptance } from "../tools/verify-acceptance-trace.mjs";
 import { checkRepository, validateCheckNames, validatePythonSetup, validateRuleset, validateRuntime } from "../tools/repository-policy.mjs";
 import { workflowSchema } from "../tools/project-config.mjs";
+import { resolveOgpPython } from "../tools/run-ogp.mjs";
 
 const roots = [];
 const rulesetUrl = new URL("../config/github-ruleset.json", import.meta.url);
@@ -37,7 +38,7 @@ describe("development checks", () => {
       "          python-version-file: .python-version",
       "        run: |",
       "          python -m venv .venv-ogp",
-      "          .venv-ogp/bin/python -m pip install --disable-pip-version-check --no-deps -r tools/requirements-ogp.txt",
+      "          .venv-ogp/bin/python -m pip install --disable-pip-version-check --no-deps --require-hashes -r tools/requirements-ogp.txt",
       "          echo \"$GITHUB_WORKSPACE/.venv-ogp/bin\" >> \"$GITHUB_PATH\"",
     ].join("\n");
     expect(validatePythonSetup(setup, "3.13.3")).toEqual([]);
@@ -46,6 +47,14 @@ describe("development checks", () => {
     expect(validatePythonSetup(setup.replace("python -m venv .venv-ogp", "python -m pip install Pillow"), "3.13.3")).toContain("CI must install OGP dependencies in an isolated virtual environment");
     expect(validatePythonSetup(setup.replace(".venv-ogp/bin/python -m pip install", "python -m pip install"), "3.13.3")).toContain("CI must install OGP dependencies in an isolated virtual environment");
     expect(validatePythonSetup(setup, "3.13")).toContain("Exact local Python pin is required");
+  });
+  it("prefers the isolated OGP Python and has an explicit system fallback", async () => {
+    const root = await fixture();
+    expect(resolveOgpPython(root)).toBe("python3");
+    const isolated = path.join(root, ".venv-ogp/bin/python");
+    await mkdir(path.dirname(isolated), { recursive: true });
+    await writeFile(isolated, "");
+    expect(resolveOgpPython(root)).toBe(isolated);
   });
   it("keeps immutable caching on hashed assets only", async () => {
     const vercel = JSON.parse(await readFile("vercel.json", "utf8"));

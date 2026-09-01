@@ -19,6 +19,8 @@ Next.js の静的出力を Vercel で配信している。サーバー処理・D
 
 ```bash
 npm ci
+python3 -m venv .venv-ogp
+.venv-ogp/bin/python -m pip install --disable-pip-version-check --no-deps --require-hashes -r tools/requirements-ogp.txt
 npm run dev
 # → http://localhost:3000
 ```
@@ -70,12 +72,12 @@ sessionStorage.removeItem('applibrary_hero_seen'); location.reload();
 
 ---
 
-## 現状と残作業
+## 現状
 
-- 掲載アプリは 2 本。`~/Documents/Xcode` には他にも複数あり、追加が主な残作業
-- iOS 以外の掲載例はまだなく、プラットフォーム拡張の実データ確認が必要
+- SubLog / CafLog / Dev-Tools の 3 本を掲載
+- iOS と Web のプラットフォーム絞り込みを実データで検証
 
-進行中タスクは [docs/TODO.md](docs/TODO.md) を参照。
+未完了項目は [docs/TODO.md](docs/TODO.md) を参照。2026-09-01 時点では 0 件。
 
 ---
 

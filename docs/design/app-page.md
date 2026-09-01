@@ -6,7 +6,7 @@
 `src/app/apps/[slug]/page.tsx` が registry から `/apps/<slug>/` を静的生成する。HTML やアプリ別の script/style ファイルをコピーしない。
 
 - Hero: 戻るリンク、アイコン、名前、紹介、プラットフォーム、配布先 CTA。
-- Features: registry の `{ icon, title, description }` を共通カードで表示。旧ページ固有の Pro 専用セクションは未移植。
+- Features: registry の `{ icon, title, description }` を共通カードで表示。
 - Screenshots: `public/apps/<slug>/screenshots/` の実ファイルを registry の順序で表示。flex wrap した各行を中央配置し、lazy loading と alt を付ける。
 - Footer: `/apps/<slug>/privacy/` とトップへの導線。
 

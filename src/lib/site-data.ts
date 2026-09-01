@@ -66,6 +66,8 @@ type Dict = {
   modal_dl_small: string;
   modal_dl_large: string;
   modal_dl_unavailable: string;
+  modal_web_small: string;
+  modal_web_large: string;
   modal_visit_site: string;
   stat_version: string;
   stat_status: string;
@@ -115,6 +117,8 @@ export const i18n: Record<Lang, Dict> = {
     modal_dl_small: "Download on the",
     modal_dl_large: "App Store",
     modal_dl_unavailable: "審査中",
+    modal_web_small: "ブラウザで開く",
+    modal_web_large: "Web アプリ",
     modal_visit_site: "アプリサイトへ",
     stat_version: "バージョン",
     stat_status: "ステータス",
@@ -162,6 +166,8 @@ export const i18n: Record<Lang, Dict> = {
     modal_dl_small: "Download on the",
     modal_dl_large: "App Store",
     modal_dl_unavailable: "In Review",
+    modal_web_small: "Open in browser",
+    modal_web_large: "Web app",
     modal_visit_site: "Visit app site",
     stat_version: "Version",
     stat_status: "Status",

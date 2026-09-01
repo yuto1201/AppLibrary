@@ -9,7 +9,7 @@ const requiredFiles = [
   "docs/workflow.md", "docs/verification.md", "docs/deploy/README.md",
   "config/acceptance.json", "config/github-ruleset.json", ".github/ISSUE_TEMPLATE/change.yml",
   ".github/pull_request_template.md", ".github/workflows/ci.yml",
-  "tests/e2e/site.spec.ts", "tools/requirements-ogp.txt",
+  "tests/e2e/site.spec.ts", "tools/requirements-ogp.txt", "tools/run-ogp.mjs",
 ];
 
 const GITHUB_ACTIONS_APP_ID = 15368;
@@ -57,6 +57,13 @@ export async function checkRepository(root) {
     const lock = await readJson(root, "package-lock.json");
     const version = (await readFile(path.join(root, ".node-version"), "utf8")).trim();
     errors.push(...validateRuntime(pkg, version));
+    if (pkg.scripts?.["generate:ogp"] !== "node tools/run-ogp.mjs" || pkg.scripts?.["check:ogp"] !== "node tools/run-ogp.mjs --check") {
+      errors.push("OGP scripts must prefer the isolated Python environment");
+    }
+    const ogpRequirements = await readFile(path.join(root, "tools/requirements-ogp.txt"), "utf8");
+    if (!/^--require-hashes$/mu.test(ogpRequirements) || [...ogpRequirements.matchAll(/--hash=sha256:[0-9a-f]{64}/gu)].length < 2) {
+      errors.push("OGP Python dependencies must use verified hashes for macOS and Linux");
+    }
     if (lock.packages?.[""]?.engines?.node !== pkg.engines?.node || lock.packages?.[""]?.engines?.npm !== pkg.engines?.npm) errors.push("Lockfile runtime ranges disagree");
     for (const [name, value] of Object.entries({ ...pkg.dependencies, ...pkg.devDependencies })) {
       if (!/^\d+\.\d+\.\d+(?:-[\w.-]+)?$/u.test(value)) errors.push(`Unpinned dependency: ${name}`);
@@ -89,7 +96,7 @@ export function validatePythonSetup(yaml, pythonPin) {
   if (!/^          python-version-file: \.python-version$/mu.test(yaml)) errors.push("CI must use the repository Python pin");
   if (
     !/^          python -m venv \.venv-ogp$/mu.test(yaml) ||
-    !/^          \.venv-ogp\/bin\/python -m pip install --disable-pip-version-check --no-deps -r tools\/requirements-ogp\.txt$/mu.test(yaml) ||
+    !/^          \.venv-ogp\/bin\/python -m pip install --disable-pip-version-check --no-deps --require-hashes -r tools\/requirements-ogp\.txt$/mu.test(yaml) ||
     !/^          echo "\$GITHUB_WORKSPACE\/\.venv-ogp\/bin" >> "\$GITHUB_PATH"$/mu.test(yaml)
   ) {
     errors.push("CI must install OGP dependencies in an isolated virtual environment");
