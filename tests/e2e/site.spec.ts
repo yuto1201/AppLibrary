@@ -195,6 +195,11 @@ test("初回テーマと言語設定が再読み込み後も維持される", as
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await expect(page.locator(".hero-bio")).toHaveAttribute("lang", "ja");
+  await expect(page.locator(".hero-meta span").first()).toHaveAttribute("lang", "ja");
+  await expect(page.locator(".hero-note-link span").last()).toHaveAttribute("lang", "ja");
+  await expect(page.locator(".post")).toHaveAttribute("lang", "ja");
+  await expect(page.getByRole("button", { name: "ファイナンス", exact: true })).toHaveAttribute("lang", "ja");
   await expect(page.getByRole("button", { name: "日本語に切替" })).toBeVisible();
   await expect(page.locator(".cta-btn")).toHaveCSS(
     "background-image",
@@ -222,6 +227,9 @@ test("初回テーマと言語設定が再読み込み後も維持される", as
     await page.goto(route);
     await expect(page.locator("html")).toHaveAttribute("lang", "en");
     await expect(page.locator(selector)).toHaveAttribute("lang", "ja");
+    if (route === "/apps/sublog/") {
+      await expect(page.getByRole("heading", { level: 2, name: "Features" })).toHaveAttribute("lang", "en");
+    }
   }
 });
 

@@ -71,7 +71,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
       <main className="page">
         <section id="features" className="features">
-          <h2 className="section-title">Features</h2>
+          <h2 className="section-title" lang="en">Features</h2>
           <div className="feature-grid">
             {app.features.map((feature) => (
               <article className="feature-card" key={feature.title}>
@@ -85,7 +85,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
 
         {app.screenshots.length > 0 && (
           <section id="screenshots" className="screenshots">
-            <h2 className="section-title">Screenshots</h2>
+            <h2 className="section-title" lang="en">Screenshots</h2>
             <div className="shot-row">
               {app.screenshots.map((file, index) => (
                 // eslint-disable-next-line @next/next/no-img-element

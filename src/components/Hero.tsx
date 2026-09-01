@@ -51,11 +51,11 @@ export function Hero() {
           <Letters text={t.hero_h1_b} baseIndex={lineACount} />
         </span>
       </h1>
-      <p className={`hero-bio ${bioClass}`} ref={bioRef} style={{ transitionDelay: "160ms" }}>
+      <p className={`hero-bio ${bioClass}`} lang="ja" ref={bioRef} style={{ transitionDelay: "160ms" }}>
         {profile.bio}
       </p>
       <div className={`hero-meta ${metaClass}`} ref={metaRef} style={{ transitionDelay: "240ms" }}>
-        <span>📍 {profile.location}</span>
+        <span lang="ja">📍 {profile.location}</span>
         <span>● {apps.length} {t.hero_meta_apps}</span>
         <span>● Swift · SwiftUI</span>
       </div>
@@ -67,7 +67,7 @@ export function Hero() {
         {latestPost && (
           <a className="hero-note-link" href="#posts">
             <span className="hero-note-date">{latestPost.date}</span>
-            <span>{latestPost.title}</span>
+            <span lang="ja">{latestPost.title}</span>
           </a>
         )}
       </div>

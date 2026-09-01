@@ -30,7 +30,7 @@ export function Posts() {
 function PostCard({ post, index }: { post: Post; index: number }) {
   const { ref: revealRef, className: revealClass } = useReveal<HTMLElement>();
   return (
-    <article className={`post glass ${revealClass}`} ref={revealRef} style={{ transitionDelay: `${index * 60}ms` }}>
+    <article className={`post glass ${revealClass}`} lang="ja" ref={revealRef} style={{ transitionDelay: `${index * 60}ms` }}>
       <div className="post-date">{post.date}</div>
       <h3 className="post-title">{post.title}</h3>
       <p className="post-excerpt">{post.excerpt}</p>

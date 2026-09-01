@@ -107,6 +107,7 @@ export function AppsSection() {
               <button
                 key={name}
                 type="button"
+                lang="ja"
                 className={`chip${category === name ? " active" : ""}`}
                 aria-pressed={category === name}
                 onClick={() => setCategory(name)}
