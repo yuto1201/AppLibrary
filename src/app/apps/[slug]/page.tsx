@@ -34,7 +34,7 @@ export default async function AppPage({ params }: { params: Promise<{ slug: stri
   if (!app) notFound();
 
   return (
-    <div className="app-shell">
+    <div className="app-shell" lang="ja">
       <header className="hero">
         <nav className="hero-nav">
           <Link href="/" className="nav-back">← AppLibrary</Link>

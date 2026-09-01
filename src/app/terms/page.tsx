@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <main className="legal-page">
+    <main className="legal-page" lang="ja">
       <nav className="legal-nav"><Link href="/">← AppLibrary</Link></nav>
       <article className="legal-card">
         <p className="legal-eyebrow">AppLibrary</p>

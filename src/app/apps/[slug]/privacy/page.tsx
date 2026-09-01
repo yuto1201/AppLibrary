@@ -38,7 +38,7 @@ export default async function PrivacyPage({ params }: { params: Promise<{ slug: 
   if (!app || !content) notFound();
 
   return (
-    <div className="app-shell">
+    <div className="app-shell" lang="ja">
       <nav className="privacy-nav" aria-label={`${app.name} のページへ戻る`}>
         <Link href={`/apps/${app.slug}/`}>← {app.name}</Link>
       </nav>

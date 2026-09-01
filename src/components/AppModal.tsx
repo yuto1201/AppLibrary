@@ -70,7 +70,7 @@ export function AppModal({ app, onClose }: { app: App; onClose: () => void }) {
         <button className="modal-close" type="button" onClick={onClose} aria-label="Close" ref={closeRef}>
           ×
         </button>
-        <div className="modal-header">
+        <div className="modal-header" lang="ja">
           <div className="app-icon" style={styleVars}><AppIcon app={app} /></div>
           <div className="modal-meta">
             <div className="app-category" style={styleVars}>{app.category}</div>
@@ -94,14 +94,14 @@ export function AppModal({ app, onClose }: { app: App; onClose: () => void }) {
           </div>
           <div>
             <div className="stat-label">{t.stat_price}</div>
-            <div className="stat-value">{app.price}</div>
+            <div className="stat-value" lang="ja">{app.price}</div>
           </div>
         </div>
 
-        <p className="modal-description">{app.description}</p>
+        <p className="modal-description" lang="ja">{app.description}</p>
 
         {app.features.length > 0 && (
-          <div className="feature-list">
+          <div className="feature-list" lang="ja">
             {app.features.map((feature) => (
               <span className="feature-tag" key={feature.title}>{feature.title}</span>
             ))}

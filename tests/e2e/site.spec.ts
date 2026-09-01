@@ -204,6 +204,25 @@ test("初回テーマと言語設定が再読み込み後も維持される", as
   await expect(page.locator(".filter-state")).toBeVisible();
   await expectFilterLabelContrast(page);
   await expectResolvedColorContrast(page, homeContrastCss("light"));
+
+  const sublogCard = page.locator(".app-card").filter({ has: page.getByRole("heading", { name: "SubLog", exact: true }) });
+  await expect(sublogCard).toHaveAttribute("lang", "ja");
+  await sublogCard.click();
+  const dialog = page.getByRole("dialog", { name: "SubLog", exact: true });
+  await expect(dialog.locator(".modal-header")).toHaveAttribute("lang", "ja");
+  await expect(dialog.locator(".modal-description")).toHaveAttribute("lang", "ja");
+  await dialog.getByRole("button", { name: "Close", exact: true }).click();
+
+  for (const [route, selector] of [
+    ["/apps/sublog/", ".app-shell"],
+    ["/apps/sublog/privacy/", ".app-shell"],
+    ["/privacy/", ".legal-page"],
+    ["/terms/", ".legal-page"],
+  ] as const) {
+    await page.goto(route);
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    await expect(page.locator(selector)).toHaveAttribute("lang", "ja");
+  }
 });
 
 test("robots と sitemap が全静的ルートを公開する", async ({ request }) => {

@@ -24,6 +24,7 @@ export function AppCard({ app, index, onOpen }: { app: App; index: number; onOpe
   return (
     <article
       className={`app-card glass ${revealClass}${app.featured ? " featured" : ""}`}
+      lang="ja"
       ref={revealRef}
       style={{
         "--card-color": app.color,
@@ -48,12 +49,13 @@ export function AppCard({ app, index, onOpen }: { app: App; index: number; onOpe
         <h3 className="app-name">{app.name}</h3>
         <p className="app-tagline">{app.tagline}</p>
         <div className="app-footer">
-          <span className="app-status">{statusLabel(app.status, t)}</span>
+          <span className="app-status" lang={prefs.lang}>{statusLabel(app.status, t)}</span>
           <span>{app.price}</span>
         </div>
       </div>
       <Link
         className="app-card-direct"
+        lang={prefs.lang}
         href={`/apps/${app.slug}/`}
         aria-label={directLabel}
         title={directLabel}
