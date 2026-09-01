@@ -58,6 +58,7 @@ export function AppsSection() {
           <input
             id="search-input"
             type="text"
+            aria-label={t.search_placeholder}
             placeholder={t.search_placeholder}
             value={search}
             autoComplete="off"
@@ -66,36 +67,55 @@ export function AppsSection() {
         </div>
 
         {/* プラットフォーム軸。iOS 限定から複数プラットフォームへ広げたため新設した。 */}
-        <div className="chips" role="group" aria-label={t.filter_platform}>
-          <button type="button" className={`chip${platform === ALL ? " active" : ""}`} onClick={() => setPlatform(ALL)}>
-            {allPlatformLabel[prefs.lang]}
-          </button>
-          {platforms.map((name) => (
+        <div className="filter-group">
+          <span className="filter-label" id="platform-filter-label">{t.filter_platform}</span>
+          <div className="chips" role="group" aria-labelledby="platform-filter-label">
             <button
-              key={name}
               type="button"
-              className={`chip${platform === name ? " active" : ""}`}
-              onClick={() => setPlatform(name)}
+              className={`chip${platform === ALL ? " active" : ""}`}
+              aria-pressed={platform === ALL}
+              onClick={() => setPlatform(ALL)}
             >
-              {name}
+              {allPlatformLabel[prefs.lang]}
             </button>
-          ))}
+            {platforms.map((name) => (
+              <button
+                key={name}
+                type="button"
+                className={`chip${platform === name ? " active" : ""}`}
+                aria-pressed={platform === name}
+                onClick={() => setPlatform(name)}
+              >
+                {name}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className="chips" role="group" aria-label={t.filter_category}>
-          <button type="button" className={`chip${category === ALL ? " active" : ""}`} onClick={() => setCategory(ALL)}>
-            {allCategoryLabel[prefs.lang]}
-          </button>
-          {categories.map((name) => (
+        <div className="filter-group">
+          <span className="filter-label" id="category-filter-label">{t.filter_category}</span>
+          <div className="chips" role="group" aria-labelledby="category-filter-label">
             <button
-              key={name}
               type="button"
-              className={`chip${category === name ? " active" : ""}`}
-              onClick={() => setCategory(name)}
+              className={`chip${category === ALL ? " active" : ""}`}
+              aria-pressed={category === ALL}
+              onClick={() => setCategory(ALL)}
             >
-              {name}
+              {allCategoryLabel[prefs.lang]}
             </button>
-          ))}
+            {categories.map((name) => (
+              <button
+                key={name}
+                type="button"
+                lang="ja"
+                className={`chip${category === name ? " active" : ""}`}
+                aria-pressed={category === name}
+                onClick={() => setCategory(name)}
+              >
+                {name}
+              </button>
+            ))}
+          </div>
         </div>
 
         {hasFilters && filtered.length > 0 && (

@@ -46,7 +46,7 @@ Cloudflare がゾーン `yutodev.com` を管理している。
 
 - 全パス: CSP、`X-Frame-Options: DENY`、`X-Content-Type-Options`、`Referrer-Policy`、`Permissions-Policy`
 - `/_next/static/*`: 1 年 immutable（ファイル名にハッシュを含むため）
-- `/apps/*`: 現在は 1 年 immutable。HTML と固定名画像も対象で、再デプロイだけではブラウザに保存済みの応答は失効しない。変更する場合は別 Issue で短縮または画像のバージョン付けを検討する
+- `/apps/*`: `public, max-age=0, must-revalidate`。HTML と固定名のアイコン・スクリーンショットを再デプロイ後に再検証できるようにする
 
 CSP を緩める変更は理由を PR に書く。
 

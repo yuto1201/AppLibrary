@@ -1,5 +1,5 @@
 ステータス：運用中
-最終更新日：2026-08-31
+最終更新日：2026-09-01
 
 ---
 
@@ -51,7 +51,7 @@ sessionStorage.removeItem('applibrary_hero_seen'); location.reload();
 
 ## アプリを追加する
 
-`src/data/registry.ts` へ 1 件追加し、`public/apps/<slug>/` に画像を置くだけ。詳細ページとプライバシーページは registry から自動生成される。
+`src/data/registry.ts` へ 1 件追加し、`public/apps/<slug>/` に画像、`src/data/privacy/` に本文を置いて `privacy/registry.ts` へ同じ slug で登録する。詳細ページとプライバシーページは静的生成され、全掲載アプリに本文があることをテストで検証する。
 
 手順の詳細は [AGENTS.md](AGENTS.md) を参照。
 
@@ -70,12 +70,10 @@ sessionStorage.removeItem('applibrary_hero_seen'); location.reload();
 
 ---
 
-## 現状と未着手
+## 現状と残作業
 
 - 掲載アプリは 2 本。`~/Documents/Xcode` には他にも複数あり、追加が主な残作業
-- OGP 画像は未作成
-- サイト全体の `/terms` と `/privacy` は未整備
-- 旧サイトの個別ページにあった手書きの機能カードは未移植
+- iOS 以外の掲載例はまだなく、プラットフォーム拡張の実データ確認が必要
 
 進行中タスクは [docs/TODO.md](docs/TODO.md) を参照。
 

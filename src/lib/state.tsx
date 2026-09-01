@@ -62,6 +62,7 @@ function subscribe(listener: () => void): () => void {
 /** <html> の data-* 属性へ反映する。初回描画前の適用は layout.tsx のインラインスクリプトが担う。 */
 function applyToDocument(prefs: Prefs) {
   const html = document.documentElement;
+  html.lang = prefs.lang;
   html.setAttribute("data-theme", prefs.theme);
   html.setAttribute("data-layout", prefs.layout);
   html.setAttribute("data-density", prefs.density);

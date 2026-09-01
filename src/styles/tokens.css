@@ -40,9 +40,12 @@
   --glass-inset: inset 0 0 10px -3px rgba(255, 255, 255, 0.6);
   --glass-accent: rgba(0, 122, 255, 0.4);
   --glass-text: #ffffff;
-  --glass-text-dim: rgba(255, 255, 255, 0.7);
-  --glass-text-faint: rgba(255, 255, 255, 0.5);
+  --glass-text-dim: rgba(255, 255, 255, 0.82);
+  --glass-text-faint: rgba(255, 255, 255, 0.72);
   --glass-text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  --filter-label-bg: #24335c;
+  --filter-label-ink: #ffffff;
+  --filter-label-border: rgba(255, 255, 255, 0.38);
 
   /* --- Shadow --- */
   --shadow-out:    0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
@@ -91,12 +94,15 @@
 /* --- Light theme override (top page only — sub-pages are self-contained) --- */
 [data-theme="light"] {
   --glass-text:        #1d1d1f;
-  --glass-text-dim:    rgba(29, 29, 31, 0.7);
-  --glass-text-faint:  rgba(29, 29, 31, 0.5);
+  --glass-text-dim:    rgba(29, 29, 31, 0.82);
+  --glass-text-faint:  rgba(29, 29, 31, 0.7);
   --glass-text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
   --glass-tint:        rgba(255, 255, 255, 0.3);
   --glass-tint-md:     rgba(255, 255, 255, 0.45);
   --glass-tint-hover:  rgba(255, 255, 255, 0.6);
   --glass-border:      rgba(255, 255, 255, 0.7);
   --glass-border-dim:  rgba(255, 255, 255, 0.45);
+  --filter-label-bg:   #ffffff;
+  --filter-label-ink:  #1d1d1f;
+  --filter-label-border: rgba(29, 29, 31, 0.2);
 }

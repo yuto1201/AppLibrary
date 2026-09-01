@@ -28,8 +28,18 @@ jobs:
         with:
           node-version-file: .node-version
           cache: npm
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version-file: .python-version
+          cache: pip
+          cache-dependency-path: tools/requirements-ogp.txt
       - run: npm install --global npm@11.6.2
       - run: npm ci
+      - name: Install OGP image dependencies
+        run: |
+          python -m venv .venv-ogp
+          .venv-ogp/bin/python -m pip install --disable-pip-version-check --no-deps -r tools/requirements-ogp.txt
+          echo "$GITHUB_WORKSPACE/.venv-ogp/bin" >> "$GITHUB_PATH"
       - run: npm run check
       - name: Check whitespace
         env:

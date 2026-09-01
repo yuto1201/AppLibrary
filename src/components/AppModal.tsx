@@ -48,8 +48,13 @@ export function AppModal({ app, onClose }: { app: App; onClose: () => void }) {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [onClose]);
 
-  const { t } = useSiteState();
-  const releaseLabel = app.releaseDate ?? String(app.year);
+  const { prefs, t } = useSiteState();
+  const releaseLabel = app.releaseDate
+    ? new Intl.DateTimeFormat(prefs.lang === "ja" ? "ja-JP" : "en-US", {
+        dateStyle: "long",
+        timeZone: "UTC",
+      }).format(new Date(`${app.releaseDate}T00:00:00Z`))
+    : String(app.year);
   const styleVars = { "--card-color": app.color, "--card-accent": app.accent } as React.CSSProperties;
 
   return (
@@ -62,10 +67,10 @@ export function AppModal({ app, onClose }: { app: App; onClose: () => void }) {
         ref={modalRef}
         onClick={(event) => event.stopPropagation()}
       >
-        <button className="modal-close" type="button" onClick={onClose} aria-label="Close" ref={closeRef}>
+        <button className="modal-close" type="button" onClick={onClose} aria-label={t.a11y_close_dialog} ref={closeRef}>
           ×
         </button>
-        <div className="modal-header">
+        <div className="modal-header" lang="ja">
           <div className="app-icon" style={styleVars}><AppIcon app={app} /></div>
           <div className="modal-meta">
             <div className="app-category" style={styleVars}>{app.category}</div>
@@ -89,16 +94,16 @@ export function AppModal({ app, onClose }: { app: App; onClose: () => void }) {
           </div>
           <div>
             <div className="stat-label">{t.stat_price}</div>
-            <div className="stat-value">{app.price}</div>
+            <div className="stat-value" lang="ja">{app.price}</div>
           </div>
         </div>
 
-        <p className="modal-description">{app.description}</p>
+        <p className="modal-description" lang="ja">{app.description}</p>
 
         {app.features.length > 0 && (
-          <div className="feature-list">
+          <div className="feature-list" lang="ja">
             {app.features.map((feature) => (
-              <span className="feature-tag" key={feature}>{feature}</span>
+              <span className="feature-tag" key={feature.title}>{feature.title}</span>
             ))}
           </div>
         )}

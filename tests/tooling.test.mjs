@@ -6,7 +6,7 @@ import path from "node:path";
 import { findBrokenMarkdownLinks } from "../tools/verify-links.mjs";
 import { generateAgents } from "../tools/generate-agent-wrappers.mjs";
 import { verifyAcceptance } from "../tools/verify-acceptance-trace.mjs";
-import { checkRepository, validateCheckNames, validateRuleset, validateRuntime } from "../tools/repository-policy.mjs";
+import { checkRepository, validateCheckNames, validatePythonSetup, validateRuleset, validateRuntime } from "../tools/repository-policy.mjs";
 import { workflowSchema } from "../tools/project-config.mjs";
 
 const roots = [];
@@ -29,6 +29,32 @@ describe("development checks", () => {
   it("detects a renamed or missing required CI check", () => {
     expect(validateCheckNames({ requiredChecks: ["Browser checks"] }, "jobs:\n  browser:\n    name: Browser checks\n")).toEqual([]);
     expect(validateCheckNames({ requiredChecks: ["Browser checks"] }, "jobs:\n  browser:\n    name: Renamed\n")).toEqual(["Required check has no CI job: Browser checks"]);
+  });
+  it("pins and isolates the Python environment used for generated images", () => {
+    const setup = [
+      "      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6",
+      "        with:",
+      "          python-version-file: .python-version",
+      "        run: |",
+      "          python -m venv .venv-ogp",
+      "          .venv-ogp/bin/python -m pip install --disable-pip-version-check --no-deps -r tools/requirements-ogp.txt",
+      "          echo \"$GITHUB_WORKSPACE/.venv-ogp/bin\" >> \"$GITHUB_PATH\"",
+    ].join("\n");
+    expect(validatePythonSetup(setup, "3.13.3")).toEqual([]);
+    expect(validatePythonSetup(setup.replace(/@[0-9a-f]{40}/u, "@v6"), "3.13.3")).toContain("CI setup-python action must use an immutable commit");
+    expect(validatePythonSetup(setup.replace(".python-version", "3.13"), "3.13.3")).toContain("CI must use the repository Python pin");
+    expect(validatePythonSetup(setup.replace("python -m venv .venv-ogp", "python -m pip install Pillow"), "3.13.3")).toContain("CI must install OGP dependencies in an isolated virtual environment");
+    expect(validatePythonSetup(setup.replace(".venv-ogp/bin/python -m pip install", "python -m pip install"), "3.13.3")).toContain("CI must install OGP dependencies in an isolated virtual environment");
+    expect(validatePythonSetup(setup, "3.13")).toContain("Exact local Python pin is required");
+  });
+  it("keeps immutable caching on hashed assets only", async () => {
+    const vercel = JSON.parse(await readFile("vercel.json", "utf8"));
+    const cacheValue = (source) => vercel.headers
+      .find((entry) => entry.source === source)
+      ?.headers.find((header) => header.key === "Cache-Control")
+      ?.value;
+    expect(cacheValue("/_next/static/(.*)")).toBe("public, max-age=31536000, immutable");
+    expect(cacheValue("/apps/(.*)")).toBe("public, max-age=0, must-revalidate");
   });
   it("keeps the exported ruleset aligned with required GitHub Actions checks regardless of order", async () => {
     const ruleset = await loadRuleset();
@@ -71,8 +97,10 @@ describe("development checks", () => {
   it("detects missing and escaping links but retains historical documents", async () => {
     const root = await fixture();
     await mkdir(path.join(root, "docs/decisions"), { recursive: true });
+    await mkdir(path.join(root, ".venv-ogp/package"), { recursive: true });
     await writeFile(path.join(root, "README.md"), "[missing](missing.md)\n[escape](../outside.md)\n[web](https://example.com)\n[bad](%ZZ)\n");
     await writeFile(path.join(root, "docs/decisions/old.md"), "[old](gone.md)");
+    await writeFile(path.join(root, ".venv-ogp/package/README.md"), "[third party](missing.md)");
     const errors = await findBrokenMarkdownLinks(root);
     expect(errors).toHaveLength(3);
     expect(errors.join("\n")).toContain("escapes");

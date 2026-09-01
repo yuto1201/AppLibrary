@@ -1,15 +1,15 @@
 # トップページのデザイン
 
 ステータス: 確定
-最終更新日: 2026-08-31
+最終更新日: 2026-09-01
 
 実装は `src/app/page.tsx` と `src/components/`。既存の Liquid Glass テーマを維持する。半透明パネル、SVG distortion、背景 gradient、dark/light、アクセントとレイアウトのトークンは `src/styles/tokens.css` / `standard.css` を使う。
 
 1. `Nav`: ブランド、アンカー、言語・テーマ切替、モバイルメニュー。
 2. `Hero`: タグライン、見出し、紹介、アプリ数、一覧への導線。文字送りと reduced-motion 対応。
-3. `AppsSection`: 検索、プラットフォームとカテゴリの 2 軸、絞り込み解除、カード、空状態。
+3. `AppsSection`: 検索、可視ラベル付きのプラットフォームとカテゴリの 2 軸、絞り込み解除、カード、空状態。
 4. `NotesSection`: お知らせ。データは `src/lib/site-data.ts`。
-5. `ContactSection` / `Footer`: 連絡先と著作権表示。
+5. `ContactSection` / `Footer`: 連絡先、サイト共通のプライバシー・利用規約への導線、著作権表示。
 
 カードは registry から生成する。mosaic/grid/list、密度、フォントは `<html>` の `data-*` と CSS のトークンで切り替わる。言語切替は UI ラベルが対象で、アプリ説明を自動翻訳しない。
 

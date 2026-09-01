@@ -2,7 +2,7 @@ import { lstat, readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const ignoredDirectories = new Set([".artifacts", ".git", ".next", ".worktrees", "node_modules", "out", "playwright-report", "test-results"]);
+const ignoredDirectories = new Set([".artifacts", ".git", ".next", ".venv-ogp", ".worktrees", "node_modules", "out", "playwright-report", "test-results"]);
 
 /** @param {string} root @param {string} [relative] @returns {Promise<string[]>} */
 async function markdownFiles(root, relative = "") {

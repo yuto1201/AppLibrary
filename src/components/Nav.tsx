@@ -11,7 +11,7 @@ export function Nav() {
   const hasPosts = posts.length > 0;
 
   return (
-    <nav className={`nav${mobileOpen ? " is-open" : ""}`} aria-label="Primary">
+    <nav className={`nav${mobileOpen ? " is-open" : ""}`} aria-label={t.a11y_primary_nav}>
       <div className="nav-inner glass">
         <div className="nav-brand">{profile.name}</div>
         <div className="nav-links" id="primary-nav">
@@ -23,8 +23,8 @@ export function Nav() {
           <button
             className="icon-btn"
             type="button"
-            title="Language"
-            aria-label={prefs.lang === "ja" ? "Switch to English" : "日本語に切替"}
+            title={t.a11y_language}
+            aria-label={t.a11y_switch_language}
             onClick={() => setPrefs({ lang: prefs.lang === "ja" ? "en" : "ja" })}
           >
             <span style={{ fontSize: 12, fontWeight: 600 }}>{prefs.lang === "ja" ? "EN" : "JA"}</span>
@@ -32,8 +32,8 @@ export function Nav() {
           <button
             className="icon-btn"
             type="button"
-            title="Theme"
-            aria-label={prefs.theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            title={t.a11y_theme}
+            aria-label={prefs.theme === "dark" ? t.a11y_switch_light : t.a11y_switch_dark}
             onClick={() => setPrefs({ theme: prefs.theme === "dark" ? "light" : "dark" })}
           >
             {prefs.theme === "dark" ? <IconSun /> : <IconMoon />}
@@ -43,7 +43,7 @@ export function Nav() {
             type="button"
             aria-expanded={mobileOpen}
             aria-controls="primary-nav"
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-label={mobileOpen ? t.a11y_close_menu : t.a11y_open_menu}
             onClick={() => setMobileOpen((open) => !open)}
           >
             {mobileOpen ? <IconClose /> : <IconMenu />}
