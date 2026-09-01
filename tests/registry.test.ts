@@ -98,6 +98,8 @@ describe("apps registry", () => {
     expect(document).toContain("登録内容と一致しない予定を削除");
     expect(document).toContain("本アプリと無関係な予定を保存しないでください");
     expect(document).toContain("カレンダーへ同期済みの予定");
+    expect(document).toContain("Spotlight の検索インデックス");
+    expect(document).toContain("アプリをアンインストールすると削除されます");
     expect(document).toContain("App Store の取引履歴は、この操作の対象ではありません");
   });
 

@@ -37,6 +37,15 @@ export const allPlatformLabel: Record<Lang, string> = { ja: "すべて", en: "Al
 
 type Dict = {
   nav: { apps: string; posts: string; contact: string };
+  a11y_primary_nav: string;
+  a11y_language: string;
+  a11y_switch_language: string;
+  a11y_theme: string;
+  a11y_switch_light: string;
+  a11y_switch_dark: string;
+  a11y_open_menu: string;
+  a11y_close_menu: string;
+  a11y_close_dialog: string;
   hero_eyebrow: string;
   hero_h1_a: string;
   hero_h1_b: string;
@@ -77,6 +86,15 @@ type Dict = {
 export const i18n: Record<Lang, Dict> = {
   ja: {
     nav: { apps: "アプリ", posts: "お知らせ", contact: "お問い合わせ" },
+    a11y_primary_nav: "メインナビゲーション",
+    a11y_language: "言語",
+    a11y_switch_language: "英語に切り替える",
+    a11y_theme: "テーマ",
+    a11y_switch_light: "ライトモードに切り替える",
+    a11y_switch_dark: "ダークモードに切り替える",
+    a11y_open_menu: "メニューを開く",
+    a11y_close_menu: "メニューを閉じる",
+    a11y_close_dialog: "閉じる",
     hero_eyebrow: "App Maker",
     hero_h1_a: "小さなアプリを、",
     hero_h1_b: "丁寧に。",
@@ -115,6 +133,15 @@ export const i18n: Record<Lang, Dict> = {
   },
   en: {
     nav: { apps: "Apps", posts: "Notes", contact: "Contact" },
+    a11y_primary_nav: "Primary navigation",
+    a11y_language: "Language",
+    a11y_switch_language: "Switch to Japanese",
+    a11y_theme: "Theme",
+    a11y_switch_light: "Switch to light mode",
+    a11y_switch_dark: "Switch to dark mode",
+    a11y_open_menu: "Open menu",
+    a11y_close_menu: "Close menu",
+    a11y_close_dialog: "Close",
     hero_eyebrow: "App Maker",
     hero_h1_a: "Small apps,",
     hero_h1_b: "made with care.",

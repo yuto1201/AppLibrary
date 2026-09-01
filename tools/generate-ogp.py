@@ -22,6 +22,9 @@ APPS = [
     ("SubLog", ROOT / "public" / "apps" / "sublog" / "icon.png"),
     ("CafLog", ROOT / "public" / "apps" / "caflog" / "icon.png"),
 ]
+MAX_OGP_APPS = 6
+
+
 def font(size: int) -> ImageFont.FreeTypeFont:
     # Pillow に同梱されたフォントを使い、OS のフォント差分を生成物へ持ち込まない。
     return ImageFont.load_default(size=size)
@@ -33,6 +36,28 @@ def rounded_icon(path: Path, size: int) -> Image.Image:
     ImageDraw.Draw(mask).rounded_rectangle((0, 0, size - 1, size - 1), radius=size // 5, fill=255)
     image.putalpha(mask)
     return image
+
+
+def icon_layout(count: int) -> list[tuple[int, int, int]]:
+    """Place up to six app icons inside the right side of the glass panel."""
+    if count < 1 or count > MAX_OGP_APPS:
+        raise ValueError(f"OGP supports 1-{MAX_OGP_APPS} app icons; received {count}")
+    if count <= 2:
+        return [(718 + index * 174, 188, 142) for index in range(count)]
+
+    panel_left, panel_width = 680, 420
+    icon_size, gap_x, row_step = 100, 24, 174
+    positions: list[tuple[int, int, int]] = []
+    for row, start_index in enumerate(range(0, count, 3)):
+        row_count = min(3, count - start_index)
+        row_width = row_count * icon_size + (row_count - 1) * gap_x
+        start_x = panel_left + (panel_width - row_width) // 2
+        for column in range(row_count):
+            positions.append((start_x + column * (icon_size + gap_x), 154 + row * row_step, icon_size))
+
+    if any(x < panel_left or x + size > panel_left + panel_width or y < 140 or y + size + 38 > 485 for x, y, size in positions):
+        raise ValueError("OGP icon layout escaped its reserved panel")
+    return positions
 
 
 def render() -> Image.Image:
@@ -81,19 +106,16 @@ def render() -> Image.Image:
     for label_x, label in badge_labels:
         draw.text((label_x + 17, 346), label, font=pill_font, fill=(255, 255, 255, 225))
 
-    icon_size = 142
-    icon_x = 718
-    for name, path in APPS:
+    for (name, path), (icon_x, icon_y, icon_size) in zip(APPS, icon_layout(len(APPS)), strict=True):
         icon = rounded_icon(path, icon_size)
         shadow = Image.new("RGBA", image.size, (0, 0, 0, 0))
-        shadow.paste((0, 0, 0, 115), (icon_x + 10, 204, icon_x + icon_size + 10, 204 + icon_size), icon.getchannel("A"))
+        shadow.paste((0, 0, 0, 115), (icon_x + 10, icon_y + 16, icon_x + icon_size + 10, icon_y + icon_size + 16), icon.getchannel("A"))
         image = Image.alpha_composite(image, shadow.filter(ImageFilter.GaussianBlur(18)))
-        image.alpha_composite(icon, (icon_x, 188))
+        image.alpha_composite(icon, (icon_x, icon_y))
         label_box = draw.textbbox((0, 0), name, font=font(20))
         label_width = label_box[2] - label_box[0]
         draw = ImageDraw.Draw(image)
-        draw.text((icon_x + (icon_size - label_width) / 2, 348), name, font=font(20), fill=(255, 255, 255, 225))
-        icon_x += 174
+        draw.text((icon_x + (icon_size - label_width) / 2, icon_y + icon_size + 18), name, font=font(20), fill=(255, 255, 255, 225))
 
     draw.text((142, 485), "APP COLLECTION", font=font(18), fill=(255, 255, 255, 175), spacing=4)
     return image.convert("RGB")

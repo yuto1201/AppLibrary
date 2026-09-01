@@ -67,7 +67,7 @@ export function AppModal({ app, onClose }: { app: App; onClose: () => void }) {
         ref={modalRef}
         onClick={(event) => event.stopPropagation()}
       >
-        <button className="modal-close" type="button" onClick={onClose} aria-label="Close" ref={closeRef}>
+        <button className="modal-close" type="button" onClick={onClose} aria-label={t.a11y_close_dialog} ref={closeRef}>
           ×
         </button>
         <div className="modal-header" lang="ja">

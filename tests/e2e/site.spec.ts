@@ -180,7 +180,7 @@ test("カードの表示・モーダル・キーボード操作", async ({ page 
   const dialog = page.getByRole("dialog", { name: "SubLog", exact: true });
   await expect(dialog).toBeVisible();
   await expect(dialog).toContainText("2026年4月14日");
-  await expect(dialog.getByRole("button", { name: "Close", exact: true })).toBeFocused();
+  await expect(dialog.getByRole("button", { name: "閉じる", exact: true })).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(dialog).toHaveCount(0);
   await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
@@ -189,8 +189,9 @@ test("カードの表示・モーダル・キーボード操作", async ({ page 
 test("初回テーマと言語設定が再読み込み後も維持される", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  await page.getByRole("button", { name: "Switch to light mode" }).click();
-  await page.getByRole("button", { name: "Switch to English" }).click();
+  await expect(page.getByRole("navigation", { name: "メインナビゲーション" })).toBeVisible();
+  await page.getByRole("button", { name: "ライトモードに切り替える" }).click();
+  await page.getByRole("button", { name: "英語に切り替える" }).click();
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
@@ -200,7 +201,10 @@ test("初回テーマと言語設定が再読み込み後も維持される", as
   await expect(page.locator(".hero-note-link span").last()).toHaveAttribute("lang", "ja");
   await expect(page.locator(".post")).toHaveAttribute("lang", "ja");
   await expect(page.getByRole("button", { name: "ファイナンス", exact: true })).toHaveAttribute("lang", "ja");
-  await expect(page.getByRole("button", { name: "日本語に切替" })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Primary navigation" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Switch to Japanese" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Switch to dark mode" })).toBeVisible();
+  await expect(page.locator(".nav-toggle")).toHaveAttribute("aria-label", "Open menu");
   await expect(page.locator(".cta-btn")).toHaveCSS(
     "background-image",
     /rgb\(0, 98, 204\).*rgb\(0, 109, 145\)/u,
