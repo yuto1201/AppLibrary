@@ -20,10 +20,18 @@ function sameStringSet(actual, expected) {
     JSON.stringify([...actual].sort()) === JSON.stringify([...expected].sort());
 }
 
+function hasExactKeys(value, expected) {
+  return value !== null && typeof value === "object" && !Array.isArray(value) &&
+    sameStringSet(Object.keys(value), expected);
+}
+
 function sameRequiredChecks(actual, expected) {
   if (!Array.isArray(actual) || actual.length !== expected.length) return false;
+  if (!actual.every((check) =>
+    hasExactKeys(check, ["context", "integration_id"]) &&
+    typeof check.context === "string" && Number.isInteger(check.integration_id))) return false;
   const normalize = (checks) => checks
-    .map((check) => `${check?.context ?? ""}@${check?.integration_id ?? ""}`)
+    .map((check) => JSON.stringify([check.context, check.integration_id]))
     .sort();
   return JSON.stringify(normalize(actual)) === JSON.stringify(normalize(expected));
 }
@@ -78,10 +86,27 @@ export function validateRuleset(workflow, ruleset) {
   const statusChecks = rules.find((rule) => rule.type === "required_status_checks");
   const expectedChecks = workflow.requiredChecks.map((context) => ({ context, integration_id: GITHUB_ACTIONS_APP_ID }));
   const ruleTypes = rules.map((rule) => rule.type).sort();
+  const normalizedShape =
+    hasExactKeys(ruleset, ["name", "target", "enforcement", "bypass_actors", "conditions", "rules"]) &&
+    hasExactKeys(ruleset.conditions, ["ref_name"]) &&
+    hasExactKeys(ruleset.conditions?.ref_name, ["include", "exclude"]) &&
+    rules.every((rule) => {
+      if (["deletion", "non_fast_forward"].includes(rule.type)) return hasExactKeys(rule, ["type"]);
+      if (!hasExactKeys(rule, ["type", "parameters"])) return false;
+      if (rule.type === "pull_request") return hasExactKeys(rule.parameters, [
+        "allowed_merge_methods", "dismiss_stale_reviews_on_push", "require_code_owner_review",
+        "require_last_push_approval", "required_approving_review_count", "required_review_thread_resolution",
+      ]);
+      if (rule.type === "required_status_checks") return hasExactKeys(rule.parameters, [
+        "do_not_enforce_on_create", "required_status_checks", "strict_required_status_checks_policy",
+      ]);
+      return false;
+    });
 
   if (JSON.stringify(ruleTypes) !== JSON.stringify(EXPECTED_RULE_TYPES)) {
     errors.push("GitHub ruleset must contain each expected rule exactly once and no unexpected rules");
   }
+  if (!normalizedShape) errors.push("GitHub ruleset export must retain its normalized key structure");
 
   if (
     ruleset.name !== "main required checks" ||

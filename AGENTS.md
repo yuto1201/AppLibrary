@@ -27,7 +27,7 @@ Next.js の静的出力 (`output: "export"`) を Vercel で配信しています
 ## 開発フロー
 
 - 1 Issue / 1 branch / 1 PR。Codex は `codex/<issue>-<slug>`、Claude は `claude/<issue>-<slug>`。
-- `config/project.json` は静的サイトの構成、`config/workflow.json` はレビュー規約、`config/acceptance.json` は受け入れ条件とテストの対応です。
+- `config/project.json` は静的サイトの構成、`config/workflow.json` はレビュー規約、`config/acceptance.json` は受け入れ条件とテストの対応、`config/github-ruleset.json` は main の Ruleset export です。
 - 通常変更は実装者と別系統のレビュー、統治・ツール・CI・配信等の変更は OpenAI / Anthropic 両系統の読み取り専用レビューを必要とします。実際のモデルが不明な出力を承認扱いにしません。
 - PR のレビューは対象 Head に結びつけ、所有者が実際の出力と照合します。自動承認ゲートは導入しておらず、CI の成功はレビュー承認ではありません。
 - Codex / Claude の evaluator は `docs/agent-contracts/change-evaluator.md` から生成します。修正後は `npm run generate`。

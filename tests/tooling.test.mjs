@@ -7,9 +7,15 @@ import { findBrokenMarkdownLinks } from "../tools/verify-links.mjs";
 import { generateAgents } from "../tools/generate-agent-wrappers.mjs";
 import { verifyAcceptance } from "../tools/verify-acceptance-trace.mjs";
 import { checkRepository, validateCheckNames, validateRuleset, validateRuntime } from "../tools/repository-policy.mjs";
+import { workflowSchema } from "../tools/project-config.mjs";
 
 const roots = [];
+const rulesetUrl = new URL("../config/github-ruleset.json", import.meta.url);
+const rulesetMessage = "GitHub ruleset must require squash pull requests and resolved review threads";
+const statusMessage = "GitHub ruleset required checks disagree with workflow configuration";
+const shapeMessage = "GitHub ruleset export must retain its normalized key structure";
 async function fixture() { const root = await mkdtemp(path.join(os.tmpdir(), "applibrary-policy-")); roots.push(root); return root; }
+async function loadRuleset() { return JSON.parse(await readFile(rulesetUrl, "utf8")); }
 afterEach(async () => { await Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true }))); });
 
 describe("development checks", () => {
@@ -25,25 +31,40 @@ describe("development checks", () => {
     expect(validateCheckNames({ requiredChecks: ["Browser checks"] }, "jobs:\n  browser:\n    name: Renamed\n")).toEqual(["Required check has no CI job: Browser checks"]);
   });
   it("keeps the exported ruleset aligned with required GitHub Actions checks regardless of order", async () => {
-    const ruleset = JSON.parse(await readFile("config/github-ruleset.json", "utf8"));
+    const ruleset = await loadRuleset();
     const workflow = { requiredChecks: ["Repository checks", "Browser checks"] };
     expect(validateRuleset(workflow, ruleset)).toEqual([]);
     ruleset.rules.find((rule) => rule.type === "required_status_checks").parameters.required_status_checks.reverse();
+    ruleset.rules.reverse();
     expect(validateRuleset(workflow, ruleset)).toEqual([]);
   });
   it.each([
     ["inactive enforcement", (ruleset) => { ruleset.enforcement = "evaluate"; }, "GitHub ruleset must actively protect only the default branch without bypass actors"],
     ["a bypass actor", (ruleset) => { ruleset.bypass_actors.push({ actor_id: 1 }); }, "GitHub ruleset must actively protect only the default branch without bypass actors"],
-    ["a renamed check", (ruleset) => { ruleset.rules.find((rule) => rule.type === "required_status_checks").parameters.required_status_checks[1].context = "Renamed"; }, "GitHub ruleset required checks disagree with workflow configuration"],
-    ["a different check provider", (ruleset) => { ruleset.rules.find((rule) => rule.type === "required_status_checks").parameters.required_status_checks[1].integration_id = 1; }, "GitHub ruleset required checks disagree with workflow configuration"],
-    ["non-strict checks", (ruleset) => { ruleset.rules.find((rule) => rule.type === "required_status_checks").parameters.strict_required_status_checks_policy = false; }, "GitHub ruleset required checks disagree with workflow configuration"],
+    ["a renamed check", (ruleset) => { ruleset.rules.find((rule) => rule.type === "required_status_checks").parameters.required_status_checks[1].context = "Renamed"; }, statusMessage],
+    ["a different check provider", (ruleset) => { ruleset.rules.find((rule) => rule.type === "required_status_checks").parameters.required_status_checks[1].integration_id = 1; }, statusMessage],
+    ["a string check provider", (ruleset) => { ruleset.rules.find((rule) => rule.type === "required_status_checks").parameters.required_status_checks[1].integration_id = "15368"; }, statusMessage],
+    ["non-strict checks", (ruleset) => { ruleset.rules.find((rule) => rule.type === "required_status_checks").parameters.strict_required_status_checks_policy = false; }, statusMessage],
+    ["checks ignored on create", (ruleset) => { ruleset.rules.find((rule) => rule.type === "required_status_checks").parameters.do_not_enforce_on_create = true; }, statusMessage],
+    ["merge commits allowed", (ruleset) => { ruleset.rules.find((rule) => rule.type === "pull_request").parameters.allowed_merge_methods.push("merge"); }, rulesetMessage],
+    ["unresolved review threads", (ruleset) => { ruleset.rules.find((rule) => rule.type === "pull_request").parameters.required_review_thread_resolution = false; }, rulesetMessage],
     ["a missing deletion rule", (ruleset) => { ruleset.rules = ruleset.rules.filter((rule) => rule.type !== "deletion"); }, "GitHub ruleset must contain each expected rule exactly once and no unexpected rules"],
     ["an unexpected rule", (ruleset) => { ruleset.rules.push({ type: "required_signatures" }); }, "GitHub ruleset must contain each expected rule exactly once and no unexpected rules"],
     ["a duplicate rule", (ruleset) => { ruleset.rules.push(structuredClone(ruleset.rules[0])); }, "GitHub ruleset must contain each expected rule exactly once and no unexpected rules"],
+    ["an unexpected parameter", (ruleset) => { ruleset.rules.find((rule) => rule.type === "pull_request").parameters.unexpected = true; }, shapeMessage],
+    ["an unexpected top-level key", (ruleset) => { ruleset.id = 1; }, shapeMessage],
   ])("rejects ruleset drift with %s", async (_label, mutate, message) => {
-    const ruleset = JSON.parse(await readFile("config/github-ruleset.json", "utf8"));
+    const ruleset = await loadRuleset();
     mutate(ruleset);
     expect(validateRuleset({ requiredChecks: ["Repository checks", "Browser checks"] }, ruleset)).toContain(message);
+  });
+  it("rejects duplicate required workflow checks", () => {
+    const workflow = {
+      schemaVersion: 1, baseBranch: "main", branchPrefixes: ["codex"], highRiskPaths: ["tools/"],
+      review: { normal: "independent-opposite-family", high: ["openai", "anthropic"], bindToHead: true, enforcement: "owner-reviewed" },
+      requiredChecks: ["Repository checks", "Repository checks"],
+    };
+    expect(() => workflowSchema.parse(workflow)).toThrow("Duplicate required check");
   });
   it("detects missing and escaping links but retains historical documents", async () => {
     const root = await fixture();
