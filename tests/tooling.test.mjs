@@ -6,7 +6,7 @@ import path from "node:path";
 import { findBrokenMarkdownLinks } from "../tools/verify-links.mjs";
 import { generateAgents } from "../tools/generate-agent-wrappers.mjs";
 import { verifyAcceptance } from "../tools/verify-acceptance-trace.mjs";
-import { checkRepository, validateCheckNames, validateRuntime } from "../tools/repository-policy.mjs";
+import { checkRepository, validateCheckNames, validateRuleset, validateRuntime } from "../tools/repository-policy.mjs";
 
 const roots = [];
 async function fixture() { const root = await mkdtemp(path.join(os.tmpdir(), "applibrary-policy-")); roots.push(root); return root; }
@@ -23,6 +23,15 @@ describe("development checks", () => {
   it("detects a renamed or missing required CI check", () => {
     expect(validateCheckNames({ requiredChecks: ["Browser checks"] }, "jobs:\n  browser:\n    name: Browser checks\n")).toEqual([]);
     expect(validateCheckNames({ requiredChecks: ["Browser checks"] }, "jobs:\n  browser:\n    name: Renamed\n")).toEqual(["Required check has no CI job: Browser checks"]);
+  });
+  it("keeps the exported ruleset aligned with required GitHub Actions checks", async () => {
+    const ruleset = JSON.parse(await readFile("config/github-ruleset.json", "utf8"));
+    expect(validateRuleset({ requiredChecks: ["Repository checks", "Browser checks"] }, ruleset)).toEqual([]);
+    const drifted = structuredClone(ruleset);
+    drifted.rules.find((rule) => rule.type === "required_status_checks").parameters.required_status_checks[1].context = "Renamed";
+    expect(validateRuleset({ requiredChecks: ["Repository checks", "Browser checks"] }, drifted)).toContain(
+      "GitHub ruleset required checks disagree with workflow configuration",
+    );
   });
   it("detects missing and escaping links but retains historical documents", async () => {
     const root = await fixture();

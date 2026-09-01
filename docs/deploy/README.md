@@ -50,7 +50,7 @@ Cloudflare がゾーン `yutodev.com` を管理している。
 
 CSP を緩める変更は理由を PR に書く。
 
-PR の `Repository checks` / `Browser checks` と独立レビューの実際の出力を確認してから、承認された対象をマージする。CI 定義と GitHub Ruleset の有効化は別の作業。[../workflow.md](../workflow.md) を参照。
+PR の `Repository checks` / `Browser checks` と独立レビューの実際の出力を確認してから、承認された対象をマージする。両 check は active な GitHub Ruleset で必須化されており、正規化した設定は `config/github-ruleset.json` に保存する。[../workflow.md](../workflow.md) を参照。
 
 ## 移行の履歴
 

@@ -33,7 +33,7 @@
 
 - [ ] Cloudflare Pages プロジェクト `applibrary` の扱いを決める（カスタムドメインは切り離し済み、`applibrary-ag2.pages.dev` は残存）
 - [x] specs / config / CI・検証ツールを Web-Template から静的サイト用に移植（ローカル実装。公開有効化は別）
-- [ ] 移植 PR の所有者レビューと、main の required checks 設定（ローカル変更だけでは有効にならない）
+- [x] 移植 PR の所有者確認と main 反映、`Repository checks` / `Browser checks` の Ruleset 必須化
 - [ ] `/apps/*` の 1 年 immutable キャッシュ方針を見直す（HTML と固定名画像も対象で、再デプロイだけではブラウザキャッシュは失効しない）
 
 ---

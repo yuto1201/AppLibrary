@@ -7,7 +7,7 @@ const requiredFiles = [
   "README.md", "AGENTS.md", "CLAUDE.md", ".npmrc", ".gitattributes",
   "specs/README.md", "specs/product.md", "specs/acceptance.md",
   "docs/workflow.md", "docs/verification.md", "docs/deploy/README.md",
-  "config/acceptance.json", ".github/ISSUE_TEMPLATE/change.yml",
+  "config/acceptance.json", "config/github-ruleset.json", ".github/ISSUE_TEMPLATE/change.yml",
   ".github/pull_request_template.md", ".github/workflows/ci.yml",
   "tests/e2e/site.spec.ts",
 ];
@@ -25,6 +25,7 @@ export async function checkRepository(root) {
     projectSchema.parse(await readJson(root, "config/project.json"));
     const workflow = workflowSchema.parse(await readJson(root, "config/workflow.json"));
     errors.push(...validateCheckNames(workflow, await readFile(path.join(root, ".github/workflows/ci.yml"), "utf8")));
+    errors.push(...validateRuleset(workflow, await readJson(root, "config/github-ruleset.json")));
     const pkg = await readJson(root, "package.json");
     const lock = await readJson(root, "package-lock.json");
     const version = (await readFile(path.join(root, ".node-version"), "utf8")).trim();
@@ -52,6 +53,40 @@ export async function checkRepository(root) {
 export function validateCheckNames(workflow, yaml) {
   const jobs = [...yaml.matchAll(/^    name: ([^\r\n]+)$/gmu)].map((match) => match[1].trim());
   return workflow.requiredChecks.filter((name) => !jobs.includes(name)).map((name) => `Required check has no CI job: ${name}`);
+}
+
+export function validateRuleset(workflow, ruleset) {
+  const errors = [];
+  const pullRequest = ruleset.rules?.find((rule) => rule.type === "pull_request");
+  const statusChecks = ruleset.rules?.find((rule) => rule.type === "required_status_checks");
+  const expectedChecks = workflow.requiredChecks.map((context) => ({ context, integration_id: 15368 }));
+  const ruleTypes = new Set(ruleset.rules?.map((rule) => rule.type));
+
+  if (
+    ruleset.name !== "main required checks" ||
+    ruleset.target !== "branch" ||
+    ruleset.enforcement !== "active" ||
+    JSON.stringify(ruleset.bypass_actors) !== "[]" ||
+    JSON.stringify(ruleset.conditions?.ref_name) !== JSON.stringify({ include: ["~DEFAULT_BRANCH"], exclude: [] })
+  ) errors.push("GitHub ruleset must actively protect only the default branch without bypass actors");
+
+  if (
+    JSON.stringify(pullRequest?.parameters?.allowed_merge_methods) !== JSON.stringify(["squash"]) ||
+    pullRequest?.parameters?.required_approving_review_count !== 0 ||
+    pullRequest?.parameters?.dismiss_stale_reviews_on_push !== true ||
+    pullRequest?.parameters?.require_code_owner_review !== false ||
+    pullRequest?.parameters?.require_last_push_approval !== false ||
+    pullRequest?.parameters?.required_review_thread_resolution !== true
+  ) errors.push("GitHub ruleset must require squash pull requests and resolved review threads");
+
+  if (
+    statusChecks?.parameters?.strict_required_status_checks_policy !== true ||
+    statusChecks?.parameters?.do_not_enforce_on_create !== false ||
+    JSON.stringify(statusChecks?.parameters?.required_status_checks) !== JSON.stringify(expectedChecks)
+  ) errors.push("GitHub ruleset required checks disagree with workflow configuration");
+
+  if (!ruleTypes.has("deletion") || !ruleTypes.has("non_fast_forward")) errors.push("GitHub ruleset must prevent default branch deletion and force pushes");
+  return errors;
 }
 
 // Local verification is exact; Vercel's build uses the compatible engines ranges.
