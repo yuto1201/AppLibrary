@@ -37,7 +37,7 @@ npm run dev
 | `npm run test` | Vitest |
 | `npm run test:e2e` | Playwright（`out/` を配信して実行） |
 
-ローカル/CI は Node 24.13.0 / npm 11.6.2 に固定。fnm を使う場合は `fnm install` → `fnm use` で `.node-version` を適用する。公開環境は patch 更新を許容する Node 24.x / npm 11.x。初回 E2E 前に `npm exec -- playwright install chromium` を実行する。`test:e2e` 単独なら先に `npm run build`。
+ローカル/CI は Node 24.20.0 / npm 11.6.2 に固定。fnm を使う場合は `fnm install` → `fnm use` で `.node-version` を適用する。公開環境は minor/patch 更新を許容する Node 24.x / npm 11.x。初回 E2E 前に `npm exec -- playwright install chromium` を実行する。`test:e2e` 単独なら先に `npm run build`。
 
 ### Hero オープニング演出を再生する
 
